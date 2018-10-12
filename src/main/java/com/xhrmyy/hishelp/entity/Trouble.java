@@ -1,29 +1,52 @@
-package com.xhrmyy.hishelp.model;
+package com.xhrmyy.hishelp.entity;
 
 import com.xhrmyy.hishelp.common.BaseModel;
 
+import javax.persistence.*;
 import java.util.Date;
 
 /**
  * Created by huangshiming on 2018/10/10 0010
  */
+@Entity
+@Table(name = "t_trouble")
 public class Trouble extends BaseModel {
 
+    @Id
+    @GeneratedValue
     private Long id;
+    @Column(nullable = false)
     private Long userId;
     /**
      * 故障状态： 1待确认 2已确认 3已解决
      */
+    @Column(nullable = false)
     private Integer status;
+    @Column(nullable = false)
     private String office;
+    @Column(nullable = false)
     private String troublePersonName;
+    @Column(nullable = false)
     private String firType;
+    @Column(nullable = false)
     private String secType;
+    @Column
     private String detail;
-    private String[] captureUrls;
+    @Column
+    private String captureUrls;
+    @Column
+    private String solutionType;
+    @Column
+    private String solutionDetail;
+    @Column(nullable = false)
     private Date submitTime;
+    @Column
     private Date confirmTime;
+    @Column
     private Date solveTime;
+
+    public Trouble() {
+    }
 
     public Long getId() {
         return id;
@@ -65,22 +88,6 @@ public class Trouble extends BaseModel {
         this.troublePersonName = troublePersonName;
     }
 
-    public String getFirType() {
-        return firType;
-    }
-
-    public void setFirType(String firType) {
-        this.firType = firType;
-    }
-
-    public String getSecType() {
-        return secType;
-    }
-
-    public void setSecType(String secType) {
-        this.secType = secType;
-    }
-
     public String getDetail() {
         return detail;
     }
@@ -89,13 +96,6 @@ public class Trouble extends BaseModel {
         this.detail = detail;
     }
 
-    public String[] getCaptureUrls() {
-        return captureUrls;
-    }
-
-    public void setCaptureUrls(String[] captureUrls) {
-        this.captureUrls = captureUrls;
-    }
 
     public Date getSubmitTime() {
         return submitTime;
@@ -119,5 +119,45 @@ public class Trouble extends BaseModel {
 
     public void setSolveTime(Date solveTime) {
         this.solveTime = solveTime;
+    }
+
+    public String getCaptureUrls() {
+        return captureUrls;
+    }
+
+    public void setCaptureUrls(String captureUrls) {
+        this.captureUrls = captureUrls;
+    }
+
+    public String getSolutionType() {
+        return solutionType;
+    }
+
+    public void setSolutionType(String solutionType) {
+        this.solutionType = solutionType;
+    }
+
+    public String getSecType() {
+        return secType;
+    }
+
+    public void setSecType(String secType) {
+        this.secType = secType;
+    }
+
+    public String getFirType() {
+        return firType;
+    }
+
+    public void setFirType(String firType) {
+        this.firType = firType;
+    }
+
+    public String getSolutionDetail() {
+        return solutionDetail;
+    }
+
+    public void setSolutionDetail(String solutionDetail) {
+        this.solutionDetail = solutionDetail;
     }
 }

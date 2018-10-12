@@ -1,21 +1,40 @@
-package com.xhrmyy.hishelp.model;
+package com.xhrmyy.hishelp.entity;
 
 import com.xhrmyy.hishelp.common.BaseModel;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  * Created by huangshiming on 2018/10/10 0010
  */
+@Entity
+@Table(name = "t_user")
 public class User extends BaseModel {
+    @Id
     private Long id;
+    @Column(nullable = false)
     private String username;
+    @Column(nullable = false)
     private String password;
-    private String mobile;
     /**
      * 是否为管理员 0否 1是
      */
+    @Column(nullable = false)
     private Integer isAdmin;
+    @Column(nullable = false)
     private String office;
+    @Column
+    private String mobile;
+    @Column
     private String photoUrl;
+    @Column
+    private String openId;
+
+    public User() {
+    }
 
     public Long getId() {
         return id;
@@ -71,5 +90,13 @@ public class User extends BaseModel {
 
     public void setPhotoUrl(String photoUrl) {
         this.photoUrl = photoUrl;
+    }
+
+    public String getOpenId() {
+        return openId;
+    }
+
+    public void setOpenId(String openId) {
+        this.openId = openId;
     }
 }

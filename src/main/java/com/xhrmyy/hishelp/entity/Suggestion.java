@@ -1,19 +1,31 @@
-package com.xhrmyy.hishelp.model;
+package com.xhrmyy.hishelp.entity;
 
 import com.xhrmyy.hishelp.common.BaseModel;
 
+import javax.persistence.*;
 import java.util.Date;
 
 /**
  * Created by huangshiming on 2018/10/10 0010
  */
+@Entity
+@Table(name = "t_suggestion")
 public class Suggestion extends BaseModel {
 
+    @Id
+    @GeneratedValue
     private Long id;
+    @Column(nullable = false)
     private Long submitUserId;
+    @Column(nullable = false)
     private String content;
+    @Column
     private String mobile;
+    @Column(nullable = false)
     private Date submitTime;
+
+    public Suggestion() {
+    }
 
     public Long getId() {
         return id;
