@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 /**
- * Created by huangshiming on 2018/10/10 0010
+ * Created by huangshiming on 2018/10/10
  */
 @Entity
 @Table(name = "t_suggestion")
