@@ -1,6 +1,9 @@
 server:
   # 端口号
   port: 80
+image-config:
+  imageDir: /usr/workspace/micro_imgs
+  mappedDir: /img
 spring:
   # 数据源配置
   datasource:
@@ -22,3 +25,5 @@ spring:
       charset: UTF-8
       enabled: true
       force: true
+logging:
+  config: classpath:logback.xml
