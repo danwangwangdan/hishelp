@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 /**
- * Created by huangshiming on 2018/10/10 0010
+ * Created by huangshiming on 2018/10/10
  */
 @Entity
 @Table(name = "t_trouble")
@@ -44,6 +44,8 @@ public class Trouble extends BaseModel {
     private Date confirmTime;
     @Column
     private Date solveTime;
+    @Column
+    private String solverName;
 
     public Trouble() {
     }
@@ -159,5 +161,13 @@ public class Trouble extends BaseModel {
 
     public void setSolutionDetail(String solutionDetail) {
         this.solutionDetail = solutionDetail;
+    }
+
+    public String getSolverName() {
+        return solverName;
+    }
+
+    public void setSolverName(String solverName) {
+        this.solverName = solverName;
     }
 }

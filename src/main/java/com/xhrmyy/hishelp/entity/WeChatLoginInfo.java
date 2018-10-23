@@ -1,10 +1,10 @@
-package com.xhrmyy.hishelp.model;
+package com.xhrmyy.hishelp.entity;
 
 
 import com.xhrmyy.hishelp.common.BaseModel;
 
 /**
- * Created by huangshiming on 2018/10/10 0010
+ * Created by huangshiming on 2018/10/10
  */
 public class WeChatLoginInfo extends BaseModel {
 

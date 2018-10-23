@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
- * Created by huangshiming on 2018/10/12 0012
+ * Created by huangshiming on 2018/10/12
  */
 @Entity
 @Table(name = "t_solutionType")

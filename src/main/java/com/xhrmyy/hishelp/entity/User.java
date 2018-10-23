@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
- * Created by huangshiming on 2018/10/10 0010
+ * Created by huangshiming on 2018/10/10
  */
 @Entity
 @Table(name = "t_user")
