@@ -4,6 +4,8 @@ import com.xhrmyy.hishelp.common.BaseResult;
 import com.xhrmyy.hishelp.entity.Trouble;
 import com.xhrmyy.hishelp.model.SolutionReq;
 import com.xhrmyy.hishelp.service.TroubleService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class TroubleController {
 
+    private static final Logger log = LoggerFactory.getLogger(TroubleController.class);
     @Autowired
     private TroubleService troubleService;
 

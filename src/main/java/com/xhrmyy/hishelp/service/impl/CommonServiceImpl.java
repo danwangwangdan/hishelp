@@ -5,6 +5,8 @@ import com.xhrmyy.hishelp.model.ImageResp;
 import com.xhrmyy.hishelp.model.UploadImage;
 import com.xhrmyy.hishelp.service.CommonService;
 import com.xhrmyy.hishelp.util.PictureUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,6 +22,7 @@ import java.util.UUID;
 @Service("commonService")
 public class CommonServiceImpl implements CommonService {
 
+    private static final Logger log = LoggerFactory.getLogger(CommonServiceImpl.class);
     /**
      * 图片上传地址
      */
@@ -51,7 +54,7 @@ public class CommonServiceImpl implements CommonService {
             for (MultipartFile multipartFile : multipartFiles) {
                 // 检查图片后缀
                 if (!PictureUtil.checkFormat(multipartFile.getOriginalFilename())) {
-                    //log.info("图片格式不支持：" + multipartFile.getOriginalFilename());
+                    log.info("图片格式不支持：" + multipartFile.getOriginalFilename());
 //                    baseResult.setCode(ResultConstant.IMAGE_FORMAT_ERROR.code);
 //                    baseResult.setMessage(ResultConstant.IMAGE_FORMAT_ERROR.message);
                 } else {
@@ -88,12 +91,12 @@ public class CommonServiceImpl implements CommonService {
             }
         } catch (Exception e) {
             e.printStackTrace();
-//            log.error("上传图片错误：" + e.toString());
+            log.error("上传图片错误：" + e.toString());
 //            baseResult.setCode(ResultConstant.SYSTEM_EXCEPTION.code);
 //            baseResult.setMessage(ResultConstant.SYSTEM_EXCEPTION.message);
         }
         baseResult.setData(uploadImageList);
-//        log.info("上传图片service返回信息：" + baseResult.toString());
+        log.info("上传图片service返回信息：" + baseResult.toString());
         return baseResult;
     }
 }

@@ -3,6 +3,8 @@ package com.xhrmyy.hishelp.service.impl;
 import com.xhrmyy.hishelp.common.BaseResult;
 import com.xhrmyy.hishelp.model.SolutionReq;
 import com.xhrmyy.hishelp.service.TroubleService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 /**
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 @Service("troubleService")
 public class TroubleServiceImpl implements TroubleService {
 
+    private static final Logger log = LoggerFactory.getLogger(TroubleServiceImpl.class);
 
     @Override
     public BaseResult submitTrouble() {
