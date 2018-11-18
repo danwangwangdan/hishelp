@@ -12,6 +12,18 @@ import java.util.Date;
 @Table(name = "t_trouble")
 public class Trouble extends BaseModel {
 
+    /**
+     * 故障状态：待确认
+     */
+    public static final int TROUBLE_STATUS_SUBMITTED = 1;
+    /**
+     * 故障状态：已确认
+     */
+    public static final int TROUBLE_STATUS_CONFIRMED = 2;
+    /**
+     * 故障状态：已解决
+     */
+    public static final int TROUBLE_STATUS_SOLVED = 3;
     @Id
     @GeneratedValue
     private Long id;
@@ -34,8 +46,10 @@ public class Trouble extends BaseModel {
     private String detail;
     @Column
     private String captureUrls;
+    @Column(nullable = false)
+    private Long solver;
     @Column
-    private String solutionType;
+    private String solutionComment;
     @Column
     private String solutionDetail;
     @Column(nullable = false)
@@ -131,13 +145,6 @@ public class Trouble extends BaseModel {
         this.captureUrls = captureUrls;
     }
 
-    public String getSolutionType() {
-        return solutionType;
-    }
-
-    public void setSolutionType(String solutionType) {
-        this.solutionType = solutionType;
-    }
 
     public String getSecType() {
         return secType;
@@ -169,5 +176,21 @@ public class Trouble extends BaseModel {
 
     public void setSolverName(String solverName) {
         this.solverName = solverName;
+    }
+
+    public Long getSolver() {
+        return solver;
+    }
+
+    public void setSolver(Long solver) {
+        this.solver = solver;
+    }
+
+    public String getSolutionComment() {
+        return solutionComment;
+    }
+
+    public void setSolutionComment(String solutionComment) {
+        this.solutionComment = solutionComment;
     }
 }

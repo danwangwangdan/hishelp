@@ -1,6 +1,7 @@
 package com.xhrmyy.hishelp.service;
 
 import com.xhrmyy.hishelp.common.BaseResult;
+import com.xhrmyy.hishelp.entity.Trouble;
 import com.xhrmyy.hishelp.model.SolutionReq;
 
 /**
@@ -8,17 +9,19 @@ import com.xhrmyy.hishelp.model.SolutionReq;
  */
 public interface TroubleService {
 
-    BaseResult submitTrouble();
+    BaseResult submitTrouble(Trouble trouble);
 
     BaseResult getAllTroubles();
 
-    BaseResult getTroublesByStatus(int status);
+    BaseResult getAllMyTroubles(long userId);
+
+    BaseResult getTroublesByStatus(int status, long userId);
 
     BaseResult getTroubleDetail(long troubleId);
 
-    BaseResult getMySolvedTroubles();
+    BaseResult getMySolvedTroubles(long userId);
 
-    BaseResult toSolveTrouble(SolutionReq solutionReq);
+    BaseResult toSolveTrouble(SolutionReq solutionReq, long solverId);
 
-    BaseResult toConfirmTrouble(long troubleId);
+    BaseResult toConfirmTrouble(long troubleId, long solverId);
 }

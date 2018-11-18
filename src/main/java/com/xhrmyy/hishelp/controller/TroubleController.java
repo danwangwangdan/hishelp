@@ -21,7 +21,7 @@ public class TroubleController {
 
     public BaseResult submitTrouble(Trouble trouble) {
 
-        return troubleService.submitTrouble();
+        return troubleService.submitTrouble(trouble);
     }
 
     public BaseResult getAllTroubles() {
@@ -29,9 +29,9 @@ public class TroubleController {
         return troubleService.getAllTroubles();
     }
 
-    public BaseResult getTroublesByStatus(int status) {
+    public BaseResult getTroublesByStatus(int status, long userId) {
 
-        return troubleService.getTroublesByStatus(status);
+        return troubleService.getTroublesByStatus(status, userId);
     }
 
     public BaseResult getTroubleDetail(long troubleId) {
@@ -39,18 +39,18 @@ public class TroubleController {
         return troubleService.getTroubleDetail(troubleId);
     }
 
-    public BaseResult toConfirmTrouble(long troubleId) {
-        return troubleService.toConfirmTrouble(troubleId);
+    public BaseResult toConfirmTrouble(long troubleId, long solverId) {
+        return troubleService.toConfirmTrouble(troubleId, solverId);
     }
 
-    public BaseResult toSolveTrouble(SolutionReq solutionReq) {
-        return troubleService.toSolveTrouble(solutionReq);
+    public BaseResult toSolveTrouble(SolutionReq solutionReq, long solverId) {
+        return troubleService.toSolveTrouble(solutionReq, solverId);
     }
 
 
-    public BaseResult getMySolvedTroubles() {
+    public BaseResult getMySolvedTroubles(long solverId) {
 
-        return troubleService.getMySolvedTroubles();
+        return troubleService.getMySolvedTroubles(solverId);
     }
 
 

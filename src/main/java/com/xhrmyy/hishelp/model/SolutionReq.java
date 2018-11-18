@@ -8,8 +8,25 @@ import com.xhrmyy.hishelp.common.BaseModel;
 public class SolutionReq extends BaseModel {
 
     private Integer solutionType;
-    private String message;
+    private String solutionDetail;
+    private String solutionComment;
     private Long troubleId;
+
+    public String getSolutionDetail() {
+        return solutionDetail;
+    }
+
+    public void setSolutionDetail(String solutionDetail) {
+        this.solutionDetail = solutionDetail;
+    }
+
+    public String getSolutionComment() {
+        return solutionComment;
+    }
+
+    public void setSolutionComment(String solutionComment) {
+        this.solutionComment = solutionComment;
+    }
 
     public Integer getSolutionType() {
         return solutionType;
@@ -17,14 +34,6 @@ public class SolutionReq extends BaseModel {
 
     public void setSolutionType(Integer solutionType) {
         this.solutionType = solutionType;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
     }
 
     public Long getTroubleId() {
