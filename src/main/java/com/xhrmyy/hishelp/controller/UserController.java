@@ -6,25 +6,35 @@ import com.xhrmyy.hishelp.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Created by huangshiming on 2018/10/23 19:53
  */
-@RestController
+@RestController("/user")
 public class UserController {
 
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
     @Autowired
     private UserService userService;
 
-    public BaseResult login(User user) {
+    @RequestMapping("/login")
+    public BaseResult login(User user, HttpServletRequest request) {
 
-        return userService.login(user);
+        BaseResult loginResult = userService.login(user);
+        if (loginResult.getCode() == 1) {
+            request.getSession().setAttribute("user", user);
+        }
+        return loginResult;
     }
 
-    public BaseResult logout(Long userId) {
+    @RequestMapping("/logout")
+    public BaseResult logout(Long userId, HttpServletRequest request) {
 
-        return userService.logout(userId);
+        request.getSession().removeAttribute("user");
+        return new BaseResult();
     }
 }
