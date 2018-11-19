@@ -1,12 +1,21 @@
 package com.xhrmyy.hishelp.service.impl;
 
 import com.xhrmyy.hishelp.common.BaseResult;
+import com.xhrmyy.hishelp.entity.FirType;
+import com.xhrmyy.hishelp.entity.SecType;
+import com.xhrmyy.hishelp.entity.SolutionType;
+import com.xhrmyy.hishelp.entity.Suggestion;
 import com.xhrmyy.hishelp.model.ImageResp;
 import com.xhrmyy.hishelp.model.UploadImage;
+import com.xhrmyy.hishelp.repository.FirTypeRepository;
+import com.xhrmyy.hishelp.repository.SecTypeRepository;
+import com.xhrmyy.hishelp.repository.SolutionTypeRepository;
+import com.xhrmyy.hishelp.repository.SuggestionRepository;
 import com.xhrmyy.hishelp.service.CommonService;
 import com.xhrmyy.hishelp.util.PictureUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,6 +31,15 @@ import java.util.UUID;
 @Service("commonService")
 public class CommonServiceImpl implements CommonService {
 
+    @Autowired
+    private FirTypeRepository firTypeRepository;
+    @Autowired
+    private SecTypeRepository secTypeRepository;
+    @Autowired
+    private SolutionTypeRepository solutionTypeRepository;
+    @Autowired
+    private SuggestionRepository suggestionRepository;
+
     private static final Logger log = LoggerFactory.getLogger(CommonServiceImpl.class);
     /**
      * 图片上传地址
@@ -33,13 +51,58 @@ public class CommonServiceImpl implements CommonService {
     private String mappedPath;
 
     @Override
-    public BaseResult getTroubleTypes() {
-        return null;
+    public BaseResult getFirTroubleTypes() {
+        BaseResult baseResult = new BaseResult();
+        try {
+            List<FirType> firTypes = firTypeRepository.findAll();
+            baseResult.setData(firTypes);
+        } catch (Exception e) {
+            log.error(e.toString());
+            baseResult.setCode(-500);
+            return baseResult;
+        }
+        return baseResult;
     }
 
     @Override
-    public BaseResult submitSug() {
-        return null;
+    public BaseResult getSecTroubleTypes() {
+        BaseResult baseResult = new BaseResult();
+        try {
+            List<SecType> secTypes = secTypeRepository.findAllByFirTypeId();
+            baseResult.setData(secTypes);
+        } catch (Exception e) {
+            log.error(e.toString());
+            baseResult.setCode(-500);
+            return baseResult;
+        }
+        return baseResult;
+    }
+
+    @Override
+    public BaseResult getSolutionTypes() {
+        BaseResult baseResult = new BaseResult();
+        try {
+            List<SolutionType> all = solutionTypeRepository.findAll();
+            baseResult.setData(all);
+        } catch (Exception e) {
+            log.error(e.toString());
+            baseResult.setCode(-500);
+            return baseResult;
+        }
+        return baseResult;
+    }
+
+    @Override
+    public BaseResult submitSug(Suggestion suggestion) {
+        BaseResult baseResult = new BaseResult();
+        try {
+            suggestionRepository.saveAndFlush(suggestion);
+        } catch (Exception e) {
+            log.error(e.toString());
+            baseResult.setCode(-500);
+            return baseResult;
+        }
+        return baseResult;
     }
 
     @Override
@@ -47,7 +110,7 @@ public class CommonServiceImpl implements CommonService {
 
         long maxSize = 1024;
         // 图片压缩质量
-        Double imageQuality = 0.8;
+        double imageQuality = 0.8;
         BaseResult<List<ImageResp>> baseResult = new BaseResult<List<ImageResp>>();
         List<ImageResp> uploadImageList = new ArrayList<ImageResp>();
         try {
@@ -55,8 +118,7 @@ public class CommonServiceImpl implements CommonService {
                 // 检查图片后缀
                 if (!PictureUtil.checkFormat(multipartFile.getOriginalFilename())) {
                     log.info("图片格式不支持：" + multipartFile.getOriginalFilename());
-//                    baseResult.setCode(ResultConstant.IMAGE_FORMAT_ERROR.code);
-//                    baseResult.setMessage(ResultConstant.IMAGE_FORMAT_ERROR.message);
+                    baseResult.setCode(500);
                 } else {
 
                     String imageHash = Integer.toHexString(UUID.randomUUID().toString().hashCode());
@@ -92,8 +154,7 @@ public class CommonServiceImpl implements CommonService {
         } catch (Exception e) {
             e.printStackTrace();
             log.error("上传图片错误：" + e.toString());
-//            baseResult.setCode(ResultConstant.SYSTEM_EXCEPTION.code);
-//            baseResult.setMessage(ResultConstant.SYSTEM_EXCEPTION.message);
+            baseResult.setCode(500);
         }
         baseResult.setData(uploadImageList);
         log.info("上传图片service返回信息：" + baseResult.toString());

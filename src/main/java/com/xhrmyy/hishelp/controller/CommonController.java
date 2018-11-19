@@ -19,18 +19,22 @@ import java.util.List;
 /**
  * Created by huangshiming on 2018/10/23 21:36
  */
-@Controller
+@Controller("/common")
 public class CommonController {
     private static final Logger log = LoggerFactory.getLogger(CommonController.class);
     @Autowired
     private CommonService commonService;
 
-    public BaseResult getTroubleTypes() {
-        return commonService.getTroubleTypes();
+    public BaseResult getFirTroubleTypes() {
+        return commonService.getFirTroubleTypes();
+    }
+
+    public BaseResult getSecTroubleTypes() {
+        return commonService.getFirTroubleTypes();
     }
 
     public BaseResult getSolutionTypes() {
-        return commonService.getTroubleTypes();
+        return commonService.getSolutionTypes();
     }
 
     public BaseResult submitSug() {
