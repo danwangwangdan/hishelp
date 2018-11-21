@@ -24,6 +24,7 @@ public class Trouble extends BaseModel {
      * 故障状态：已解决
      */
     public static final int TROUBLE_STATUS_SOLVED = 3;
+    private static final long serialVersionUID = -2848637751116057116L;
     @Id
     @GeneratedValue
     private Long id;

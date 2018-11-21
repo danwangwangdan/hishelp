@@ -13,6 +13,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "t_secType")
 public class SecType extends BaseModel {
+    private static final long serialVersionUID = 6998039505825793763L;
     @Id
     private Long id;
     @Column

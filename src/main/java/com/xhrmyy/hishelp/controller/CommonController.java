@@ -1,6 +1,7 @@
 package com.xhrmyy.hishelp.controller;
 
 import com.xhrmyy.hishelp.common.BaseResult;
+import com.xhrmyy.hishelp.entity.Suggestion;
 import com.xhrmyy.hishelp.service.CommonService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,8 +38,8 @@ public class CommonController {
         return commonService.getSolutionTypes();
     }
 
-    public BaseResult submitSug() {
-        return commonService.submitSug();
+    public BaseResult submitSug(Suggestion suggestion) {
+        return commonService.submitSug(suggestion);
     }
 
     @RequestMapping("/uploadPic")

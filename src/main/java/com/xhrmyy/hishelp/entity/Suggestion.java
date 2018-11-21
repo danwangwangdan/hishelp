@@ -12,6 +12,7 @@ import java.util.Date;
 @Table(name = "t_suggestion")
 public class Suggestion extends BaseModel {
 
+    private static final long serialVersionUID = -578563465779321215L;
     @Id
     @GeneratedValue
     private Long id;

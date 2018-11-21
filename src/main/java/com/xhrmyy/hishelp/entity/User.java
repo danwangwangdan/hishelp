@@ -13,6 +13,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "t_user")
 public class User extends BaseModel {
+    private static final long serialVersionUID = 5273428032385393344L;
     @Id
     private Long id;
     @Column(nullable = false)

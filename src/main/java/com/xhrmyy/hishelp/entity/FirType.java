@@ -13,6 +13,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "t_firType")
 public class FirType extends BaseModel {
+    private static final long serialVersionUID = 2335259102176543944L;
     @Id
     private Long id;
     @Column

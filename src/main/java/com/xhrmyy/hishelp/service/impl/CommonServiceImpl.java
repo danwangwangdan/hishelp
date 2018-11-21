@@ -126,7 +126,7 @@ public class CommonServiceImpl implements CommonService {
                     mappedPath += "/" + hashPath;
                     path += "/" + hashPath;
                     String fileName = imageHash + PictureUtil.getImageFormat(multipartFile.getOriginalFilename());
-                    // 图片地址为: 服务器路径 + 映射路径 + 文件名，例如：http://localhost:8080 /imageweb/img /abc.jpg
+                    // 图片地址为: 服务器路径 + 映射路径 + 文件名，例如：http://localhost:8080 /imageweb/img/abc.jpg
                     String imageUrl = serverUrl + mappedPath + "/" + fileName;
                     File file = new File(path, fileName);
                     UploadImage uploadImage = null;
@@ -143,8 +143,6 @@ public class CommonServiceImpl implements CommonService {
                         imageQuality = pictureUtil.getQuality(imageQuality);
                         // 以高度为基准，等比例缩放图片
                         PictureUtil.compressPicForScale(file.getAbsolutePath(), file.getAbsolutePath(), maxSize, imageQuality);
-                        // 以高度为基准，等比例缩放图片
-//                        pictureUtil.resizeByHeight(scale);
                     }
                     ImageResp uploadImageDTO = new ImageResp();
                     uploadImageDTO.setUrl(uploadImage.getImageUrl());
