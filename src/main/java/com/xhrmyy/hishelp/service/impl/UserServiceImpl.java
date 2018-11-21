@@ -23,7 +23,7 @@ public class UserServiceImpl implements UserService {
     public BaseResult login(User user) {
         BaseResult baseResult = new BaseResult();
         try {
-            User realUser = userRepository.findByIdAndPassword(user.getId(), user.getPassword());
+            User realUser = userRepository.findByUsernameAndPassword(user.getUsername(), user.getPassword());
             if (null == realUser) {
                 baseResult.setCode(-1);
                 return baseResult;
@@ -42,5 +42,24 @@ public class UserServiceImpl implements UserService {
     public BaseResult logout(Long userId) {
 
         return null;
+    }
+
+    @Override
+    public BaseResult addUser(User user) {
+        BaseResult baseResult = new BaseResult();
+        try {
+            User returnUser = userRepository.saveAndFlush(user);
+            if (null == returnUser) {
+                baseResult.setCode(-1);
+                return baseResult;
+            } else {
+                baseResult.setData(returnUser);
+            }
+        } catch (Exception e) {
+            log.error(e.toString());
+            baseResult.setCode(-500);
+            return baseResult;
+        }
+        return baseResult;
     }
 }

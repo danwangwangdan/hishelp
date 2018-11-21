@@ -17,6 +17,8 @@ public class User extends BaseModel {
     @Id
     private Long id;
     @Column(nullable = false)
+    private String nickname;
+    @Column(nullable = false)
     private String username;
     @Column(nullable = false)
     private String password;
@@ -99,5 +101,13 @@ public class User extends BaseModel {
 
     public void setOpenId(String openId) {
         this.openId = openId;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 }

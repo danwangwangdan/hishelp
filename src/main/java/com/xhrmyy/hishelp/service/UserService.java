@@ -11,4 +11,6 @@ public interface UserService {
     BaseResult login(User user);
 
     BaseResult logout(Long userId);
+
+    BaseResult addUser(User user);
 }

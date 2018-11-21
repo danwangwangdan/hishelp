@@ -9,7 +9,7 @@
     </appender>
 
     <appender name="logfile" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <Encoding>UTF-8</Encoding>
+        <!--<Encoding>UTF-8</Encoding>-->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>logs/common/${log.base}.%d{yyyy-MM-dd}.log</fileNamePattern>
         </rollingPolicy>
@@ -22,7 +22,7 @@
     </appender>
 
     <appender name="errorlogfile" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <Encoding>UTF-8</Encoding>
+        <!--<Encoding>UTF-8</Encoding>-->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!--日志文件输出的文件名-->
             <FileNamePattern>logs/error/${log.base}.%d{yyyy-MM-dd}.error.log</FileNamePattern>

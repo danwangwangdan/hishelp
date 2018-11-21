@@ -6,8 +6,9 @@ import com.xhrmyy.hishelp.service.CommonService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
@@ -20,24 +21,28 @@ import java.util.List;
 /**
  * Created by huangshiming on 2018/10/23 21:36
  */
-@Controller("/common")
+@RestController("/common")
 public class CommonController {
     private static final Logger log = LoggerFactory.getLogger(CommonController.class);
     @Autowired
     private CommonService commonService;
 
+    @RequestMapping("/firTypes")
     public BaseResult getFirTroubleTypes() {
         return commonService.getFirTroubleTypes();
     }
 
-    public BaseResult getSecTroubleTypes() {
-        return commonService.getFirTroubleTypes();
+    @RequestMapping("/secTypes")
+    public BaseResult getSecTroubleTypes(@RequestParam Long firTypeId) {
+        return commonService.getSecTroubleTypes(firTypeId);
     }
 
+    @RequestMapping("/solutionTypes")
     public BaseResult getSolutionTypes() {
         return commonService.getSolutionTypes();
     }
 
+    @RequestMapping("/submitSug")
     public BaseResult submitSug(Suggestion suggestion) {
         return commonService.submitSug(suggestion);
     }

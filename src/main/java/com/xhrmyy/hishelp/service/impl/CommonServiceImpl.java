@@ -65,10 +65,10 @@ public class CommonServiceImpl implements CommonService {
     }
 
     @Override
-    public BaseResult getSecTroubleTypes() {
+    public BaseResult getSecTroubleTypes(Long firTypeId) {
         BaseResult baseResult = new BaseResult();
         try {
-            List<SecType> secTypes = secTypeRepository.findAllByFirTypeId();
+            List<SecType> secTypes = secTypeRepository.findAllByFirTypeId(firTypeId);
             baseResult.setData(secTypes);
         } catch (Exception e) {
             log.error(e.toString());

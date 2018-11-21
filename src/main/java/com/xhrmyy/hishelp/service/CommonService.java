@@ -13,7 +13,7 @@ public interface CommonService {
 
     BaseResult getFirTroubleTypes();
 
-    BaseResult getSecTroubleTypes();
+    BaseResult getSecTroubleTypes(Long firTypeId);
 
     BaseResult getSolutionTypes();
 
