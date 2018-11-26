@@ -21,7 +21,8 @@ import java.util.List;
 /**
  * Created by huangshiming on 2018/10/23 21:36
  */
-@RestController("/common")
+@RestController
+@RequestMapping("/common")
 public class CommonController {
     private static final Logger log = LoggerFactory.getLogger(CommonController.class);
     @Autowired
