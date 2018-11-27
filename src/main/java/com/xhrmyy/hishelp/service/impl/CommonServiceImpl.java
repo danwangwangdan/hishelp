@@ -41,14 +41,6 @@ public class CommonServiceImpl implements CommonService {
     private SuggestionRepository suggestionRepository;
 
     private static final Logger log = LoggerFactory.getLogger(CommonServiceImpl.class);
-    /**
-     * 图片上传地址
-     */
-    private String path;
-    /**
-     * Tomcat映射地址
-     */
-    private String mappedPath;
 
     @Override
     public BaseResult getFirTroubleTypes() {
@@ -108,7 +100,8 @@ public class CommonServiceImpl implements CommonService {
     @Override
     public BaseResult uploadImage(List<MultipartFile> multipartFiles, String serverUrl) {
 
-        long maxSize = 1024;
+        String path = "D:/IMG";
+        long maxSize = 512;
         // 图片压缩质量
         double imageQuality = 0.8;
         BaseResult<List<ImageResp>> baseResult = new BaseResult<List<ImageResp>>();
@@ -123,30 +116,27 @@ public class CommonServiceImpl implements CommonService {
 
                     String imageHash = Integer.toHexString(UUID.randomUUID().toString().hashCode());
                     String hashPath = PictureUtil.getHashPath(imageHash);
-                    mappedPath += "/" + hashPath;
                     path += "/" + hashPath;
                     String fileName = imageHash + PictureUtil.getImageFormat(multipartFile.getOriginalFilename());
                     // 图片地址为: 服务器路径 + 映射路径 + 文件名，例如：http://localhost:8080 /imageweb/img/abc.jpg
-                    String imageUrl = serverUrl + mappedPath + "/" + fileName;
-                    File file = new File(path, fileName);
-                    UploadImage uploadImage = null;
-                    if (!file.exists()) {
+                    String imageUrl = serverUrl + "/" + hashPath + "/" + fileName;
+                    File file = new File(path + "/" + fileName);
+                    UploadImage uploadImage = new UploadImage();
+                    if (!file.getParentFile().exists()) {
                         // 文件不存在，存入
-//                        log.info("图片不存在，即将存入图片" + imageUrl);
-                        file.mkdirs();
+                        log.info("图片不存在，即将存入图片" + imageUrl);
+                        file.getParentFile().mkdirs();
                         multipartFile.transferTo(file);
-                        uploadImage = new UploadImage();
                         uploadImage.setUploadTime(new Date());
                         uploadImage.setImageUrl(imageUrl);
-                        // 压缩及生成缩略图
-                        PictureUtil pictureUtil = new PictureUtil(path + "/" + fileName);
+                        // 压缩图片
+                        PictureUtil pictureUtil = new PictureUtil(file.getAbsolutePath());
                         imageQuality = pictureUtil.getQuality(imageQuality);
-                        // 以高度为基准，等比例缩放图片
                         PictureUtil.compressPicForScale(file.getAbsolutePath(), file.getAbsolutePath(), maxSize, imageQuality);
+                        ImageResp uploadImageDTO = new ImageResp();
+                        uploadImageDTO.setUrl(uploadImage.getImageUrl());
+                        uploadImageList.add(uploadImageDTO);
                     }
-                    ImageResp uploadImageDTO = new ImageResp();
-                    uploadImageDTO.setUrl(uploadImage.getImageUrl());
-                    uploadImageList.add(uploadImageDTO);
                 }
             }
         } catch (Exception e) {

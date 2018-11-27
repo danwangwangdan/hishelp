@@ -90,6 +90,20 @@ public class PictureUtil {
      *      * @return
      *     
      */
+    /**
+     *      * 根据指定大小和指定精度压缩图片
+     *      *
+     *      * @param srcPath
+     *      *            源图片地址
+     *      * @param desPath
+     *      *            目标图片地址
+     *      * @param desFileSize
+     *      *            指定图片大小，单位kb
+     *      * @param accuracy
+     *      *            精度，递归压缩的比率，建议小于0.9
+     *      * @return
+     *     
+     */
     public static String compressPicForScale(String srcPath, String desPath,
                                              long desFileSize, double accuracy) {
         if (StringUtils.isEmpty(srcPath) || StringUtils.isEmpty(srcPath)) {
@@ -138,8 +152,9 @@ public class PictureUtil {
         compressPicCycle(desPath, desFileSize, accuracy);
     }
 
+
     public static void main(String[] args) {
-        checkFormat("1212.jpg");
+        compressPicForScale("0d680d82b5.JPG", "0d680d82b5.JPG", 512, 0.8);
     }
 
     /**

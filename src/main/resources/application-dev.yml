@@ -1,10 +1,15 @@
 server:
   # 端口号
   port: 80
-image-config:
+image:
   imageDir: /usr/workspace/micro_imgs
   mappedDir: /img
 spring:
+  mvc:
+    static-path-pattern: /**
+  resources:
+    static-locations: classpath:/META-INF/resources/,classpath:/resources/,\
+      classpath:/static/,classpath:/public/,file:D:/IMG/
   # 数据源配置
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
@@ -25,5 +30,9 @@ spring:
       charset: UTF-8
       enabled: true
       force: true
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+
 logging:
   config: classpath:logback.xml
