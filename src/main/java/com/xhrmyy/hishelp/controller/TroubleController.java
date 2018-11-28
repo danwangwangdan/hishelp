@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -41,7 +42,7 @@ public class TroubleController {
     }
 
     @RequestMapping("/detail")
-    public BaseResult getTroubleDetail(long troubleId) {
+    public BaseResult getTroubleDetail(@RequestParam long troubleId) {
 
         return troubleService.getTroubleDetail(troubleId);
     }
