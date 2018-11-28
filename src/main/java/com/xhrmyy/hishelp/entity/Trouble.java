@@ -47,8 +47,8 @@ public class Trouble extends BaseModel {
     private String detail;
     @Column
     private String captureUrls;
-    @Column(nullable = false)
-    private Long solver;
+    @Column
+    private Long solverId;
     @Column
     private String solutionComment;
     @Column
@@ -179,13 +179,6 @@ public class Trouble extends BaseModel {
         this.solverName = solverName;
     }
 
-    public Long getSolver() {
-        return solver;
-    }
-
-    public void setSolver(Long solver) {
-        this.solver = solver;
-    }
 
     public String getSolutionComment() {
         return solutionComment;
@@ -193,5 +186,13 @@ public class Trouble extends BaseModel {
 
     public void setSolutionComment(String solutionComment) {
         this.solutionComment = solutionComment;
+    }
+
+    public Long getSolverId() {
+        return solverId;
+    }
+
+    public void setSolverId(Long solverId) {
+        this.solverId = solverId;
     }
 }

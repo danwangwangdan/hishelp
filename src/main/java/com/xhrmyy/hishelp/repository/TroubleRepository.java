@@ -20,7 +20,7 @@ public interface TroubleRepository extends JpaRepository<Trouble, Long> {
 
     List<Trouble> findByUserIdAndStatus(long userId, int status, Sort sort);
 
-    List<Trouble> findBySolver(long solverId, Sort sort);
+    List<Trouble> findBySolverId(long solverId, Sort sort);
 
     @Modifying
     @Transactional

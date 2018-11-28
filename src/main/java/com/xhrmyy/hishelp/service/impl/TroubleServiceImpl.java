@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -29,6 +30,8 @@ public class TroubleServiceImpl implements TroubleService {
 
         BaseResult baseResult = new BaseResult();
         try {
+            trouble.setStatus(Trouble.TROUBLE_STATUS_SUBMITTED);
+            trouble.setSubmitTime(new Date());
             Trouble savedTrouble = troubleRepository.saveAndFlush(trouble);
             if (null != savedTrouble) {
                 baseResult.setData(savedTrouble);
@@ -113,7 +116,7 @@ public class TroubleServiceImpl implements TroubleService {
         BaseResult baseResult = new BaseResult();
         try {
             Sort sort = new Sort(Sort.Direction.DESC, "submitTime");
-            List<Trouble> troubles = troubleRepository.findBySolver(userId, sort);
+            List<Trouble> troubles = troubleRepository.findBySolverId(userId, sort);
             if (null != troubles && troubles.size() > 0) {
                 baseResult.setData(troubles);
             }
