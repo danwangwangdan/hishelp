@@ -6,9 +6,7 @@ import com.xhrmyy.hishelp.service.CommonService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
@@ -43,8 +41,8 @@ public class CommonController {
         return commonService.getSolutionTypes();
     }
 
-    @RequestMapping("/submitSug")
-    public BaseResult submitSug(Suggestion suggestion) {
+    @PostMapping("/submitSug")
+    public BaseResult submitSug(@RequestBody Suggestion suggestion) {
         return commonService.submitSug(suggestion);
     }
 

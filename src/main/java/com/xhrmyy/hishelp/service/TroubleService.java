@@ -24,4 +24,5 @@ public interface TroubleService {
     BaseResult toSolveTrouble(SolutionReq solutionReq, long solverId);
 
     BaseResult toConfirmTrouble(long troubleId, long solverId);
+
 }

@@ -35,6 +35,13 @@ public class TroubleController {
         return troubleService.getAllTroubles();
     }
 
+    @RequestMapping("/myAll")
+    public BaseResult getMyAllTroubles(@RequestParam long userId) {
+
+
+        return troubleService.getAllMyTroubles(userId);
+    }
+
     @RequestMapping("/byStatus")
     public BaseResult getTroublesByStatus(int status, long userId) {
 
