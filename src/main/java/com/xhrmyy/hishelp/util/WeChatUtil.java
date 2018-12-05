@@ -8,8 +8,8 @@ import org.slf4j.LoggerFactory;
 public class WeChatUtil {
 
     private static final Logger log = LoggerFactory.getLogger(WeChatUtil.class);
-    private static String APP_ID = "wxf1dd1c5aebeda934";
-    private static String APP_SECRET = "cd02d9cd61ee918a6765e1796b42bfe8";
+    private static String APP_ID = "wx6c54f40530b65ae8";
+    private static String APP_SECRET = "efd4557cec70b46f45d7d466f3b8c93e";
 
     /**
      * 通过code获取sessionKey
@@ -17,7 +17,7 @@ public class WeChatUtil {
      * @param code
      * @return
      */
-    public static WeChatLoginInfo getSessionKey(String code) {
+    public static WeChatLoginInfo code2Session(String code) {
 
         String authUrl = "https://api.weixin.qq.com/sns/jscode2session?appid=APPID&secret=SECRET&js_code=JSCODE&grant_type=authorization_code";
         WeChatLoginInfo loginInfo = null;

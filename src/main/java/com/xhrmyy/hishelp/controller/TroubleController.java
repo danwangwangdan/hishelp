@@ -22,7 +22,7 @@ public class TroubleController {
     private TroubleService troubleService;
 
     @PostMapping("/submit")
-    public BaseResult submitTrouble(Trouble trouble) {
+    public BaseResult submitTrouble(@RequestBody Trouble trouble) {
 
         return troubleService.submitTrouble(trouble);
     }

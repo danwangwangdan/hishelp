@@ -1,16 +1,20 @@
 server:
   # 端口号
-  port: 80
-image-config:
-  imageDir: /usr/workspace/micro_imgs
-  mappedDir: /img
+  port: 6666
+  context-path: /hishelp
+imageDir: /usr/workspace/hishelp_imgs
 spring:
+  mvc:
+    static-path-pattern: /**
+  resources:
+    static-locations: classpath:/META-INF/resources/,classpath:/resources/,\
+      classpath:/static/,classpath:/public/,file:${imageDir}
   # 数据源配置
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/hishelp
-    username: root
-    password: 123456
+    url: jdbc:mysql://122.152.207.225:3306/hishelp
+    username: zhangyanfu
+    password: 1105564Zyf!
   # spring data jpa配置
   jpa:
     hibernate:
@@ -25,5 +29,9 @@ spring:
       charset: UTF-8
       enabled: true
       force: true
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+
 logging:
   config: classpath:logback.xml

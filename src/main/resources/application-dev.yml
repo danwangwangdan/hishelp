@@ -1,15 +1,14 @@
 server:
   # 端口号
   port: 80
-image:
-  imageDir: /usr/workspace/micro_imgs
-  mappedDir: /img
+  context-path: /hishelp
+imageDir: D:/IMG/
 spring:
   mvc:
     static-path-pattern: /**
   resources:
     static-locations: classpath:/META-INF/resources/,classpath:/resources/,\
-      classpath:/static/,classpath:/public/,file:D:/IMG/
+      classpath:/static/,classpath:/public/,file:${imageDir}
   # 数据源配置
   datasource:
     driver-class-name: com.mysql.jdbc.Driver

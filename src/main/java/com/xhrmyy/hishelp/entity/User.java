@@ -36,6 +36,8 @@ public class User extends BaseModel {
     @Column
     private String openId;
 
+    private String jsCode;
+
     public User() {
     }
 
@@ -109,5 +111,13 @@ public class User extends BaseModel {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    public String getJsCode() {
+        return jsCode;
+    }
+
+    public void setJsCode(String jsCode) {
+        this.jsCode = jsCode;
     }
 }
