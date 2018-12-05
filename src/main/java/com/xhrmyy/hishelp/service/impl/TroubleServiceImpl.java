@@ -2,6 +2,7 @@ package com.xhrmyy.hishelp.service.impl;
 
 import com.xhrmyy.hishelp.common.BaseResult;
 import com.xhrmyy.hishelp.entity.Trouble;
+import com.xhrmyy.hishelp.model.ConfirmReq;
 import com.xhrmyy.hishelp.model.SolutionReq;
 import com.xhrmyy.hishelp.repository.TroubleRepository;
 import com.xhrmyy.hishelp.service.TroubleService;
@@ -129,11 +130,11 @@ public class TroubleServiceImpl implements TroubleService {
     }
 
     @Override
-    public BaseResult toSolveTrouble(SolutionReq solutionReq, long solverId) {
+    public BaseResult toSolveTrouble(SolutionReq solutionReq) {
         BaseResult baseResult = new BaseResult();
         try {
             // 更新状态、解决方案
-            troubleRepository.updateSolveStatus(solutionReq.getSolutionComment(), solutionReq.getSolutionDetail(), Trouble.TROUBLE_STATUS_SOLVED);
+            troubleRepository.updateSolveStatus(solutionReq.getSolutionComment(), solutionReq.getSolutionDetail(), Trouble.TROUBLE_STATUS_SOLVED, solutionReq.getSolver(), solutionReq.getSolverId());
         } catch (Exception e) {
             log.error(e.toString());
             baseResult.setCode(-500);
@@ -143,11 +144,25 @@ public class TroubleServiceImpl implements TroubleService {
     }
 
     @Override
-    public BaseResult toConfirmTrouble(long troubleId, long userId) {
+    public BaseResult toConfirmTrouble(ConfirmReq confirmReq) {
         BaseResult baseResult = new BaseResult();
         try {
             // 更新状态
-            troubleRepository.updateConfirmStatus(Trouble.TROUBLE_STATUS_CONFIRMED);
+            troubleRepository.updateConfirmStatus(Trouble.TROUBLE_STATUS_CONFIRMED, confirmReq.getConfirmerId(), confirmReq.getConfirmer());
+        } catch (Exception e) {
+            log.error(e.toString());
+            baseResult.setCode(-500);
+            return baseResult;
+        }
+        return baseResult;
+    }
+
+    @Override
+    public BaseResult toRevokeTrouble(SolutionReq solutionReq) {
+        BaseResult baseResult = new BaseResult();
+        try {
+            // 更新状态
+            troubleRepository.updateSolveStatus("", "", Trouble.TROUBLE_STATUS_REVOKED, solutionReq.getSolver(), solutionReq.getSolverId());
         } catch (Exception e) {
             log.error(e.toString());
             baseResult.setCode(-500);

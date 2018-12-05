@@ -24,11 +24,11 @@ public interface TroubleRepository extends JpaRepository<Trouble, Long> {
 
     @Modifying
     @Transactional
-    @Query("update Trouble t set t.solutionComment = ?1, t.solutionDetail = ?2,t.status=?3")
-    int updateSolveStatus(String solutionComment, String solutionDetail, int status);
+    @Query("update Trouble t set t.solutionComment = ?1, t.solutionDetail = ?2,t.status=?3, t.solver=?4,t.solverId=?5,t.solveTime=now()")
+    int updateSolveStatus(String solutionComment, String solutionDetail, int status, String solver, long solverId);
 
     @Modifying
     @Transactional
-    @Query("update Trouble t set t.status=?1")
-    int updateConfirmStatus(int status);
+    @Query("update Trouble t set t.status=?1, t.confirmerId=?2, t.confirmer=?3, t.confirmTime=now()")
+    int updateConfirmStatus(int status, long confirmerId, String confirmer);
 }

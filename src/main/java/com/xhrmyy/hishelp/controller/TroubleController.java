@@ -2,15 +2,13 @@ package com.xhrmyy.hishelp.controller;
 
 import com.xhrmyy.hishelp.common.BaseResult;
 import com.xhrmyy.hishelp.entity.Trouble;
+import com.xhrmyy.hishelp.model.ConfirmReq;
 import com.xhrmyy.hishelp.model.SolutionReq;
 import com.xhrmyy.hishelp.service.TroubleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Created by huangshiming on 2018/10/23 21:12
@@ -43,7 +41,7 @@ public class TroubleController {
     }
 
     @RequestMapping("/byStatus")
-    public BaseResult getTroublesByStatus(int status, long userId) {
+    public BaseResult getTroublesByStatus(@RequestParam("status") int status, @RequestParam("userId") long userId) {
 
         return troubleService.getTroublesByStatus(status, userId);
     }
@@ -54,18 +52,23 @@ public class TroubleController {
         return troubleService.getTroubleDetail(troubleId);
     }
 
-    @RequestMapping("/confirm")
-    public BaseResult toConfirmTrouble(long troubleId, long solverId) {
-        return troubleService.toConfirmTrouble(troubleId, solverId);
+    @PostMapping("/revoke")
+    public BaseResult toRevokeTrouble(@RequestBody SolutionReq solutionReq) {
+        return troubleService.toRevokeTrouble(solutionReq);
     }
 
-    @RequestMapping("/solve")
-    public BaseResult toSolveTrouble(SolutionReq solutionReq, long solverId) {
-        return troubleService.toSolveTrouble(solutionReq, solverId);
+    @PostMapping("/confirm")
+    public BaseResult toConfirmTrouble(@RequestBody ConfirmReq confirmReq) {
+        return troubleService.toConfirmTrouble(confirmReq);
+    }
+
+    @PostMapping("/solve")
+    public BaseResult toSolveTrouble(SolutionReq solutionReq) {
+        return troubleService.toSolveTrouble(solutionReq);
     }
 
     @RequestMapping("/mySolved")
-    public BaseResult getMySolvedTroubles(long solverId) {
+    public BaseResult getMySolvedTroubles(@RequestParam long solverId) {
 
         return troubleService.getMySolvedTroubles(solverId);
     }

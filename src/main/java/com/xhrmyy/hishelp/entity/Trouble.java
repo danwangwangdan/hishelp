@@ -24,6 +24,10 @@ public class Trouble extends BaseModel {
      * 故障状态：已解决
      */
     public static final int TROUBLE_STATUS_SOLVED = 3;
+    /**
+     * 故障状态：已撤回
+     */
+    public static final int TROUBLE_STATUS_REVOKED = 4;
     private static final long serialVersionUID = -2848637751116057116L;
     @Id
     @GeneratedValue
@@ -49,6 +53,12 @@ public class Trouble extends BaseModel {
     private String captureUrls;
     @Column
     private Long solverId;
+    @Column
+    private String solver;
+    @Column
+    private Long confirmerId;
+    @Column
+    private String confirmer;
     @Column
     private String solutionComment;
     @Column
@@ -194,5 +204,29 @@ public class Trouble extends BaseModel {
 
     public void setSolverId(Long solverId) {
         this.solverId = solverId;
+    }
+
+    public String getSolver() {
+        return solver;
+    }
+
+    public void setSolver(String solver) {
+        this.solver = solver;
+    }
+
+    public String getConfirmer() {
+        return confirmer;
+    }
+
+    public void setConfirmer(String confirmer) {
+        this.confirmer = confirmer;
+    }
+
+    public Long getConfirmerId() {
+        return confirmerId;
+    }
+
+    public void setConfirmerId(Long confirmerId) {
+        this.confirmerId = confirmerId;
     }
 }

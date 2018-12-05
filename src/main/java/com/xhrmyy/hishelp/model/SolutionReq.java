@@ -10,7 +10,10 @@ public class SolutionReq extends BaseModel {
     private Integer solutionType;
     private String solutionDetail;
     private String solutionComment;
+    private String solver;
     private Long troubleId;
+    private Long solverId;
+
 
     public String getSolutionDetail() {
         return solutionDetail;
@@ -42,5 +45,21 @@ public class SolutionReq extends BaseModel {
 
     public void setTroubleId(Long troubleId) {
         this.troubleId = troubleId;
+    }
+
+    public String getSolver() {
+        return solver;
+    }
+
+    public void setSolver(String solver) {
+        this.solver = solver;
+    }
+
+    public Long getSolverId() {
+        return solverId;
+    }
+
+    public void setSolverId(Long solverId) {
+        this.solverId = solverId;
     }
 }

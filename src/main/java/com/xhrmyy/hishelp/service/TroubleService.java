@@ -2,6 +2,7 @@ package com.xhrmyy.hishelp.service;
 
 import com.xhrmyy.hishelp.common.BaseResult;
 import com.xhrmyy.hishelp.entity.Trouble;
+import com.xhrmyy.hishelp.model.ConfirmReq;
 import com.xhrmyy.hishelp.model.SolutionReq;
 
 /**
@@ -21,8 +22,9 @@ public interface TroubleService {
 
     BaseResult getMySolvedTroubles(long userId);
 
-    BaseResult toSolveTrouble(SolutionReq solutionReq, long solverId);
+    BaseResult toSolveTrouble(SolutionReq solutionReq);
 
-    BaseResult toConfirmTrouble(long troubleId, long solverId);
+    BaseResult toConfirmTrouble(ConfirmReq confirmReq);
 
+    BaseResult toRevokeTrouble(SolutionReq solutionReq);
 }
