@@ -1,6 +1,6 @@
 server:
   # 端口号
-  port: 8010
+  port: 80
   context-path: /hishelp
 imageDir: /usr/workspace/hishelp_imgs
 spring:

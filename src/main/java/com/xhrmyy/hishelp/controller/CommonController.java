@@ -52,7 +52,7 @@ public class CommonController {
         CommonsMultipartResolver cmr = new CommonsMultipartResolver(request.getServletContext());
 
         // 服务器路径
-        String serverUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
+        String serverUrl = "https://" + request.getServerName();
         // 包含了文件上传项
         if (cmr.isMultipart(request)) {
             MultipartHttpServletRequest mRequest = (MultipartHttpServletRequest) (request);
