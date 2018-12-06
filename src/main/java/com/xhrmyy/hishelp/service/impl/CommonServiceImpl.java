@@ -16,6 +16,7 @@ import com.xhrmyy.hishelp.util.PictureUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -39,6 +40,8 @@ public class CommonServiceImpl implements CommonService {
     private SolutionTypeRepository solutionTypeRepository;
     @Autowired
     private SuggestionRepository suggestionRepository;
+    @Value("${imageDir}")
+    private String uploadPath;
 
     private static final Logger log = LoggerFactory.getLogger(CommonServiceImpl.class);
 
@@ -100,7 +103,7 @@ public class CommonServiceImpl implements CommonService {
     @Override
     public BaseResult uploadImage(List<MultipartFile> multipartFiles, String serverUrl) {
 
-        String path = "D:/IMG";
+        String path = uploadPath;
         long maxSize = 512;
         // 图片压缩质量
         double imageQuality = 0.8;
@@ -119,7 +122,7 @@ public class CommonServiceImpl implements CommonService {
                     path += "/" + hashPath;
                     String fileName = imageHash + PictureUtil.getImageFormat(multipartFile.getOriginalFilename());
                     // 图片地址为: 服务器路径 + 映射路径 + 文件名，例如：http://localhost:8080 /imageweb/img/abc.jpg
-                    String imageUrl = serverUrl + "/" + hashPath + "/" + fileName;
+                    String imageUrl = serverUrl + "/img/" + hashPath + "/" + fileName;
                     File file = new File(path + "/" + fileName);
                     UploadImage uploadImage = new UploadImage();
                     if (!file.getParentFile().exists()) {
