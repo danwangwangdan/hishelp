@@ -28,7 +28,10 @@ public class CommonController {
 
     @RequestMapping("/firTypes")
     public BaseResult getFirTroubleTypes() {
-        return commonService.getFirTroubleTypes();
+        log.info("请求firTypes");
+        BaseResult baseResult = commonService.getFirTroubleTypes();
+        log.info("firTypes请求返回：" + baseResult.toString());
+        return baseResult;
     }
 
     @RequestMapping("/secTypes")

@@ -42,6 +42,7 @@ public class UserServiceImpl implements UserService {
         } catch (Exception e) {
             log.error(e.toString());
             baseResult.setCode(-500);
+            baseResult.setMessage("服务器异常");
             return baseResult;
         }
         return baseResult;
@@ -67,6 +68,7 @@ public class UserServiceImpl implements UserService {
         } catch (Exception e) {
             log.error(e.toString());
             baseResult.setCode(-500);
+            baseResult.setMessage("服务器异常");
             return baseResult;
         }
         return baseResult;

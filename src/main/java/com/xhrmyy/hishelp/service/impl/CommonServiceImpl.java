@@ -54,6 +54,7 @@ public class CommonServiceImpl implements CommonService {
         } catch (Exception e) {
             log.error(e.toString());
             baseResult.setCode(-500);
+            baseResult.setMessage("服务器异常");
             return baseResult;
         }
         return baseResult;
@@ -68,6 +69,7 @@ public class CommonServiceImpl implements CommonService {
         } catch (Exception e) {
             log.error(e.toString());
             baseResult.setCode(-500);
+            baseResult.setMessage("服务器异常");
             return baseResult;
         }
         return baseResult;
@@ -82,6 +84,7 @@ public class CommonServiceImpl implements CommonService {
         } catch (Exception e) {
             log.error(e.toString());
             baseResult.setCode(-500);
+            baseResult.setMessage("服务器异常");
             return baseResult;
         }
         return baseResult;
@@ -95,6 +98,7 @@ public class CommonServiceImpl implements CommonService {
         } catch (Exception e) {
             log.error(e.toString());
             baseResult.setCode(-500);
+            baseResult.setMessage("服务器异常");
             return baseResult;
         }
         return baseResult;
@@ -114,7 +118,8 @@ public class CommonServiceImpl implements CommonService {
                 // 检查图片后缀
                 if (!PictureUtil.checkFormat(multipartFile.getOriginalFilename())) {
                     log.info("图片格式不支持：" + multipartFile.getOriginalFilename());
-                    baseResult.setCode(500);
+                    baseResult.setCode(-500);
+                    baseResult.setMessage("服务器异常");
                 } else {
 
                     String imageHash = Integer.toHexString(UUID.randomUUID().toString().hashCode());
@@ -145,7 +150,8 @@ public class CommonServiceImpl implements CommonService {
         } catch (Exception e) {
             e.printStackTrace();
             log.error("上传图片错误：" + e.toString());
-            baseResult.setCode(500);
+            baseResult.setCode(-500);
+            baseResult.setMessage("服务器异常");
         }
         baseResult.setData(uploadImageList);
         log.info("上传图片service返回信息：" + baseResult.toString());

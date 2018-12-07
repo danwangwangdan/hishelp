@@ -27,10 +27,12 @@ public class UserController {
     @PostMapping("/login")
     public BaseResult login(@RequestBody User user, HttpServletRequest request) {
 
+        log.info("请求login:" + user.toString());
         BaseResult loginResult = userService.login(user);
         if (loginResult.getCode() == 1) {
             request.getSession().setAttribute("user", user);
         }
+        log.info("login请求返回：" + loginResult.toString());
         return loginResult;
     }
 

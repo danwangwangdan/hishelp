@@ -40,6 +40,7 @@ public class TroubleServiceImpl implements TroubleService {
         } catch (Exception e) {
             log.error(e.toString());
             baseResult.setCode(-500);
+            baseResult.setMessage("服务器异常");
             return baseResult;
         }
         return baseResult;
@@ -57,6 +58,7 @@ public class TroubleServiceImpl implements TroubleService {
         } catch (Exception e) {
             log.error(e.toString());
             baseResult.setCode(-500);
+            baseResult.setMessage("服务器异常");
             return baseResult;
         }
         return baseResult;
@@ -74,6 +76,7 @@ public class TroubleServiceImpl implements TroubleService {
         } catch (Exception e) {
             log.error(e.toString());
             baseResult.setCode(-500);
+            baseResult.setMessage("服务器异常");
             return baseResult;
         }
         return baseResult;
@@ -82,15 +85,21 @@ public class TroubleServiceImpl implements TroubleService {
     @Override
     public BaseResult getTroublesByStatus(int status, long userId) {
         BaseResult baseResult = new BaseResult();
+        List<Trouble> troubles = null;
         try {
             Sort sort = new Sort(Sort.Direction.DESC, "submitTime");
-            List<Trouble> troubles = troubleRepository.findByUserIdAndStatus(userId, status, sort);
+            if (status == 3) {
+                troubles = troubleRepository.findByUserIdAndStatusGreaterThan(userId, status, sort);
+            } else {
+                troubles = troubleRepository.findByUserIdAndStatus(userId, status, sort);
+            }
             if (null != troubles && troubles.size() > 0) {
                 baseResult.setData(troubles);
             }
         } catch (Exception e) {
             log.error(e.toString());
             baseResult.setCode(-500);
+            baseResult.setMessage("服务器异常");
             return baseResult;
         }
         return baseResult;
@@ -107,6 +116,7 @@ public class TroubleServiceImpl implements TroubleService {
         } catch (Exception e) {
             log.error(e.toString());
             baseResult.setCode(-500);
+            baseResult.setMessage("服务器异常");
             return baseResult;
         }
         return baseResult;
@@ -124,6 +134,7 @@ public class TroubleServiceImpl implements TroubleService {
         } catch (Exception e) {
             log.error(e.toString());
             baseResult.setCode(-500);
+            baseResult.setMessage("服务器异常");
             return baseResult;
         }
         return baseResult;
@@ -138,6 +149,7 @@ public class TroubleServiceImpl implements TroubleService {
         } catch (Exception e) {
             log.error(e.toString());
             baseResult.setCode(-500);
+            baseResult.setMessage("服务器异常");
             return baseResult;
         }
         return baseResult;
@@ -152,6 +164,7 @@ public class TroubleServiceImpl implements TroubleService {
         } catch (Exception e) {
             log.error(e.toString());
             baseResult.setCode(-500);
+            baseResult.setMessage("服务器异常");
             return baseResult;
         }
         return baseResult;
@@ -166,6 +179,7 @@ public class TroubleServiceImpl implements TroubleService {
         } catch (Exception e) {
             log.error(e.toString());
             baseResult.setCode(-500);
+            baseResult.setMessage("服务器异常");
             return baseResult;
         }
         return baseResult;
