@@ -43,7 +43,10 @@ public class TroubleController {
     @RequestMapping("/byStatus")
     public BaseResult getTroublesByStatus(@RequestParam("status") int status, @RequestParam("userId") long userId) {
 
-        return troubleService.getTroublesByStatus(status, userId);
+        log.info("请求byStatus");
+        BaseResult baseResult = troubleService.getTroublesByStatusAndUserId(status, userId);
+        log.info("byStatus请求返回：" + baseResult.toString());
+        return baseResult;
     }
 
     @RequestMapping("/detail")
@@ -63,7 +66,7 @@ public class TroubleController {
     }
 
     @PostMapping("/solve")
-    public BaseResult toSolveTrouble(SolutionReq solutionReq) {
+    public BaseResult toSolveTrouble(@RequestBody SolutionReq solutionReq) {
         return troubleService.toSolveTrouble(solutionReq);
     }
 
@@ -71,6 +74,18 @@ public class TroubleController {
     public BaseResult getMySolvedTroubles(@RequestParam long solverId) {
 
         return troubleService.getMySolvedTroubles(solverId);
+    }
+
+    @RequestMapping("/confirmed")
+    public BaseResult getConfirmedTroubles() {
+
+        return troubleService.getTroublesByStatus(Trouble.TROUBLE_STATUS_CONFIRMED);
+    }
+
+    @RequestMapping("/submitted")
+    public BaseResult getSubmittedTroubles() {
+
+        return troubleService.getTroublesByStatus(Trouble.TROUBLE_STATUS_SUBMITTED);
     }
 
 

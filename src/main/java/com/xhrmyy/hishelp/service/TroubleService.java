@@ -16,7 +16,9 @@ public interface TroubleService {
 
     BaseResult getAllMyTroubles(long userId);
 
-    BaseResult getTroublesByStatus(int status, long userId);
+    BaseResult getTroublesByStatus(int status);
+
+    BaseResult getTroublesByStatusAndUserId(int status, long userId);
 
     BaseResult getTroubleDetail(long troubleId);
 

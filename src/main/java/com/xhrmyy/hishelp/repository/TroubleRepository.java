@@ -22,16 +22,22 @@ public interface TroubleRepository extends JpaRepository<Trouble, Long> {
 
     List<Trouble> findByUserIdAndStatusGreaterThan(long userId, int status, Sort sort);
 
+    List<Trouble> findByStatusLessThan(int status, Sort sort);
+
 
     List<Trouble> findBySolverId(long solverId, Sort sort);
 
     @Modifying
     @Transactional
-    @Query("update Trouble t set t.solutionComment = ?1, t.solutionDetail = ?2,t.status=?3, t.solver=?4,t.solverId=?5,t.solveTime=now()")
-    int updateSolveStatus(String solutionComment, String solutionDetail, int status, String solver, long solverId);
+    @Query("update Trouble t set t.solutionComment = ?1, t.solutionDetail = ?2,t.status=?3, t.solver=?4,t.solverId=?5,t.solveTime=now() where t.id=?6")
+    int updateSolveStatus(String solutionComment, String solutionDetail, int status, String solver, long solverId, long troubleId);
 
     @Modifying
     @Transactional
-    @Query("update Trouble t set t.status=?1, t.confirmerId=?2, t.confirmer=?3, t.confirmTime=now()")
-    int updateConfirmStatus(int status, long confirmerId, String confirmer);
+    @Query("update Trouble t set t.status=?1, t.confirmerId=?2, t.confirmer=?3, t.confirmTime=now() where t.id=?4")
+    int updateConfirmStatus(int status, long confirmerId, String confirmer, long troubleId);
+
+    List<Trouble> findByStatus(int status, Sort sort);
+
+    List<Trouble> findByStatusAndSolverId(int status, long userId, Sort sort);
 }

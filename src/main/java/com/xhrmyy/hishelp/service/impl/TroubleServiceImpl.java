@@ -83,13 +83,36 @@ public class TroubleServiceImpl implements TroubleService {
     }
 
     @Override
-    public BaseResult getTroublesByStatus(int status, long userId) {
+    public BaseResult getTroublesByStatus(int status) {
+        BaseResult baseResult = new BaseResult();
+        try {
+            Sort sort = new Sort(Sort.Direction.DESC, "submitTime");
+            List<Trouble> troubles = troubleRepository.findByStatus(status, sort);
+
+            if (null != troubles && troubles.size() > 0) {
+                baseResult.setData(troubles);
+            }
+        } catch (Exception e) {
+            log.error(e.toString());
+            baseResult.setCode(-500);
+            baseResult.setMessage("服务器异常");
+            return baseResult;
+        }
+        return baseResult;
+    }
+
+    @Override
+    public BaseResult getTroublesByStatusAndUserId(int status, long userId) {
         BaseResult baseResult = new BaseResult();
         List<Trouble> troubles = null;
         try {
             Sort sort = new Sort(Sort.Direction.DESC, "submitTime");
             if (status == 3) {
-                troubles = troubleRepository.findByUserIdAndStatusGreaterThan(userId, status, sort);
+                troubles = troubleRepository.findByUserIdAndStatusGreaterThan(userId, status - 1, sort);
+            } else if (status == 5) { //所有未解决
+                troubles = troubleRepository.findByStatusLessThan(status - 2, sort);
+            } else if (status == 6) { //所有我已经解决的故障
+                troubles = troubleRepository.findByStatusAndSolverId(Trouble.TROUBLE_STATUS_SOLVED, userId, sort);
             } else {
                 troubles = troubleRepository.findByUserIdAndStatus(userId, status, sort);
             }
@@ -145,7 +168,7 @@ public class TroubleServiceImpl implements TroubleService {
         BaseResult baseResult = new BaseResult();
         try {
             // 更新状态、解决方案
-            troubleRepository.updateSolveStatus(solutionReq.getSolutionComment(), solutionReq.getSolutionDetail(), Trouble.TROUBLE_STATUS_SOLVED, solutionReq.getSolver(), solutionReq.getSolverId());
+            troubleRepository.updateSolveStatus(solutionReq.getSolutionComment(), solutionReq.getSolutionDetail(), Trouble.TROUBLE_STATUS_SOLVED, solutionReq.getSolver(), solutionReq.getSolverId(), solutionReq.getTroubleId());
         } catch (Exception e) {
             log.error(e.toString());
             baseResult.setCode(-500);
@@ -160,13 +183,14 @@ public class TroubleServiceImpl implements TroubleService {
         BaseResult baseResult = new BaseResult();
         try {
             // 更新状态
-            troubleRepository.updateConfirmStatus(Trouble.TROUBLE_STATUS_CONFIRMED, confirmReq.getConfirmerId(), confirmReq.getConfirmer());
+            troubleRepository.updateConfirmStatus(Trouble.TROUBLE_STATUS_CONFIRMED, confirmReq.getConfirmerId(), confirmReq.getConfirmer(), confirmReq.getTroubleId());
         } catch (Exception e) {
             log.error(e.toString());
             baseResult.setCode(-500);
             baseResult.setMessage("服务器异常");
             return baseResult;
         }
+        baseResult = getTroubleDetail(confirmReq.getTroubleId());
         return baseResult;
     }
 
@@ -175,13 +199,14 @@ public class TroubleServiceImpl implements TroubleService {
         BaseResult baseResult = new BaseResult();
         try {
             // 更新状态
-            troubleRepository.updateSolveStatus("", "", Trouble.TROUBLE_STATUS_REVOKED, solutionReq.getSolver(), solutionReq.getSolverId());
+            troubleRepository.updateSolveStatus("", "", Trouble.TROUBLE_STATUS_REVOKED, solutionReq.getSolver(), solutionReq.getSolverId(), solutionReq.getTroubleId());
         } catch (Exception e) {
             log.error(e.toString());
             baseResult.setCode(-500);
             baseResult.setMessage("服务器异常");
             return baseResult;
         }
+        baseResult = getTroubleDetail(solutionReq.getTroubleId());
         return baseResult;
     }
 
