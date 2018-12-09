@@ -4,6 +4,7 @@ import com.xhrmyy.hishelp.common.BaseModel;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by huangshiming on 2018/10/10
@@ -71,6 +72,8 @@ public class Trouble extends BaseModel {
     private Date solveTime;
     @Column
     private String solverName;
+
+    private List<String> formIds;
 
     public Trouble() {
     }
@@ -228,5 +231,13 @@ public class Trouble extends BaseModel {
 
     public void setConfirmerId(Long confirmerId) {
         this.confirmerId = confirmerId;
+    }
+
+    public List<String> getFormIds() {
+        return formIds;
+    }
+
+    public void setFormIds(List<String> formIds) {
+        this.formIds = formIds;
     }
 }

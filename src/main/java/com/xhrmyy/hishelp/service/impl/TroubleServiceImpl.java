@@ -13,7 +13,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by huangshiming on 2018/10/12
@@ -25,24 +27,31 @@ public class TroubleServiceImpl implements TroubleService {
 
     @Autowired
     private TroubleRepository troubleRepository;
+    private Map<Long, Date> lastSubmitMap = new HashMap<>();
 
     @Override
     public BaseResult submitTrouble(Trouble trouble) {
 
         BaseResult baseResult = new BaseResult();
-        try {
-            trouble.setStatus(Trouble.TROUBLE_STATUS_SUBMITTED);
-            trouble.setSubmitTime(new Date());
-            Trouble savedTrouble = troubleRepository.saveAndFlush(trouble);
-            if (null != savedTrouble) {
-                baseResult.setData(savedTrouble);
+        Date lastSubmitDate = lastSubmitMap.get(trouble.getUserId());
+        Date now = new Date();
+        if (null == lastSubmitDate | (null != lastSubmitDate && (now.getTime() - lastSubmitDate.getTime()) > 1000)) {
+            lastSubmitMap.put(trouble.getUserId(), now);
+            try {
+                trouble.setStatus(Trouble.TROUBLE_STATUS_SUBMITTED);
+                trouble.setSubmitTime(new Date());
+                Trouble savedTrouble = troubleRepository.saveAndFlush(trouble);
+                if (null != savedTrouble) {
+                    baseResult.setData(savedTrouble);
+                }
+            } catch (Exception e) {
+                log.error(e.toString());
+                baseResult.setCode(-500);
+                baseResult.setMessage("服务器异常");
+                return baseResult;
             }
-        } catch (Exception e) {
-            log.error(e.toString());
-            baseResult.setCode(-500);
-            baseResult.setMessage("服务器异常");
-            return baseResult;
         }
+
         return baseResult;
     }
 
@@ -207,6 +216,23 @@ public class TroubleServiceImpl implements TroubleService {
             return baseResult;
         }
         baseResult = getTroubleDetail(solutionReq.getTroubleId());
+        return baseResult;
+    }
+
+    @Override
+    public BaseResult sendMessage(List<String> formIds) {
+        BaseResult baseResult = new BaseResult();
+        try {
+            // 发送推送消息
+            if (null != formIds && formIds.size() > 0) {
+
+            }
+        } catch (Exception e) {
+            log.error(e.toString());
+            baseResult.setCode(-500);
+            baseResult.setMessage("服务器异常");
+            return baseResult;
+        }
         return baseResult;
     }
 

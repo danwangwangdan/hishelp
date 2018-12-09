@@ -2,7 +2,7 @@ package com.xhrmyy.hishelp.service.impl;
 
 import com.xhrmyy.hishelp.common.BaseResult;
 import com.xhrmyy.hishelp.entity.User;
-import com.xhrmyy.hishelp.entity.WeChatLoginInfo;
+import com.xhrmyy.hishelp.entity.WeChatInfo;
 import com.xhrmyy.hishelp.repository.UserRepository;
 import com.xhrmyy.hishelp.service.UserService;
 import com.xhrmyy.hishelp.util.WeChatUtil;
@@ -34,8 +34,8 @@ public class UserServiceImpl implements UserService {
                 baseResult.setData(realUser);
                 // 账号密码校验通过，开始与微信绑定
                 if (StringUtils.isNotBlank(user.getJsCode())) {
-                    WeChatLoginInfo weChatLoginInfo = WeChatUtil.code2Session(user.getJsCode());
-                    userRepository.updateOpenId(weChatLoginInfo.getOpenid(), realUser.getId());
+                    WeChatInfo weChatInfo = WeChatUtil.code2Session(user.getJsCode());
+                    userRepository.updateOpenId(weChatInfo.getOpenid(), realUser.getId());
                 }
 
             }
