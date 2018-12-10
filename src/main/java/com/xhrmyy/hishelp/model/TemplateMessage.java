@@ -11,6 +11,11 @@ import java.util.Map;
  */
 public class TemplateMessage extends BaseModel {
 
+    public static final int MESSAGE_TYPE_SUBMIT = 1;
+    public static final int MESSAGE_TYPE_SOLVED = 2;
+    private static final long serialVersionUID = 4672282392360960647L;
+    private int messageType;
+
     private String touser; //接收者（用户）的 openid
 
     private String template_id; //所需下发的模板消息的id
@@ -69,6 +74,14 @@ public class TemplateMessage extends BaseModel {
 
     public void setEmphasis_keyword(String emphasis_keyword) {
         this.emphasis_keyword = emphasis_keyword;
+    }
+
+    public int getMessageType() {
+        return messageType;
+    }
+
+    public void setMessageType(int messageType) {
+        this.messageType = messageType;
     }
 }
 

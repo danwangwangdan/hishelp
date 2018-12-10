@@ -21,10 +21,10 @@ public class TroubleController {
     @Autowired
     private TroubleService troubleService;
 
-    @PostMapping("/formids")
-    public BaseResult sendMessage(@RequestBody Trouble trouble) {
+    @PostMapping("/message/submit")
+    public BaseResult sendMessageSubmit(@RequestBody Trouble trouble) {
 
-        return troubleService.sendMessage(trouble.getFormIds());
+        return troubleService.sendMessageSubmit(trouble);
     }
 
     @PostMapping("/submit")

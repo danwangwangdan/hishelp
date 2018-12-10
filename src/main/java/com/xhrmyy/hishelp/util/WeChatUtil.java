@@ -13,8 +13,16 @@ import java.util.Map;
 public class WeChatUtil {
 
     private static final Logger log = LoggerFactory.getLogger(WeChatUtil.class);
-    private static String APP_ID = "wx6c54f40530b65ae8";
-    private static String APP_SECRET = "efd4557cec70b46f45d7d466f3b8c93e";
+    public static final String HSM_OPEN_ID = "oixGf4q8DpKAgflAZMKixk--Gc0Q";
+    public static final String YQ_OPEN_ID = "oixGf4q8DpKAgflAZMKixk--Gc0Q";
+    public static final String WWD_OPEN_ID = "oixGf4q8DpKAgflAZMKixk--Gc0Q";
+    public static final String TEMPLE_MESSAGE_SUBMIT = "3COMTrL4TYAvxpcphp-14QtFK6dibpjC3ItG8gfFAlA";
+    public static final String TEMPLE_MESSAGE_SOVLED = "3COMTrL4TYAvxpcphp-14QtFK6dibpjC3ItG8gfFAlA";
+    public static final String GO_PAGE_SUBMIT = "submit";
+    public static final String GO_PAGE_DETAIL = "detail?troubleId=";
+
+    private static final String APP_ID = "wx6c54f40530b65ae8";
+    private static final String APP_SECRET = "efd4557cec70b46f45d7d466f3b8c93e";
 
     /**
      * 通过code获取session
@@ -36,7 +44,7 @@ public class WeChatUtil {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        log.info("获取微信信息成功：" + weChatInfo.toString());
+        log.info("获取微信信息：" + weChatInfo.toString());
         return weChatInfo;
     }
 

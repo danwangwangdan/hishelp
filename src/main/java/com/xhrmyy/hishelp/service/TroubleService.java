@@ -5,8 +5,6 @@ import com.xhrmyy.hishelp.entity.Trouble;
 import com.xhrmyy.hishelp.model.ConfirmReq;
 import com.xhrmyy.hishelp.model.SolutionReq;
 
-import java.util.List;
-
 /**
  * Created by huangshiming on 2018/10/12
  */
@@ -32,5 +30,5 @@ public interface TroubleService {
 
     BaseResult toRevokeTrouble(SolutionReq solutionReq);
 
-    BaseResult sendMessage(List<String> formIds);
+    BaseResult sendMessageSubmit(Trouble trouble);
 }

@@ -73,6 +73,7 @@ public class Trouble extends BaseModel {
     @Column
     private String solverName;
 
+    @Transient
     private List<String> formIds;
 
     public Trouble() {
@@ -233,6 +234,7 @@ public class Trouble extends BaseModel {
         this.confirmerId = confirmerId;
     }
 
+    @Transient
     public List<String> getFormIds() {
         return formIds;
     }

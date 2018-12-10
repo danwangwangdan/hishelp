@@ -1,17 +1,21 @@
 package com.xhrmyy.hishelp.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.xhrmyy.hishelp.common.BaseResult;
 import com.xhrmyy.hishelp.entity.Trouble;
 import com.xhrmyy.hishelp.model.ConfirmReq;
 import com.xhrmyy.hishelp.model.SolutionReq;
+import com.xhrmyy.hishelp.model.TemplateData;
 import com.xhrmyy.hishelp.repository.TroubleRepository;
 import com.xhrmyy.hishelp.service.TroubleService;
+import com.xhrmyy.hishelp.util.WeChatUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -220,12 +224,23 @@ public class TroubleServiceImpl implements TroubleService {
     }
 
     @Override
-    public BaseResult sendMessage(List<String> formIds) {
+    public BaseResult sendMessageSubmit(Trouble trouble) {
         BaseResult baseResult = new BaseResult();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         try {
             // 发送推送消息
-            if (null != formIds && formIds.size() > 0) {
-
+            if (null != trouble.getFormIds() && trouble.getFormIds().size() > 0) {
+                Map<String, TemplateData> dataMap = new HashMap<>();
+                dataMap.put("keyword1", new TemplateData(trouble.getTroublePersonName()));
+                dataMap.put("keyword2", new TemplateData(trouble.getOffice()));
+                dataMap.put("keyword3", new TemplateData(simpleDateFormat.format(new Date())));
+                dataMap.put("keyword4", new TemplateData(trouble.getDetail()));
+                JSONObject jsonObject1 = WeChatUtil.sendTemplateMessage(WeChatUtil.HSM_OPEN_ID, WeChatUtil.TEMPLE_MESSAGE_SUBMIT, WeChatUtil.GO_PAGE_SUBMIT, trouble.getFormIds().get(0), dataMap);
+                //JSONObject jsonObject2 = WeChatUtil.sendTemplateMessage(WeChatUtil.WWD_OPEN_ID, WeChatUtil.TEMPLE_MESSAGE_SUBMIT, WeChatUtil.GO_PAGE_SUBMIT, trouble.getFormIds().get(1), dataMap);
+                //JSONObject jsonObject3 = WeChatUtil.sendTemplateMessage(WeChatUtil.YQ_OPEN_ID, WeChatUtil.TEMPLE_MESSAGE_SUBMIT, WeChatUtil.GO_PAGE_SUBMIT, trouble.getFormIds().get(2), dataMap);
+                log.info("发送消息至黄士明:" + jsonObject1.getString("errmsg"));
+                //log.info("发送消息至文卫东:" + jsonObject2.getString("errmsg"));
+                //log.info("发送消息至杨庆:" + jsonObject3.getString("errmsg"));
             }
         } catch (Exception e) {
             log.error(e.toString());
