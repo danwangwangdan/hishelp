@@ -2,8 +2,7 @@ package com.xhrmyy.hishelp.controller;
 
 import com.xhrmyy.hishelp.common.BaseResult;
 import com.xhrmyy.hishelp.entity.Trouble;
-import com.xhrmyy.hishelp.model.ConfirmReq;
-import com.xhrmyy.hishelp.model.SolutionReq;
+import com.xhrmyy.hishelp.model.ProcessReq;
 import com.xhrmyy.hishelp.service.TroubleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,18 +61,18 @@ public class TroubleController {
     }
 
     @PostMapping("/revoke")
-    public BaseResult toRevokeTrouble(@RequestBody SolutionReq solutionReq) {
-        return troubleService.toRevokeTrouble(solutionReq);
+    public BaseResult toRevokeTrouble(@RequestBody ProcessReq processReq) {
+        return troubleService.toRevokeTrouble(processReq);
     }
 
     @PostMapping("/confirm")
-    public BaseResult toConfirmTrouble(@RequestBody ConfirmReq confirmReq) {
-        return troubleService.toConfirmTrouble(confirmReq);
+    public BaseResult toConfirmTrouble(@RequestBody ProcessReq processReq) {
+        return troubleService.toConfirmTrouble(processReq);
     }
 
     @PostMapping("/solve")
-    public BaseResult toSolveTrouble(@RequestBody SolutionReq solutionReq) {
-        return troubleService.toSolveTrouble(solutionReq);
+    public BaseResult toSolveTrouble(@RequestBody ProcessReq processReq) {
+        return troubleService.toSolveTrouble(processReq);
     }
 
     @RequestMapping("/mySolved")

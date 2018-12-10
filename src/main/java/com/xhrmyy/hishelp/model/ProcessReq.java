@@ -5,7 +5,7 @@ import com.xhrmyy.hishelp.common.BaseModel;
 /**
  * Created by huangshiming on 2018/10/23 22:10
  */
-public class SolutionReq extends BaseModel {
+public class ProcessReq extends BaseModel {
 
     private Integer solutionType;
     private String solutionDetail;
@@ -13,6 +13,7 @@ public class SolutionReq extends BaseModel {
     private String solver;
     private Long troubleId;
     private Long solverId;
+    private String formId;
 
 
     public String getSolutionDetail() {
@@ -61,5 +62,13 @@ public class SolutionReq extends BaseModel {
 
     public void setSolverId(Long solverId) {
         this.solverId = solverId;
+    }
+
+    public String getFormId() {
+        return formId;
+    }
+
+    public void setFormId(String formId) {
+        this.formId = formId;
     }
 }

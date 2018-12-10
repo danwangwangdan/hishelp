@@ -16,13 +16,13 @@ public class WeChatUtil {
     public static final String HSM_OPEN_ID = "oixGf4q8DpKAgflAZMKixk--Gc0Q";
     public static final String YQ_OPEN_ID = "oixGf4q8DpKAgflAZMKixk--Gc0Q";
     public static final String WWD_OPEN_ID = "oixGf4q8DpKAgflAZMKixk--Gc0Q";
-    public static final String TEMPLE_MESSAGE_SUBMIT = "3COMTrL4TYAvxpcphp-14QtFK6dibpjC3ItG8gfFAlA";
-    public static final String TEMPLE_MESSAGE_SOVLED = "3COMTrL4TYAvxpcphp-14QtFK6dibpjC3ItG8gfFAlA";
-    public static final String GO_PAGE_SUBMIT = "submit";
-    public static final String GO_PAGE_DETAIL = "detail?troubleId=";
+    public static final String TEMPLE_MESSAGE_SUBMIT = "3COMTrL4TYAvxpcphp-14eop26fpkEOOYSZkyb5jI5g";
+    public static final String TEMPLE_MESSAGE_SOVLED = "V0KeA1QZRFSY6R6PtKvy-FlN8dUTqQkqUQ6AioiRGLY";
+    public static final String GO_PAGE_SUBMIT = "pages/submit/submit";
+    public static final String GO_PAGE_DETAIL = "pages/detail/detail?troubleId=";
 
     private static final String APP_ID = "wx6c54f40530b65ae8";
-    private static final String APP_SECRET = "efd4557cec70b46f45d7d466f3b8c93e";
+    private static final String APP_SECRET = "cbd4d838876efcb340fae65a4d8cf236";
 
     /**
      * 通过code获取session
@@ -50,7 +50,7 @@ public class WeChatUtil {
 
     public static WeChatInfo getAccessToken() {
 
-        String authUrl = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET";
+        String authUrl = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=SECRET";
         WeChatInfo weChatInfo = null;
         authUrl = authUrl.replace("APPID", APP_ID);
         authUrl = authUrl.replace("SECRET", APP_SECRET);

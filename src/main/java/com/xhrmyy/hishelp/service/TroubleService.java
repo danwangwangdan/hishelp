@@ -2,8 +2,7 @@ package com.xhrmyy.hishelp.service;
 
 import com.xhrmyy.hishelp.common.BaseResult;
 import com.xhrmyy.hishelp.entity.Trouble;
-import com.xhrmyy.hishelp.model.ConfirmReq;
-import com.xhrmyy.hishelp.model.SolutionReq;
+import com.xhrmyy.hishelp.model.ProcessReq;
 
 /**
  * Created by huangshiming on 2018/10/12
@@ -24,11 +23,11 @@ public interface TroubleService {
 
     BaseResult getMySolvedTroubles(long userId);
 
-    BaseResult toSolveTrouble(SolutionReq solutionReq);
+    BaseResult toSolveTrouble(ProcessReq processReq);
 
-    BaseResult toConfirmTrouble(ConfirmReq confirmReq);
+    BaseResult toConfirmTrouble(ProcessReq processReq);
 
-    BaseResult toRevokeTrouble(SolutionReq solutionReq);
+    BaseResult toRevokeTrouble(ProcessReq processReq);
 
     BaseResult sendMessageSubmit(Trouble trouble);
 }
