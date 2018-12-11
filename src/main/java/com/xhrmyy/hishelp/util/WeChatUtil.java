@@ -15,7 +15,7 @@ public class WeChatUtil {
     private static final Logger log = LoggerFactory.getLogger(WeChatUtil.class);
     public static final String HSM_OPEN_ID = "oixGf4q8DpKAgflAZMKixk--Gc0Q";
     public static final String YQ_OPEN_ID = "oixGf4q8DpKAgflAZMKixk--Gc0Q";
-    public static final String WWD_OPEN_ID = "oixGf4q8DpKAgflAZMKixk--Gc0Q";
+    public static final String WWD_OPEN_ID = "oixGf4kbBjtkOdAOwowdd3DpV-2s";
     public static final String TEMPLE_MESSAGE_SUBMIT = "3COMTrL4TYAvxpcphp-14eop26fpkEOOYSZkyb5jI5g";
     public static final String TEMPLE_MESSAGE_SOVLED = "V0KeA1QZRFSY6R6PtKvy-FlN8dUTqQkqUQ6AioiRGLY";
     public static final String GO_PAGE_SUBMIT = "pages/submit/submit";

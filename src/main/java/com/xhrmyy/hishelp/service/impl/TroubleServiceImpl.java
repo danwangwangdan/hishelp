@@ -247,10 +247,10 @@ public class TroubleServiceImpl implements TroubleService {
                 dataMap.put("keyword2", new TemplateData(trouble.getOffice()));
                 dataMap.put("keyword3", new TemplateData(trouble.getDetail()));
                 JSONObject jsonObject1 = WeChatUtil.sendTemplateMessage(WeChatUtil.HSM_OPEN_ID, WeChatUtil.TEMPLE_MESSAGE_SUBMIT, WeChatUtil.GO_PAGE_SUBMIT, trouble.getFormIds().get(0), dataMap);
-                //JSONObject jsonObject2 = WeChatUtil.sendTemplateMessage(WeChatUtil.WWD_OPEN_ID, WeChatUtil.TEMPLE_MESSAGE_SUBMIT, WeChatUtil.GO_PAGE_SUBMIT, trouble.getFormIds().get(1), dataMap);
+                JSONObject jsonObject2 = WeChatUtil.sendTemplateMessage(WeChatUtil.WWD_OPEN_ID, WeChatUtil.TEMPLE_MESSAGE_SUBMIT, WeChatUtil.GO_PAGE_SUBMIT, trouble.getFormIds().get(1), dataMap);
                 //JSONObject jsonObject3 = WeChatUtil.sendTemplateMessage(WeChatUtil.YQ_OPEN_ID, WeChatUtil.TEMPLE_MESSAGE_SUBMIT, WeChatUtil.GO_PAGE_SUBMIT, trouble.getFormIds().get(2), dataMap);
                 log.info("发送消息至黄士明:" + jsonObject1.getString("errmsg"));
-                //log.info("发送消息至文卫东:" + jsonObject2.getString("errmsg"));
+                log.info("发送消息至文卫东:" + jsonObject2.getString("errmsg"));
                 //log.info("发送消息至杨庆:" + jsonObject3.getString("errmsg"));
             }
         } catch (Exception e) {
