@@ -273,7 +273,7 @@ public class TroubleServiceImpl implements TroubleService {
                 Map<String, TemplateData> dataMap = new HashMap<>();
                 Trouble trouble = troubleRepository.findOne(processReq.getTroubleId());
                 User user = userRepository.findOne(trouble.getUserId());
-                dataMap.put("keyword1", new TemplateData(trouble.getFirType() + (trouble.getSecType().equals("其他问题") ? "" : trouble.getSecType())));
+                dataMap.put("keyword1", new TemplateData(trouble.getFirType() + (trouble.getSecType().equals("其他问题") ? "" : ("-" + trouble.getSecType()))));
                 dataMap.put("keyword2", new TemplateData(simpleDateFormat.format(trouble.getSubmitTime())));
                 dataMap.put("keyword3", new TemplateData(getStatusByIntValue(trouble.getStatus())));
                 JSONObject jsonObject1 = WeChatUtil.sendTemplateMessage(user.getOpenId(), WeChatUtil.TEMPLE_MESSAGE_SOVLED, WeChatUtil.GO_PAGE_DETAIL + trouble.getId(), processReq.getFormId(), dataMap);
