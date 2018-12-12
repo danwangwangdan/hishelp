@@ -2,6 +2,7 @@ package com.xhrmyy.hishelp.util;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.xhrmyy.hishelp.cache.CacheManager;
 import com.xhrmyy.hishelp.entity.WeChatInfo;
 import com.xhrmyy.hishelp.model.TemplateData;
 import com.xhrmyy.hishelp.model.TemplateMessage;
@@ -78,7 +79,7 @@ public class WeChatUtil {
     public static JSONObject sendTemplateMessage(String toUser, String templateId, String page, String formId, Map<String, TemplateData> map) {
 
         String authUrl = "https://api.weixin.qq.com/cgi-bin/message/wxopen/template/send?access_token=ACCESS_TOKEN";
-        authUrl = authUrl.replace("ACCESS_TOKEN", getAccessToken().getAccess_token());
+        authUrl = authUrl.replace("ACCESS_TOKEN", CacheManager.getAccessToken());
         TemplateMessage templateMessage = new TemplateMessage();
         //拼接数据
         templateMessage.setTouser(toUser);
