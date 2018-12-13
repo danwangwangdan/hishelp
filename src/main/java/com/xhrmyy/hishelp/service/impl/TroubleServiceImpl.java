@@ -2,15 +2,17 @@ package com.xhrmyy.hishelp.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.xhrmyy.hishelp.common.BaseResult;
+import com.xhrmyy.hishelp.entity.FormIdMapper;
 import com.xhrmyy.hishelp.entity.Trouble;
 import com.xhrmyy.hishelp.entity.User;
 import com.xhrmyy.hishelp.model.ProcessReq;
 import com.xhrmyy.hishelp.model.TemplateData;
+import com.xhrmyy.hishelp.model.TemplateMessage;
 import com.xhrmyy.hishelp.repository.TroubleRepository;
 import com.xhrmyy.hishelp.repository.UserRepository;
+import com.xhrmyy.hishelp.service.CommonService;
 import com.xhrmyy.hishelp.service.TroubleService;
 import com.xhrmyy.hishelp.util.WeChatUtil;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +37,8 @@ public class TroubleServiceImpl implements TroubleService {
     private TroubleRepository troubleRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private CommonService commonService;
     private Map<Long, Date> lastSubmitMap = new HashMap<>();
 
     @Override
@@ -51,6 +55,8 @@ public class TroubleServiceImpl implements TroubleService {
                 Trouble savedTrouble = troubleRepository.saveAndFlush(trouble);
                 if (null != savedTrouble) {
                     baseResult.setData(savedTrouble);
+                    // 给管理员推送消息
+                    sendMessageToAdmin(trouble);
                 }
             } catch (Exception e) {
                 log.error(e.toString());
@@ -62,6 +68,7 @@ public class TroubleServiceImpl implements TroubleService {
 
         return baseResult;
     }
+
 
     @Override
     public BaseResult getAllTroubles() {
@@ -188,7 +195,20 @@ public class TroubleServiceImpl implements TroubleService {
             int count = troubleRepository.updateSolveStatus(processReq.getSolutionComment(), processReq.getSolutionDetail(), Trouble.TROUBLE_STATUS_SOLVED, processReq.getSolver(), processReq.getSolverId(), processReq.getTroubleId());
             log.info("toSolveTrouble更新了" + count + "行");
             if (count > 0) {
-                new MessageSendThread(processReq).start();
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                Map<String, TemplateData> dataMap = new HashMap<>();
+                Trouble trouble = troubleRepository.findOne(processReq.getTroubleId());
+                dataMap.put("keyword1", new TemplateData(trouble.getFirType() + (trouble.getSecType().equals("其他问题") ? "" : ("-" + trouble.getSecType()))));
+                dataMap.put("keyword2", new TemplateData(simpleDateFormat.format(trouble.getSubmitTime())));
+                dataMap.put("keyword3", new TemplateData(getStatusByIntValue(trouble.getStatus())));
+
+                User user = userRepository.findOne(trouble.getUserId());
+                TemplateMessage templateMessage = new TemplateMessage();
+                templateMessage.setTemplate_id(WeChatUtil.TEMPLE_MESSAGE_SOVLED);
+                templateMessage.setPage(WeChatUtil.GO_PAGE_DETAIL + trouble.getId());
+                templateMessage.setTouser(user.getOpenId());
+                templateMessage.setData(dataMap);
+                new MessageSendThread(templateMessage).start();
             }
         } catch (Exception e) {
             log.error(e.toString());
@@ -207,7 +227,20 @@ public class TroubleServiceImpl implements TroubleService {
             int count = troubleRepository.updateConfirmStatus(Trouble.TROUBLE_STATUS_CONFIRMED, processReq.getSolverId(), processReq.getSolver(), processReq.getTroubleId());
             log.info("toConfirmTrouble更新了" + count + "行");
             if (count > 0) {
-                new MessageSendThread(processReq).start();
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                Map<String, TemplateData> dataMap = new HashMap<>();
+                Trouble trouble = troubleRepository.findOne(processReq.getTroubleId());
+                dataMap.put("keyword1", new TemplateData(trouble.getFirType() + (trouble.getSecType().equals("其他问题") ? "" : ("-" + trouble.getSecType()))));
+                dataMap.put("keyword2", new TemplateData(simpleDateFormat.format(trouble.getSubmitTime())));
+                dataMap.put("keyword3", new TemplateData(getStatusByIntValue(trouble.getStatus())));
+
+                User user = userRepository.findOne(trouble.getUserId());
+                TemplateMessage templateMessage = new TemplateMessage();
+                templateMessage.setTemplate_id(WeChatUtil.TEMPLE_MESSAGE_CONFIRMD);
+                templateMessage.setPage(WeChatUtil.GO_PAGE_DETAIL + trouble.getId());
+                templateMessage.setTouser(user.getOpenId());
+                templateMessage.setData(dataMap);
+                new MessageSendThread(templateMessage).start();
             }
         } catch (Exception e) {
             log.error(e.toString());
@@ -217,6 +250,21 @@ public class TroubleServiceImpl implements TroubleService {
         }
         baseResult = getTroubleDetail(processReq.getTroubleId());
         return baseResult;
+    }
+
+    private void sendMessageToAdmin(Trouble trouble) {
+
+        Map<String, TemplateData> dataMap = new HashMap<>();
+        dataMap.put("keyword1", new TemplateData(trouble.getTroublePersonName()));
+        dataMap.put("keyword2", new TemplateData(trouble.getOffice()));
+        dataMap.put("keyword3", new TemplateData(trouble.getDetail()));
+
+        TemplateMessage templateMessage = new TemplateMessage();
+        templateMessage.setTemplate_id(WeChatUtil.TEMPLE_MESSAGE_CONFIRMD);
+        templateMessage.setPage(WeChatUtil.GO_PAGE_SUBMIT);
+        templateMessage.setTouser(WeChatUtil.HSM_OPEN_ID);
+        templateMessage.setData(dataMap);
+        new MessageSendThread(templateMessage).start();
     }
 
     @Override
@@ -235,49 +283,16 @@ public class TroubleServiceImpl implements TroubleService {
         return baseResult;
     }
 
+
     @Override
-    public BaseResult sendMessageSubmit(Trouble trouble) {
+    public BaseResult sendTemplateMessage(TemplateMessage templateMessage) {
         BaseResult baseResult = new BaseResult();
-        try {
-            Thread.sleep(2000);
-            // 发送推送消息
-            if (null != trouble.getFormIds() && trouble.getFormIds().size() > 0) {
-                Map<String, TemplateData> dataMap = new HashMap<>();
-                dataMap.put("keyword1", new TemplateData(trouble.getTroublePersonName()));
-                dataMap.put("keyword2", new TemplateData(trouble.getOffice()));
-                dataMap.put("keyword3", new TemplateData(trouble.getDetail()));
-                JSONObject jsonObject1 = WeChatUtil.sendTemplateMessage(WeChatUtil.HSM_OPEN_ID, WeChatUtil.TEMPLE_MESSAGE_SUBMIT, WeChatUtil.GO_PAGE_SUBMIT, trouble.getFormIds().get(0), dataMap);
-                //JSONObject jsonObject2 = WeChatUtil.sendTemplateMessage(WeChatUtil.HSM_OPEN_ID, WeChatUtil.TEMPLE_MESSAGE_SUBMIT, WeChatUtil.GO_PAGE_SUBMIT, trouble.getFormIds().get(1), dataMap);
-                //JSONObject jsonObject3 = WeChatUtil.sendTemplateMessage(WeChatUtil.YQ_OPEN_ID, WeChatUtil.TEMPLE_MESSAGE_SUBMIT, WeChatUtil.GO_PAGE_SUBMIT, trouble.getFormIds().get(2), dataMap);
-                log.info("发送消息至黄士明:" + jsonObject1.getString("errmsg"));
-                //log.info("发送消息至文卫东:" + jsonObject2.getString("errmsg"));
-                //log.info("发送消息至杨庆:" + jsonObject3.getString("errmsg"));
-            }
-        } catch (Exception e) {
-            log.error(e.toString());
-            baseResult.setCode(-500);
-            baseResult.setMessage("服务器异常");
-            return baseResult;
-        }
-        return baseResult;
-    }
-
-    public BaseResult sendMessageProcess(ProcessReq processReq) {
-        BaseResult baseResult = new BaseResult();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
         try {
-            Thread.sleep(2000);
-            // 发送推送消息
-            if (StringUtils.isNotBlank(processReq.getFormId())) {
-                Map<String, TemplateData> dataMap = new HashMap<>();
-                Trouble trouble = troubleRepository.findOne(processReq.getTroubleId());
-                User user = userRepository.findOne(trouble.getUserId());
-                dataMap.put("keyword1", new TemplateData(trouble.getFirType() + (trouble.getSecType().equals("其他问题") ? "" : ("-" + trouble.getSecType()))));
-                dataMap.put("keyword2", new TemplateData(simpleDateFormat.format(trouble.getSubmitTime())));
-                dataMap.put("keyword3", new TemplateData(getStatusByIntValue(trouble.getStatus())));
-                JSONObject jsonObject1 = WeChatUtil.sendTemplateMessage(user.getOpenId(), WeChatUtil.TEMPLE_MESSAGE_SOVLED, WeChatUtil.GO_PAGE_DETAIL + trouble.getId(), processReq.getFormId(), dataMap);
-                log.info("发送消息至" + user.getNickname() + jsonObject1.getString("errmsg"));
+            BaseResult<FormIdMapper> formIdResult = commonService.getOneUsefulFormId(templateMessage.getTouser());
+            if (formIdResult.getCode() >= 0) {
+                JSONObject jsonObject1 = WeChatUtil.sendTemplateMessage(templateMessage.getTouser(), templateMessage.getTemplate_id(), templateMessage.getPage(), formIdResult.getData().getFormId(), templateMessage.getData());
+                log.info("发送消息至" + templateMessage.getTouser() + jsonObject1.getString("errmsg"));
             }
         } catch (Exception e) {
             log.error(e.toString());
@@ -305,22 +320,22 @@ public class TroubleServiceImpl implements TroubleService {
 
     class MessageSendThread extends Thread {
 
-        private ProcessReq processReq;
+        private TemplateMessage templateMessage;
 
-        public MessageSendThread(ProcessReq processReq) {
-            this.processReq = processReq;
+        public TemplateMessage getTemplateMessage() {
+            return templateMessage;
+        }
+
+        public void setTemplateMessage(TemplateMessage templateMessage) {
+            this.templateMessage = templateMessage;
         }
 
         public MessageSendThread() {
 
         }
 
-        public ProcessReq getProcessReq() {
-            return processReq;
-        }
-
-        public void setProcessReq(ProcessReq processReq) {
-            this.processReq = processReq;
+        public MessageSendThread(TemplateMessage templateMessage) {
+            this.templateMessage = templateMessage;
         }
 
         @Override
@@ -330,7 +345,7 @@ public class TroubleServiceImpl implements TroubleService {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            sendMessageProcess(this.processReq);
+            sendTemplateMessage(this.templateMessage);
         }
     }
 

@@ -20,11 +20,11 @@ public class TroubleController {
     @Autowired
     private TroubleService troubleService;
 
-    @PostMapping("/message/submit")
-    public BaseResult sendMessageSubmit(@RequestBody Trouble trouble) {
-
-        return troubleService.sendMessageSubmit(trouble);
-    }
+    //@PostMapping("/message/submit")
+    //public BaseResult sendMessageSubmit(@RequestBody Trouble trouble) {
+    //
+    //    return troubleService.sendMessageSubmit(trouble);
+    //}
 
     @PostMapping("/submit")
     public BaseResult submitTrouble(@RequestBody Trouble trouble) {

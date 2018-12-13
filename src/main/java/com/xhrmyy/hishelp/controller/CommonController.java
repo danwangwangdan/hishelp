@@ -2,6 +2,7 @@ package com.xhrmyy.hishelp.controller;
 
 import com.xhrmyy.hishelp.common.BaseResult;
 import com.xhrmyy.hishelp.entity.Suggestion;
+import com.xhrmyy.hishelp.entity.Trouble;
 import com.xhrmyy.hishelp.service.CommonService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,6 +69,14 @@ public class CommonController {
         } else {
             return null;
         }
+    }
+
+    @RequestMapping("/collectFormIds")
+    public BaseResult collectFormIds(@RequestBody Trouble trouble) {
+        log.info("请求collectFormIds");
+        BaseResult baseResult = commonService.collectFormIds(trouble);
+        log.info("collectFormIds请求返回：" + baseResult.toString());
+        return baseResult;
     }
 
 

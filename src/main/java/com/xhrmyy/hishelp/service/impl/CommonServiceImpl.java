@@ -1,22 +1,17 @@
 package com.xhrmyy.hishelp.service.impl;
 
 import com.xhrmyy.hishelp.common.BaseResult;
-import com.xhrmyy.hishelp.entity.FirType;
-import com.xhrmyy.hishelp.entity.SecType;
-import com.xhrmyy.hishelp.entity.SolutionType;
-import com.xhrmyy.hishelp.entity.Suggestion;
+import com.xhrmyy.hishelp.entity.*;
 import com.xhrmyy.hishelp.model.ImageResp;
 import com.xhrmyy.hishelp.model.UploadImage;
-import com.xhrmyy.hishelp.repository.FirTypeRepository;
-import com.xhrmyy.hishelp.repository.SecTypeRepository;
-import com.xhrmyy.hishelp.repository.SolutionTypeRepository;
-import com.xhrmyy.hishelp.repository.SuggestionRepository;
+import com.xhrmyy.hishelp.repository.*;
 import com.xhrmyy.hishelp.service.CommonService;
 import com.xhrmyy.hishelp.util.PictureUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -40,6 +35,10 @@ public class CommonServiceImpl implements CommonService {
     private SolutionTypeRepository solutionTypeRepository;
     @Autowired
     private SuggestionRepository suggestionRepository;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private ForIdMapperRepository forIdMapperRepository;
     @Value("${imageDir}")
     private String uploadPath;
 
@@ -108,7 +107,7 @@ public class CommonServiceImpl implements CommonService {
     public BaseResult uploadImage(List<MultipartFile> multipartFiles, String serverUrl) {
 
         String path = uploadPath;
-        long maxSize = 512;
+        long maxSize = 256;
         // 图片压缩质量
         double imageQuality = 0.8;
         BaseResult<List<ImageResp>> baseResult = new BaseResult<List<ImageResp>>();
@@ -155,6 +154,75 @@ public class CommonServiceImpl implements CommonService {
         }
         baseResult.setData(uploadImageList);
         log.info("上传图片service返回信息：" + baseResult.toString());
+        return baseResult;
+    }
+
+    @Override
+    public BaseResult collectFormIds(Trouble trouble) {
+
+        BaseResult baseResult = new BaseResult();
+        try {
+            if (null != trouble.getFormIds() && !trouble.getFormIds().isEmpty()) {
+
+                User user = userRepository.findOne(trouble.getUserId());
+                for (int i = 0; i < trouble.getFormIds().size(); i++) {
+                    FormIdMapper formIdMapper = new FormIdMapper();
+                    formIdMapper.setCreateDate(new Date());
+                    formIdMapper.setFormId(trouble.getFormIds().get(i));
+                    formIdMapper.setOpenId(user.getOpenId());
+                    forIdMapperRepository.saveAndFlush(formIdMapper);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("上传formId错误：" + e.toString());
+            baseResult.setCode(-500);
+            baseResult.setMessage("服务器异常");
+        }
+        return baseResult;
+    }
+
+    @Override
+    public BaseResult<FormIdMapper> getOneUsefulFormId(String openId) {
+
+        BaseResult<FormIdMapper> baseResult = new BaseResult<>();
+        boolean isUseful = false;
+        FormIdMapper formIdMapper;
+        int i = 0;
+        try {
+            Sort sort = new Sort(Sort.Direction.ASC, "createDate");
+            List<FormIdMapper> forIdMapperList = forIdMapperRepository.findByOpenId(openId, sort);
+            if (null != forIdMapperList && forIdMapperList.size() > 0) {
+                do {
+                    formIdMapper = forIdMapperList.get(i);
+                    long differ = new Date().getTime() - formIdMapper.getCreateDate().getTime();
+                    long day = differ / (24 * 60 * 60 * 1000);
+                    long hour = (differ / (60 * 60 * 1000) - day * 24);
+                    if (hour <= (24 * 7) - 1) {
+                        isUseful = true;
+                    } else {
+                        i++;
+                    }
+                } while (isUseful || i == forIdMapperList.size() - 1);
+                if (i == forIdMapperList.size() - 1) {
+                    log.error("无可用formId，请稍后重试");
+                    baseResult.setCode(-101);
+                    baseResult.setMessage("无可用formId");
+                }
+                if (isUseful) {
+                    log.info("已找到可用formId: " + formIdMapper.getFormId());
+                    baseResult.setData(formIdMapper);
+                }
+            } else {
+                throw new Exception("无可用formId，请稍后重试");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("上传formId错误：" + e.toString());
+            baseResult.setCode(-500);
+            baseResult.setMessage("服务器异常");
+        }
         return baseResult;
     }
 }

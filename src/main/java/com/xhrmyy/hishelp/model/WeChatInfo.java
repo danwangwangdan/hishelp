@@ -1,4 +1,4 @@
-package com.xhrmyy.hishelp.entity;
+package com.xhrmyy.hishelp.model;
 
 
 import com.xhrmyy.hishelp.common.BaseModel;

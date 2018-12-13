@@ -42,6 +42,8 @@ public class Trouble extends BaseModel {
     private Integer status;
     @Column(nullable = false)
     private String office;
+    @Column
+    private String toOffice;
     @Column(nullable = false)
     private String troublePersonName;
     @Column(nullable = false)
@@ -241,5 +243,13 @@ public class Trouble extends BaseModel {
 
     public void setFormIds(List<String> formIds) {
         this.formIds = formIds;
+    }
+
+    public String getToOffice() {
+        return toOffice;
+    }
+
+    public void setToOffice(String toOffice) {
+        this.toOffice = toOffice;
     }
 }

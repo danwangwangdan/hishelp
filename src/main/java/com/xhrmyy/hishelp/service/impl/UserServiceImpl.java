@@ -2,7 +2,7 @@ package com.xhrmyy.hishelp.service.impl;
 
 import com.xhrmyy.hishelp.common.BaseResult;
 import com.xhrmyy.hishelp.entity.User;
-import com.xhrmyy.hishelp.entity.WeChatInfo;
+import com.xhrmyy.hishelp.model.WeChatInfo;
 import com.xhrmyy.hishelp.repository.UserRepository;
 import com.xhrmyy.hishelp.service.UserService;
 import com.xhrmyy.hishelp.util.WeChatUtil;

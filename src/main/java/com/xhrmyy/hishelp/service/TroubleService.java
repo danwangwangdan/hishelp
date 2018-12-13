@@ -3,6 +3,7 @@ package com.xhrmyy.hishelp.service;
 import com.xhrmyy.hishelp.common.BaseResult;
 import com.xhrmyy.hishelp.entity.Trouble;
 import com.xhrmyy.hishelp.model.ProcessReq;
+import com.xhrmyy.hishelp.model.TemplateMessage;
 
 /**
  * Created by huangshiming on 2018/10/12
@@ -29,5 +30,5 @@ public interface TroubleService {
 
     BaseResult toRevokeTrouble(ProcessReq processReq);
 
-    BaseResult sendMessageSubmit(Trouble trouble);
+    BaseResult sendTemplateMessage(TemplateMessage templateMessage);
 }
