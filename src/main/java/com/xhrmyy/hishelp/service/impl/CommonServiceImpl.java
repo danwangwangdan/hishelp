@@ -201,6 +201,8 @@ public class CommonServiceImpl implements CommonService {
                     if (hour <= (24 * 7) - 1) {
                         isUseful = true;
                     } else {
+                        // 标记为已过期
+                        forIdMapperRepository.updateToExpire(formIdMapper.getFormId());
                         i++;
                     }
                 } while (!isUseful && i != forIdMapperList.size() - 1);
