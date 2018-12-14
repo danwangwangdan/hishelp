@@ -191,7 +191,7 @@ public class CommonServiceImpl implements CommonService {
         int i = 0;
         try {
             Sort sort = new Sort(Sort.Direction.ASC, "createDate");
-            List<FormIdMapper> forIdMapperList = forIdMapperRepository.findByOpenId(openId, sort);
+            List<FormIdMapper> forIdMapperList = forIdMapperRepository.findByOpenIdAndIsExpire(openId, 0, sort);
             if (null != forIdMapperList && forIdMapperList.size() > 0) {
                 do {
                     formIdMapper = forIdMapperList.get(i);
@@ -203,7 +203,7 @@ public class CommonServiceImpl implements CommonService {
                     } else {
                         i++;
                     }
-                } while (isUseful || i == forIdMapperList.size() - 1);
+                } while (!isUseful && i != forIdMapperList.size() - 1);
                 if (i == forIdMapperList.size() - 1) {
                     log.error("无可用formId，请稍后重试");
                     baseResult.setCode(-101);
@@ -211,6 +211,8 @@ public class CommonServiceImpl implements CommonService {
                 }
                 if (isUseful) {
                     log.info("已找到可用formId: " + formIdMapper.getFormId());
+                    // 标记为已过期
+                    forIdMapperRepository.updateToExpire(formIdMapper.getFormId());
                     baseResult.setData(formIdMapper);
                 }
             } else {

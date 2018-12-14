@@ -204,7 +204,7 @@ public class TroubleServiceImpl implements TroubleService {
 
                 User user = userRepository.findOne(trouble.getUserId());
                 TemplateMessage templateMessage = new TemplateMessage();
-                templateMessage.setTemplate_id(WeChatUtil.TEMPLE_MESSAGE_SOVLED);
+                templateMessage.setTemplate_id(WeChatUtil.TEMPLE_MESSAGE_PROCESSED);
                 templateMessage.setPage(WeChatUtil.GO_PAGE_DETAIL + trouble.getId());
                 templateMessage.setTouser(user.getOpenId());
                 templateMessage.setData(dataMap);
@@ -236,7 +236,7 @@ public class TroubleServiceImpl implements TroubleService {
 
                 User user = userRepository.findOne(trouble.getUserId());
                 TemplateMessage templateMessage = new TemplateMessage();
-                templateMessage.setTemplate_id(WeChatUtil.TEMPLE_MESSAGE_CONFIRMD);
+                templateMessage.setTemplate_id(WeChatUtil.TEMPLE_MESSAGE_PROCESSED);
                 templateMessage.setPage(WeChatUtil.GO_PAGE_DETAIL + trouble.getId());
                 templateMessage.setTouser(user.getOpenId());
                 templateMessage.setData(dataMap);
@@ -260,7 +260,7 @@ public class TroubleServiceImpl implements TroubleService {
         dataMap.put("keyword3", new TemplateData(trouble.getDetail()));
 
         TemplateMessage templateMessage = new TemplateMessage();
-        templateMessage.setTemplate_id(WeChatUtil.TEMPLE_MESSAGE_CONFIRMD);
+        templateMessage.setTemplate_id(WeChatUtil.TEMPLE_MESSAGE_SUBMITTED);
         templateMessage.setPage(WeChatUtil.GO_PAGE_SUBMIT);
         templateMessage.setTouser(WeChatUtil.HSM_OPEN_ID);
         templateMessage.setData(dataMap);
