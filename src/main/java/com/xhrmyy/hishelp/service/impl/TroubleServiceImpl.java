@@ -13,6 +13,7 @@ import com.xhrmyy.hishelp.repository.UserRepository;
 import com.xhrmyy.hishelp.service.CommonService;
 import com.xhrmyy.hishelp.service.TroubleService;
 import com.xhrmyy.hishelp.util.WeChatUtil;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,8 @@ public class TroubleServiceImpl implements TroubleService {
     @Autowired
     private CommonService commonService;
     private Map<Long, Date> lastSubmitMap = new HashMap<>();
+    private Map<Long, Date> lastConfirmMap = new HashMap<>();
+    private Map<Long, Date> lastSolveMap = new HashMap<>();
 
     @Override
     public BaseResult submitTrouble(Trouble trouble) {
@@ -56,7 +59,7 @@ public class TroubleServiceImpl implements TroubleService {
                 if (null != savedTrouble) {
                     baseResult.setData(savedTrouble);
                     // 给管理员推送消息
-                    sendMessageToAdmin(trouble);
+                    sendMessageToAdmin(savedTrouble);
                 }
             } catch (Exception e) {
                 log.error(e.toString());
@@ -217,51 +220,59 @@ public class TroubleServiceImpl implements TroubleService {
             return baseResult;
         }
         return baseResult;
+
     }
 
     @Override
     public BaseResult toConfirmTrouble(ProcessReq processReq) {
         BaseResult baseResult = new BaseResult();
-        try {
-            // 更新状态
-            int count = troubleRepository.updateConfirmStatus(Trouble.TROUBLE_STATUS_CONFIRMED, processReq.getSolverId(), processReq.getSolver(), processReq.getTroubleId());
-            log.info("toConfirmTrouble更新了" + count + "行");
-            if (count > 0) {
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-                Map<String, TemplateData> dataMap = new HashMap<>();
-                Trouble trouble = troubleRepository.findOne(processReq.getTroubleId());
-                dataMap.put("keyword1", new TemplateData(trouble.getFirType() + (trouble.getSecType().equals("其他问题") ? "" : ("-" + trouble.getSecType()))));
-                dataMap.put("keyword2", new TemplateData(simpleDateFormat.format(trouble.getSubmitTime())));
-                dataMap.put("keyword3", new TemplateData(getStatusByIntValue(trouble.getStatus())));
+        Date lastConfirmDate = lastConfirmMap.get(processReq.getSolverId());
+        Date now = new Date();
+        if (null == lastConfirmDate | (null != lastConfirmDate && (now.getTime() - lastConfirmDate.getTime()) > 2018)) {
+            lastConfirmMap.put(processReq.getSolverId(), now);
+            try {
+                // 更新状态
+                int count = troubleRepository.updateConfirmStatus(Trouble.TROUBLE_STATUS_CONFIRMED, processReq.getSolverId(), processReq.getSolver(), processReq.getTroubleId());
+                log.info("toConfirmTrouble更新了" + count + "行");
+                if (count > 0) {
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                    Map<String, TemplateData> dataMap = new HashMap<>();
+                    Trouble trouble = troubleRepository.findOne(processReq.getTroubleId());
+                    dataMap.put("keyword1", new TemplateData(trouble.getFirType() + (trouble.getSecType().equals("其他问题") ? "" : ("--" + trouble.getSecType()))));
+                    dataMap.put("keyword2", new TemplateData(simpleDateFormat.format(trouble.getSubmitTime())));
+                    dataMap.put("keyword3", new TemplateData(getStatusByIntValue(trouble.getStatus())));
 
-                User user = userRepository.findOne(trouble.getUserId());
-                TemplateMessage templateMessage = new TemplateMessage();
-                templateMessage.setTemplate_id(WeChatUtil.TEMPLE_MESSAGE_PROCESSED);
-                templateMessage.setPage(WeChatUtil.GO_PAGE_DETAIL + trouble.getId());
-                templateMessage.setTouser(user.getOpenId());
-                templateMessage.setData(dataMap);
-                new MessageSendThread(templateMessage).start();
+                    User user = userRepository.findOne(trouble.getUserId());
+                    TemplateMessage templateMessage = new TemplateMessage();
+                    templateMessage.setTemplate_id(WeChatUtil.TEMPLE_MESSAGE_PROCESSED);
+                    templateMessage.setPage(WeChatUtil.GO_PAGE_DETAIL + trouble.getId());
+                    templateMessage.setTouser(user.getOpenId());
+                    templateMessage.setData(dataMap);
+                    new MessageSendThread(templateMessage).start();
+                }
+            } catch (Exception e) {
+                log.error(e.toString());
+                baseResult.setCode(-500);
+                baseResult.setMessage("服务器异常");
+                return baseResult;
+
             }
-        } catch (Exception e) {
-            log.error(e.toString());
-            baseResult.setCode(-500);
-            baseResult.setMessage("服务器异常");
-            return baseResult;
         }
         baseResult = getTroubleDetail(processReq.getTroubleId());
         return baseResult;
+
     }
 
     private void sendMessageToAdmin(Trouble trouble) {
 
         Map<String, TemplateData> dataMap = new HashMap<>();
-        dataMap.put("keyword1", new TemplateData(trouble.getTroublePersonName()));
-        dataMap.put("keyword2", new TemplateData(trouble.getOffice()));
-        dataMap.put("keyword3", new TemplateData(trouble.getDetail()));
+        dataMap.put("keyword1", new TemplateData(trouble.getOffice() + "--" + trouble.getTroublePersonName()));
+        dataMap.put("keyword2", new TemplateData(trouble.getFirType() + (trouble.getSecType().equals("其他问题") ? "" : ("--" + trouble.getSecType()))));
+        dataMap.put("keyword3", new TemplateData(StringUtils.isBlank(trouble.getDetail()) ? "无" : trouble.getDetail()));
 
         TemplateMessage templateMessage = new TemplateMessage();
         templateMessage.setTemplate_id(WeChatUtil.TEMPLE_MESSAGE_SUBMITTED);
-        templateMessage.setPage(WeChatUtil.GO_PAGE_SUBMIT);
+        templateMessage.setPage(WeChatUtil.GO_PAGE_DETAIL + trouble.getId());
         templateMessage.setTouser(WeChatUtil.HSM_OPEN_ID);
         templateMessage.setData(dataMap);
         new MessageSendThread(templateMessage).start();
