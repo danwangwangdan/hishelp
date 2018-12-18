@@ -28,4 +28,6 @@ public interface CommonService {
     BaseResult<FormIdMapper> getOneUsefulFormId(String openId);
 
     BaseResult getNotice();
+
+    BaseResult getContact();
 }

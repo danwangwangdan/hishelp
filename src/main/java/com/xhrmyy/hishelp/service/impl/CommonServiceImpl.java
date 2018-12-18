@@ -41,6 +41,10 @@ public class CommonServiceImpl implements CommonService {
     private NoticeRepository noticeRepository;
     @Autowired
     private ForIdMapperRepository forIdMapperRepository;
+
+    @Autowired
+    private ContactRepository contactRepository;
+
     @Value("${imageDir}")
     private String uploadPath;
 
@@ -177,7 +181,7 @@ public class CommonServiceImpl implements CommonService {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            log.error("上传formId错误：" + e.toString());
+            log.error("collectFormIds错误：" + e.toString());
             baseResult.setCode(-500);
             baseResult.setMessage("服务器异常");
         }
@@ -225,7 +229,7 @@ public class CommonServiceImpl implements CommonService {
 
         } catch (Exception e) {
             e.printStackTrace();
-            log.error("上传formId错误：" + e.toString());
+            log.error("getOneUsefulFormId错误：" + e.toString());
             baseResult.setCode(-500);
             baseResult.setMessage("服务器异常");
         }
@@ -240,7 +244,22 @@ public class CommonServiceImpl implements CommonService {
             baseResult.setData(notice);
         } catch (Exception e) {
             e.printStackTrace();
-            log.error("上传formId错误：" + e.toString());
+            log.error("getNotice错误：" + e.toString());
+            baseResult.setCode(-500);
+            baseResult.setMessage("服务器异常");
+        }
+        return baseResult;
+    }
+
+    @Override
+    public BaseResult getContact() {
+        BaseResult baseResult = new BaseResult();
+        try {
+            List<Contact> contactList = contactRepository.findAll();
+            baseResult.setData(contactList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("getContact错误：" + e.toString());
             baseResult.setCode(-500);
             baseResult.setMessage("服务器异常");
         }

@@ -41,6 +41,11 @@ public class CommonController {
         return baseResult;
     }
 
+    @RequestMapping("/contact")
+    public BaseResult getContact() {
+        BaseResult baseResult = commonService.getContact();
+        return baseResult;
+    }
     @RequestMapping("/secTypes")
     public BaseResult getSecTroubleTypes(@RequestParam Long firTypeId) {
         return commonService.getSecTroubleTypes(firTypeId);
