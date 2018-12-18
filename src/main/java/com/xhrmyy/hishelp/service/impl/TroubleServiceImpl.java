@@ -78,7 +78,7 @@ public class TroubleServiceImpl implements TroubleService {
         BaseResult baseResult = new BaseResult();
         try {
             Sort sort = new Sort(Sort.Direction.DESC, "submitTime");
-            List<Trouble> troubles = troubleRepository.findAll(sort);
+            List<Trouble> troubles = troubleRepository.findBySubmitTimeAfter(new Date((new Date().getTime() / 1000 - 30 * 24 * 60 * 60) * 1000), sort);
             if (null != troubles && troubles.size() > 0) {
                 baseResult.setData(troubles);
             }
@@ -96,7 +96,7 @@ public class TroubleServiceImpl implements TroubleService {
         BaseResult baseResult = new BaseResult();
         try {
             Sort sort = new Sort(Sort.Direction.DESC, "submitTime");
-            List<Trouble> troubles = troubleRepository.findByUserId(userId, sort);
+            List<Trouble> troubles = troubleRepository.findByUserIdAndSubmitTimeAfter(userId, new Date((new Date().getTime() / 1000 - 30 * 24 * 60 * 60) * 1000), sort);
             if (null != troubles && troubles.size() > 0) {
                 baseResult.setData(troubles);
             }
@@ -114,7 +114,7 @@ public class TroubleServiceImpl implements TroubleService {
         BaseResult baseResult = new BaseResult();
         try {
             Sort sort = new Sort(Sort.Direction.DESC, "submitTime");
-            List<Trouble> troubles = troubleRepository.findByStatus(status, sort);
+            List<Trouble> troubles = troubleRepository.findByStatusAndSubmitTimeAfter(status, new Date((new Date().getTime() / 1000 - 30 * 24 * 60 * 60) * 1000), sort);
 
             if (null != troubles && troubles.size() > 0) {
                 baseResult.setData(troubles);
@@ -131,17 +131,18 @@ public class TroubleServiceImpl implements TroubleService {
     @Override
     public BaseResult getTroublesByStatusAndUserId(int status, long userId) {
         BaseResult baseResult = new BaseResult();
+        Date monthAgo = new Date((new Date().getTime() / 1000 - 30 * 24 * 60 * 60) * 1000);
         List<Trouble> troubles = null;
         try {
             Sort sort = new Sort(Sort.Direction.DESC, "submitTime");
             if (status == 3) {
-                troubles = troubleRepository.findByUserIdAndStatusGreaterThan(userId, status - 1, sort);
+                troubles = troubleRepository.findByUserIdAndStatusGreaterThanAndSubmitTimeAfter(userId, status - 1, monthAgo, sort);
             } else if (status == 5) { //所有未解决
-                troubles = troubleRepository.findByStatusLessThan(status - 2, sort);
+                troubles = troubleRepository.findByStatusLessThanAndSubmitTimeAfter(status - 2, monthAgo, sort);
             } else if (status == 6) { //所有我已经解决的故障
-                troubles = troubleRepository.findByStatusAndSolverId(Trouble.TROUBLE_STATUS_SOLVED, userId, sort);
+                troubles = troubleRepository.findByStatusAndSolverIdAndSubmitTimeAfter(Trouble.TROUBLE_STATUS_SOLVED, userId, monthAgo, sort);
             } else {
-                troubles = troubleRepository.findByUserIdAndStatus(userId, status, sort);
+                troubles = troubleRepository.findByUserIdAndStatusAndSubmitTimeAfter(userId, status, monthAgo, sort);
             }
             if (null != troubles && troubles.size() > 0) {
                 baseResult.setData(troubles);
@@ -177,7 +178,7 @@ public class TroubleServiceImpl implements TroubleService {
         BaseResult baseResult = new BaseResult();
         try {
             Sort sort = new Sort(Sort.Direction.DESC, "submitTime");
-            List<Trouble> troubles = troubleRepository.findBySolverId(userId, sort);
+            List<Trouble> troubles = troubleRepository.findBySolverIdAndSubmitTimeAfter(userId, new Date((new Date().getTime() / 1000 - 30 * 24 * 60 * 60) * 1000), sort);
             if (null != troubles && troubles.size() > 0) {
                 baseResult.setData(troubles);
             }
@@ -201,7 +202,7 @@ public class TroubleServiceImpl implements TroubleService {
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                 Map<String, TemplateData> dataMap = new HashMap<>();
                 Trouble trouble = troubleRepository.findOne(processReq.getTroubleId());
-                dataMap.put("keyword1", new TemplateData(trouble.getFirType() + (trouble.getSecType().equals("其他问题") ? "" : ("-" + trouble.getSecType()))));
+                dataMap.put("keyword1", new TemplateData(trouble.getFirType() + (trouble.getSecType().equals("其他问题") ? "" : ("--" + trouble.getSecType()))));
                 dataMap.put("keyword2", new TemplateData(simpleDateFormat.format(trouble.getSubmitTime())));
                 dataMap.put("keyword3", new TemplateData(getStatusByIntValue(trouble.getStatus())));
 

@@ -38,6 +38,8 @@ public class CommonServiceImpl implements CommonService {
     @Autowired
     private UserRepository userRepository;
     @Autowired
+    private NoticeRepository noticeRepository;
+    @Autowired
     private ForIdMapperRepository forIdMapperRepository;
     @Value("${imageDir}")
     private String uploadPath;
@@ -221,6 +223,21 @@ public class CommonServiceImpl implements CommonService {
                 throw new Exception("无可用formId，请稍后重试");
             }
 
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("上传formId错误：" + e.toString());
+            baseResult.setCode(-500);
+            baseResult.setMessage("服务器异常");
+        }
+        return baseResult;
+    }
+
+    @Override
+    public BaseResult getNotice() {
+        BaseResult baseResult = new BaseResult();
+        try {
+            Notice notice = noticeRepository.findOne(0L);
+            baseResult.setData(notice);
         } catch (Exception e) {
             e.printStackTrace();
             log.error("上传formId错误：" + e.toString());

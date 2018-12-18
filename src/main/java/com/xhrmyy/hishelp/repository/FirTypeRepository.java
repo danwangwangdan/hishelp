@@ -9,4 +9,5 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface FirTypeRepository extends JpaRepository<FirType, Long> {
+
 }

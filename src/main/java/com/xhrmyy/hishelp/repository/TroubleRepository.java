@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -16,16 +17,18 @@ import java.util.List;
 @Repository
 public interface TroubleRepository extends JpaRepository<Trouble, Long> {
 
-    List<Trouble> findByUserId(long userId, Sort sort);
+    List<Trouble> findBySubmitTimeAfter(Date nowBeforeMonth, Sort sort);
 
-    List<Trouble> findByUserIdAndStatus(long userId, int status, Sort sort);
+    List<Trouble> findByUserIdAndSubmitTimeAfter(long userId, Date monthAgo, Sort sort);
 
-    List<Trouble> findByUserIdAndStatusGreaterThan(long userId, int status, Sort sort);
+    List<Trouble> findByUserIdAndStatusAndSubmitTimeAfter(long userId, int status, Date monthAgo, Sort sort);
 
-    List<Trouble> findByStatusLessThan(int status, Sort sort);
+    List<Trouble> findByUserIdAndStatusGreaterThanAndSubmitTimeAfter(long userId, int status, Date monthAgo, Sort sort);
+
+    List<Trouble> findByStatusLessThanAndSubmitTimeAfter(int status, Date monthAgo, Sort sort);
 
 
-    List<Trouble> findBySolverId(long solverId, Sort sort);
+    List<Trouble> findBySolverIdAndSubmitTimeAfter(long solverId, Date monthAgo, Sort sort);
 
     @Modifying
     @Transactional
@@ -37,7 +40,7 @@ public interface TroubleRepository extends JpaRepository<Trouble, Long> {
     @Query("update Trouble t set t.status=?1, t.confirmerId=?2, t.confirmer=?3, t.confirmTime=now() where t.id=?4")
     int updateConfirmStatus(int status, long confirmerId, String confirmer, long troubleId);
 
-    List<Trouble> findByStatus(int status, Sort sort);
+    List<Trouble> findByStatusAndSubmitTimeAfter(int status, Date monthAgo, Sort sort);
 
-    List<Trouble> findByStatusAndSolverId(int status, long userId, Sort sort);
+    List<Trouble> findByStatusAndSolverIdAndSubmitTimeAfter(int status, long userId, Date monthAgo, Sort sort);
 }

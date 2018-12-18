@@ -26,4 +26,6 @@ public interface CommonService {
     BaseResult collectFormIds(Trouble trouble);
 
     BaseResult<FormIdMapper> getOneUsefulFormId(String openId);
+
+    BaseResult getNotice();
 }
