@@ -113,9 +113,9 @@ public class CommonServiceImpl implements CommonService {
     public BaseResult uploadImage(List<MultipartFile> multipartFiles, String serverUrl) {
 
         String path = uploadPath;
-        long maxSize = 256;
+        long maxSize = 512;
         // 图片压缩质量
-        double imageQuality = 0.8;
+        double imageQuality = 0.99;
         BaseResult<List<ImageResp>> baseResult = new BaseResult<List<ImageResp>>();
         List<ImageResp> uploadImageList = new ArrayList<ImageResp>();
         try {
