@@ -29,7 +29,7 @@ public class CacheManager {
             access_token = accessTokenCache.get("accessToken", new Callable<String>() {
                 @Override
                 public String call() throws Exception {
-                    log.error("accessToken不合法或已过期，开始重新获取");
+                    log.info("accessToken不合法或已过期，开始重新获取。。。");
                     return WeChatUtil.getAccessToken().getAccess_token();
                 }
             });

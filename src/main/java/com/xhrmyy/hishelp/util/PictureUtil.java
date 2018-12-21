@@ -2,6 +2,8 @@ package com.xhrmyy.hishelp.util;
 
 import net.coobird.thumbnailator.Thumbnails;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -18,6 +20,7 @@ public class PictureUtil {
     private int width;
     private int height;
     private Image img;
+    private static final Logger log = LoggerFactory.getLogger(PictureUtil.class);
 
     /**
      * 构造函数
@@ -115,7 +118,7 @@ public class PictureUtil {
         try {
             File srcFile = new File(srcPath);
             long srcFileSize = srcFile.length();
-            System.out.println("源图片：" + srcPath + "，大小：" + srcFileSize / 1024 + "kb");
+            log.info("源图片：" + srcPath + "，大小：" + srcFileSize / 1024 + "kb");
 
             // 1、先转换成jpg
             Thumbnails.of(srcPath).scale(1f).toFile(desPath);
@@ -123,8 +126,7 @@ public class PictureUtil {
             compressPicCycle(desPath, desFileSize, accuracy);
 
             File desFile = new File(desPath);
-            System.out.println("目标图片：" + desPath + "，大小" + desFile.length() / 1024 + "kb");
-            System.out.println("图片压缩完成！");
+            log.info("目标图片：" + desPath + "，大小" + desFile.length() / 1024 + "kb");
         } catch (Exception e) {
             e.printStackTrace();
             return null;
