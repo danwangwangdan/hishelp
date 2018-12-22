@@ -78,7 +78,7 @@ public class TroubleServiceImpl implements TroubleService {
         BaseResult baseResult = new BaseResult();
         try {
             Sort sort = new Sort(Sort.Direction.DESC, "submitTime");
-            List<Trouble> troubles = troubleRepository.findBySubmitTimeAfter(new Date((new Date().getTime() / 1000 - 30 * 24 * 60 * 60) * 1000), sort);
+            List<Trouble> troubles = troubleRepository.findBySubmitTimeAfter(new Date((new Date().getTime() / 1000 - 15 * 24 * 60 * 60) * 1000), sort);
             if (null != troubles && troubles.size() > 0) {
                 baseResult.setData(troubles);
             }
@@ -96,7 +96,7 @@ public class TroubleServiceImpl implements TroubleService {
         BaseResult baseResult = new BaseResult();
         try {
             Sort sort = new Sort(Sort.Direction.DESC, "submitTime");
-            List<Trouble> troubles = troubleRepository.findByUserIdAndSubmitTimeAfter(userId, new Date((new Date().getTime() / 1000 - 30 * 24 * 60 * 60) * 1000), sort);
+            List<Trouble> troubles = troubleRepository.findByUserIdAndSubmitTimeAfter(userId, new Date((new Date().getTime() / 1000 - 15 * 24 * 60 * 60) * 1000), sort);
             if (null != troubles && troubles.size() > 0) {
                 baseResult.setData(troubles);
             }
@@ -114,7 +114,7 @@ public class TroubleServiceImpl implements TroubleService {
         BaseResult baseResult = new BaseResult();
         try {
             Sort sort = new Sort(Sort.Direction.DESC, "submitTime");
-            List<Trouble> troubles = troubleRepository.findByStatusAndSubmitTimeAfter(status, new Date((new Date().getTime() / 1000 - 30 * 24 * 60 * 60) * 1000), sort);
+            List<Trouble> troubles = troubleRepository.findByStatusAndSubmitTimeAfter(status, new Date((new Date().getTime() / 1000 - 15 * 24 * 60 * 60) * 1000), sort);
 
             if (null != troubles && troubles.size() > 0) {
                 baseResult.setData(troubles);
@@ -131,7 +131,7 @@ public class TroubleServiceImpl implements TroubleService {
     @Override
     public BaseResult getTroublesByStatusAndUserId(int status, long userId) {
         BaseResult baseResult = new BaseResult();
-        Date monthAgo = new Date((new Date().getTime() / 1000 - 30 * 24 * 60 * 60) * 1000);
+        Date monthAgo = new Date((new Date().getTime() / 1000 - 15 * 24 * 60 * 60) * 1000);
         List<Trouble> troubles = null;
         try {
             Sort sort = new Sort(Sort.Direction.DESC, "submitTime");
@@ -178,7 +178,7 @@ public class TroubleServiceImpl implements TroubleService {
         BaseResult baseResult = new BaseResult();
         try {
             Sort sort = new Sort(Sort.Direction.DESC, "submitTime");
-            List<Trouble> troubles = troubleRepository.findBySolverIdAndSubmitTimeAfter(userId, new Date((new Date().getTime() / 1000 - 30 * 24 * 60 * 60) * 1000), sort);
+            List<Trouble> troubles = troubleRepository.findBySolverIdAndSubmitTimeAfter(userId, new Date((new Date().getTime() / 1000 - 15 * 24 * 60 * 60) * 1000), sort);
             if (null != troubles && troubles.size() > 0) {
                 baseResult.setData(troubles);
             }
@@ -198,22 +198,7 @@ public class TroubleServiceImpl implements TroubleService {
             // 更新状态、解决方案
             int count = troubleRepository.updateSolveStatus(processReq.getSolutionComment(), processReq.getSolutionDetail(), Trouble.TROUBLE_STATUS_SOLVED, processReq.getSolver(), processReq.getSolverId(), processReq.getTroubleId());
             log.info("toSolveTrouble更新了" + count + "行");
-            if (count > 0) {
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-                Map<String, TemplateData> dataMap = new HashMap<>();
-                Trouble trouble = troubleRepository.findOne(processReq.getTroubleId());
-                dataMap.put("keyword1", new TemplateData(trouble.getFirType() + (trouble.getSecType().equals("其他问题") ? "" : ("--" + trouble.getSecType()))));
-                dataMap.put("keyword2", new TemplateData(simpleDateFormat.format(trouble.getSubmitTime())));
-                dataMap.put("keyword3", new TemplateData(getStatusByIntValue(trouble.getStatus())));
-
-                User user = userRepository.findOne(trouble.getUserId());
-                TemplateMessage templateMessage = new TemplateMessage();
-                templateMessage.setTemplate_id(WeChatUtil.TEMPLE_MESSAGE_PROCESSED);
-                templateMessage.setPage(WeChatUtil.GO_PAGE_DETAIL + trouble.getId());
-                templateMessage.setTouser(user.getOpenId());
-                templateMessage.setData(dataMap);
-                new MessageSendThread(templateMessage).start();
-            }
+            sendProcessMessage(processReq.getTroubleId(), count);
         } catch (Exception e) {
             log.error(e.toString());
             baseResult.setCode(-500);
@@ -222,6 +207,25 @@ public class TroubleServiceImpl implements TroubleService {
         }
         return baseResult;
 
+    }
+
+    private void sendProcessMessage(Long troubleId, int count) {
+        if (count > 0) {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            Map<String, TemplateData> dataMap = new HashMap<>();
+            Trouble trouble = troubleRepository.findOne(troubleId);
+            dataMap.put("keyword1", new TemplateData(trouble.getFirType() + (trouble.getSecType().equals("其他问题") ? "" : ("--" + trouble.getSecType()))));
+            dataMap.put("keyword2", new TemplateData(simpleDateFormat.format(trouble.getSubmitTime())));
+            dataMap.put("keyword3", new TemplateData(getStatusByIntValue(trouble.getStatus())));
+
+            User user = userRepository.findOne(trouble.getUserId());
+            TemplateMessage templateMessage = new TemplateMessage();
+            templateMessage.setTemplate_id(WeChatUtil.TEMPLE_MESSAGE_PROCESSED);
+            templateMessage.setPage(WeChatUtil.GO_PAGE_DETAIL + trouble.getId());
+            templateMessage.setTouser(user.getOpenId());
+            templateMessage.setData(dataMap);
+            new MessageSendThread(templateMessage).start();
+        }
     }
 
     @Override
@@ -235,22 +239,7 @@ public class TroubleServiceImpl implements TroubleService {
                 // 更新状态
                 int count = troubleRepository.updateConfirmStatus(Trouble.TROUBLE_STATUS_CONFIRMED, processReq.getSolverId(), processReq.getSolver(), processReq.getTroubleId());
                 log.info("toConfirmTrouble更新了" + count + "行");
-                if (count > 0) {
-                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-                    Map<String, TemplateData> dataMap = new HashMap<>();
-                    Trouble trouble = troubleRepository.findOne(processReq.getTroubleId());
-                    dataMap.put("keyword1", new TemplateData(trouble.getFirType() + (trouble.getSecType().equals("其他问题") ? "" : ("--" + trouble.getSecType()))));
-                    dataMap.put("keyword2", new TemplateData(simpleDateFormat.format(trouble.getSubmitTime())));
-                    dataMap.put("keyword3", new TemplateData(getStatusByIntValue(trouble.getStatus())));
-
-                    User user = userRepository.findOne(trouble.getUserId());
-                    TemplateMessage templateMessage = new TemplateMessage();
-                    templateMessage.setTemplate_id(WeChatUtil.TEMPLE_MESSAGE_PROCESSED);
-                    templateMessage.setPage(WeChatUtil.GO_PAGE_DETAIL + trouble.getId());
-                    templateMessage.setTouser(user.getOpenId());
-                    templateMessage.setData(dataMap);
-                    new MessageSendThread(templateMessage).start();
-                }
+                sendProcessMessage(processReq.getTroubleId(), count);
             } catch (Exception e) {
                 log.error(e.toString());
                 baseResult.setCode(-500);
