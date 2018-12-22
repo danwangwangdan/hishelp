@@ -143,11 +143,11 @@ public class CommonServiceImpl implements CommonService {
                         uploadImage.setUploadTime(new Date());
                         uploadImage.setImageUrl(imageUrl);
                         // 压缩图片
-                        PictureUtil pictureUtil = new PictureUtil(file.getAbsolutePath());
-                        imageQuality = pictureUtil.getQuality(imageQuality);
+                        // PictureUtil pictureUtil = new PictureUtil(file.getAbsolutePath());
+                        //  imageQuality = pictureUtil.getQuality(imageQuality);
                         PictureUtil.compressPicForScale(file.getAbsolutePath(), file.getAbsolutePath(), maxSize, imageQuality);
                         ImageResp uploadImageDTO = new ImageResp();
-                        uploadImageDTO.setUrl(uploadImage.getImageUrl());
+                        uploadImageDTO.setUrl(imageUrl);
                         uploadImageList.add(uploadImageDTO);
                     }
                 }
