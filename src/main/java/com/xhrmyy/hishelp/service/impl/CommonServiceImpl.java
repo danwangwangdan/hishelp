@@ -115,7 +115,7 @@ public class CommonServiceImpl implements CommonService {
         String path = uploadPath;
         long maxSize = 512;
         // 图片压缩质量
-        double imageQuality = 0.99;
+        double imageQuality = 0.8;
         BaseResult<List<ImageResp>> baseResult = new BaseResult<List<ImageResp>>();
         List<ImageResp> uploadImageList = new ArrayList<ImageResp>();
         try {
@@ -145,7 +145,7 @@ public class CommonServiceImpl implements CommonService {
                         // 压缩图片
                         // PictureUtil pictureUtil = new PictureUtil(file.getAbsolutePath());
                         //  imageQuality = pictureUtil.getQuality(imageQuality);
-                        PictureUtil.compressPicForScale(file.getAbsolutePath(), file.getAbsolutePath(), maxSize, imageQuality);
+                        //PictureUtil.compressPicForScale(file.getAbsolutePath(), file.getAbsolutePath(), maxSize, imageQuality);
                         ImageResp uploadImageDTO = new ImageResp();
                         uploadImageDTO.setUrl(imageUrl);
                         uploadImageList.add(uploadImageDTO);

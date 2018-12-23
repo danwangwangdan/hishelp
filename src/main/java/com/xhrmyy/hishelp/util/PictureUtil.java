@@ -139,9 +139,9 @@ public class PictureUtil {
         File srcFileJPG = new File(desPath);
         long srcFileSizeJPG = srcFileJPG.length();
         // 2、判断大小，如果小于500kb，不压缩；如果大于等于500kb，压缩
-        if (srcFileSizeJPG <= desFileSize * 1024) {
-            return;
-        }
+        //if (srcFileSizeJPG <= desFileSize * 1024) {
+        //    return;
+        //}
         // 计算宽高
         bim = ImageIO.read(srcFileJPG);
         int srcWidth = bim.getWidth();
@@ -151,7 +151,7 @@ public class PictureUtil {
                 new BigDecimal(accuracy)).intValue();
 
         Thumbnails.of(desPath).size(desWidth, desHeight).outputQuality(accuracy).toFile(desPath);
-        compressPicCycle(desPath, desFileSize, accuracy);
+        //compressPicCycle(desPath, desFileSize, accuracy);
     }
 
 
