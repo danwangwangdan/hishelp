@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
+
 /**
  * Created by huangshiming on 2018/10/23 21:12
  */
@@ -48,9 +50,11 @@ public class TroubleController {
     @RequestMapping("/byStatus")
     public BaseResult getTroublesByStatus(@RequestParam("status") int status, @RequestParam("userId") long userId) {
 
-        log.info("请求byStatus");
+        Date start = new Date();
+        log.info("请求byStatus：" + start.toLocaleString());
         BaseResult baseResult = troubleService.getTroublesByStatusAndUserId(status, userId);
         log.info("byStatus请求返回：" + baseResult.toString());
+        log.info("byStatus请求耗时：" + (new Date().getTime() - start.getTime()) / 1000);
         return baseResult;
     }
 

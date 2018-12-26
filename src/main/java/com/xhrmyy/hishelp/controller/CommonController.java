@@ -14,6 +14,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -29,15 +30,21 @@ public class CommonController {
 
     @RequestMapping("/firTypes")
     public BaseResult getFirTroubleTypes() {
-        log.info("请求firTypes");
+        Date start = new Date();
+        log.info("请求firTypes：" + start.toLocaleString());
         BaseResult baseResult = commonService.getFirTroubleTypes();
         log.info("firTypes请求返回：" + baseResult.toString());
+        log.info("firTypes请求耗时：" + (new Date().getTime() - start.getTime()) / 1000);
         return baseResult;
     }
 
     @RequestMapping("/notice")
     public BaseResult getNotice() {
+        Date start = new Date();
+        log.info("请求getNotice：" + start.toLocaleString());
         BaseResult baseResult = commonService.getNotice();
+        log.info("getNotice请求返回：" + baseResult.toString());
+        log.info("getNotice请求耗时：" + (new Date().getTime() - start.getTime()) / 1000);
         return baseResult;
     }
 
@@ -46,6 +53,7 @@ public class CommonController {
         BaseResult baseResult = commonService.getContact();
         return baseResult;
     }
+
     @RequestMapping("/secTypes")
     public BaseResult getSecTroubleTypes(@RequestParam Long firTypeId) {
         return commonService.getSecTroubleTypes(firTypeId);
