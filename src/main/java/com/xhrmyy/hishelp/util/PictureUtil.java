@@ -149,7 +149,6 @@ public class PictureUtil {
         int desWidth = new BigDecimal(srcWidth).multiply(new BigDecimal(accuracy)).intValue();
         int desHeight = new BigDecimal(srcHeight).multiply(
                 new BigDecimal(accuracy)).intValue();
-
         Thumbnails.of(desPath).size(desWidth, desHeight).outputQuality(accuracy).toFile(desPath);
         //compressPicCycle(desPath, desFileSize, accuracy);
     }
