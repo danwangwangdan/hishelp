@@ -69,6 +69,12 @@ public class TroubleController {
         return troubleService.toRevokeTrouble(processReq);
     }
 
+    @PostMapping("/active")
+    public BaseResult activeTrouble(@RequestBody ProcessReq processReq) {
+
+        return troubleService.toActiveTrouble(processReq);
+    }
+
     @PostMapping("/confirm")
     public BaseResult toConfirmTrouble(@RequestBody ProcessReq processReq) {
         return troubleService.toConfirmTrouble(processReq);

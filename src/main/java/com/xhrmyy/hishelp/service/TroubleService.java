@@ -30,5 +30,7 @@ public interface TroubleService {
 
     BaseResult toRevokeTrouble(ProcessReq processReq);
 
+    BaseResult toActiveTrouble(ProcessReq processReq);
+
     BaseResult sendTemplateMessage(TemplateMessage templateMessage);
 }

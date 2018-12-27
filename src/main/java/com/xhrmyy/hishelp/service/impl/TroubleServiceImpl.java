@@ -284,6 +284,23 @@ public class TroubleServiceImpl implements TroubleService {
         return baseResult;
     }
 
+    @Override
+    public BaseResult toActiveTrouble(ProcessReq processReq) {
+        BaseResult baseResult = new BaseResult();
+        try {
+            // 更新状态
+            troubleRepository.updateSolveStatus("", "", Trouble.TROUBLE_STATUS_SUBMITTED, "", 0, processReq.getTroubleId());
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.toString());
+            baseResult.setCode(-500);
+            baseResult.setMessage("服务器异常");
+            return baseResult;
+        }
+        baseResult = getTroubleDetail(processReq.getTroubleId());
+        return baseResult;
+    }
+
 
     @Override
     public BaseResult sendTemplateMessage(TemplateMessage templateMessage) {
