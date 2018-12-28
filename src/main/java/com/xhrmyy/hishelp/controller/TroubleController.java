@@ -51,7 +51,7 @@ public class TroubleController {
     public BaseResult getTroublesByStatus(@RequestParam("status") int status, @RequestParam("userId") long userId) {
 
         Date start = new Date();
-        log.info("请求byStatus：" + start.toLocaleString());
+        log.info("请求byStatus：" + "status:" + status + "userId:" + userId + "," + start.toLocaleString());
         BaseResult baseResult = troubleService.getTroublesByStatusAndUserId(status, userId);
         log.info("byStatus请求返回：" + baseResult.toString());
         log.info("byStatus请求耗时：" + (new Date().getTime() - start.getTime()));
@@ -99,8 +99,11 @@ public class TroubleController {
 
     @RequestMapping("/submitted")
     public BaseResult getSubmittedTroubles() {
-
-        return troubleService.getTroublesByStatus(Trouble.TROUBLE_STATUS_SUBMITTED);
+        Date start = new Date();
+        log.info("请求submitted：" + start.toLocaleString());
+        BaseResult baseResult = troubleService.getTroublesByStatus(Trouble.TROUBLE_STATUS_SUBMITTED);
+        log.info("submitted返回：" + (new Date().getTime() - start.getTime()));
+        return baseResult;
     }
 
 
