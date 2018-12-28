@@ -54,7 +54,7 @@ public class TroubleController {
         log.info("请求byStatus：" + start.toLocaleString());
         BaseResult baseResult = troubleService.getTroublesByStatusAndUserId(status, userId);
         log.info("byStatus请求返回：" + baseResult.toString());
-        log.info("byStatus请求耗时：" + (new Date().getTime() - start.getTime()) / 1000);
+        log.info("byStatus请求耗时：" + (new Date().getTime() - start.getTime()));
         return baseResult;
     }
 

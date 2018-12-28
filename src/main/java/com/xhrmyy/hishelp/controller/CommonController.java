@@ -34,7 +34,7 @@ public class CommonController {
         log.info("请求firTypes：" + start.toLocaleString());
         BaseResult baseResult = commonService.getFirTroubleTypes();
         log.info("firTypes请求返回：" + baseResult.toString());
-        log.info("firTypes请求耗时：" + (new Date().getTime() - start.getTime()) / 1000);
+        log.info("firTypes请求耗时：" + (new Date().getTime() - start.getTime()));
         return baseResult;
     }
 
@@ -44,7 +44,7 @@ public class CommonController {
         log.info("请求getNotice：" + start.toLocaleString());
         BaseResult baseResult = commonService.getNotice();
         log.info("getNotice请求返回：" + baseResult.toString());
-        log.info("getNotice请求耗时：" + (new Date().getTime() - start.getTime()) / 1000);
+        log.info("getNotice请求耗时：" + (new Date().getTime() - start.getTime()));
         return baseResult;
     }
 
