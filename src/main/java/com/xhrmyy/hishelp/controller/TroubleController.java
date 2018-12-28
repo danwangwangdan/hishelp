@@ -102,7 +102,8 @@ public class TroubleController {
         Date start = new Date();
         log.info("请求submitted：" + start.toLocaleString());
         BaseResult baseResult = troubleService.getTroublesByStatus(Trouble.TROUBLE_STATUS_SUBMITTED);
-        log.info("submitted返回：" + (new Date().getTime() - start.getTime()));
+        log.info("submitted返回：" + baseResult.toString());
+        log.info("submitted请求耗时：" + (new Date().getTime() - start.getTime()));
         return baseResult;
     }
 
