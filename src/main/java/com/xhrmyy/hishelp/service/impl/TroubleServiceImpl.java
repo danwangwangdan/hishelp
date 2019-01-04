@@ -78,7 +78,7 @@ public class TroubleServiceImpl implements TroubleService {
         BaseResult baseResult = new BaseResult();
         try {
             Sort sort = new Sort(Sort.Direction.DESC, "submitTime");
-            List<Trouble> troubles = troubleRepository.findBySubmitTimeAfter(new Date((new Date().getTime() / 1000 - 15 * 24 * 60 * 60) * 1000), sort);
+            List<Trouble> troubles = troubleRepository.findBySubmitTimeAfter(new Date((new Date().getTime() / 1000 - 10 * 24 * 60 * 60) * 1000), sort);
             if (null != troubles && troubles.size() > 0) {
                 baseResult.setData(troubles);
             }
@@ -96,7 +96,7 @@ public class TroubleServiceImpl implements TroubleService {
         BaseResult baseResult = new BaseResult();
         try {
             Sort sort = new Sort(Sort.Direction.DESC, "submitTime");
-            List<Trouble> troubles = troubleRepository.findByUserIdAndSubmitTimeAfter(userId, new Date((new Date().getTime() / 1000 - 15 * 24 * 60 * 60) * 1000), sort);
+            List<Trouble> troubles = troubleRepository.findByUserIdAndSubmitTimeAfter(userId, new Date((new Date().getTime() / 1000 - 10 * 24 * 60 * 60) * 1000), sort);
             if (null != troubles && troubles.size() > 0) {
                 baseResult.setData(troubles);
             }
@@ -114,7 +114,7 @@ public class TroubleServiceImpl implements TroubleService {
         BaseResult baseResult = new BaseResult();
         try {
             Sort sort = new Sort(Sort.Direction.DESC, "submitTime");
-            List<Trouble> troubles = troubleRepository.findByStatusAndSubmitTimeAfter(status, new Date((new Date().getTime() / 1000 - 15 * 24 * 60 * 60) * 1000), sort);
+            List<Trouble> troubles = troubleRepository.findByStatusAndSubmitTimeAfter(status, new Date((new Date().getTime() / 1000 - 10 * 24 * 60 * 60) * 1000), sort);
 
             if (null != troubles && troubles.size() > 0) {
                 baseResult.setData(troubles);
@@ -131,7 +131,7 @@ public class TroubleServiceImpl implements TroubleService {
     @Override
     public BaseResult getTroublesByStatusAndUserId(int status, long userId) {
         BaseResult baseResult = new BaseResult();
-        Date monthAgo = new Date((new Date().getTime() / 1000 - 15 * 24 * 60 * 60) * 1000);
+        Date monthAgo = new Date((new Date().getTime() / 1000 - 10 * 24 * 60 * 60) * 1000);
         List<Trouble> troubles = null;
         try {
             Sort sort = new Sort(Sort.Direction.DESC, "submitTime");
@@ -178,7 +178,7 @@ public class TroubleServiceImpl implements TroubleService {
         BaseResult baseResult = new BaseResult();
         try {
             Sort sort = new Sort(Sort.Direction.DESC, "submitTime");
-            List<Trouble> troubles = troubleRepository.findBySolverIdAndSubmitTimeAfter(userId, new Date((new Date().getTime() / 1000 - 15 * 24 * 60 * 60) * 1000), sort);
+            List<Trouble> troubles = troubleRepository.findBySolverIdAndSubmitTimeAfter(userId, new Date((new Date().getTime() / 1000 - 10 * 24 * 60 * 60) * 1000), sort);
             if (null != troubles && troubles.size() > 0) {
                 baseResult.setData(troubles);
             }
