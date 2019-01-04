@@ -114,7 +114,7 @@ public class TroubleServiceImpl implements TroubleService {
         BaseResult baseResult = new BaseResult();
         try {
             Sort sort = new Sort(Sort.Direction.DESC, "submitTime");
-            List<Trouble> troubles = troubleRepository.findByStatusAndSubmitTimeAfter(status, new Date((new Date().getTime() / 1000 - 10 * 24 * 60 * 60) * 1000), sort);
+            List<Trouble> troubles = troubleRepository.findByStatus(status, sort);
 
             if (null != troubles && troubles.size() > 0) {
                 baseResult.setData(troubles);
