@@ -20,7 +20,7 @@ public interface TroubleService {
 
     BaseResult getTroublesByStatusAndUserId(int status, long userId);
 
-    BaseResult getTroubleDetail(long troubleId);
+    BaseResult<Trouble> getTroubleDetail(long troubleId);
 
     BaseResult getMySolvedTroubles(long userId);
 
@@ -30,7 +30,7 @@ public interface TroubleService {
 
     BaseResult toRevokeTrouble(ProcessReq processReq);
 
-    BaseResult toActiveTrouble(ProcessReq processReq);
+    BaseResult<Trouble> toActiveTrouble(ProcessReq processReq);
 
     BaseResult sendTemplateMessage(TemplateMessage templateMessage);
 }

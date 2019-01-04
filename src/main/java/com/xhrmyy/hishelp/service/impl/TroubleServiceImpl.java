@@ -157,8 +157,8 @@ public class TroubleServiceImpl implements TroubleService {
     }
 
     @Override
-    public BaseResult getTroubleDetail(long troubleId) {
-        BaseResult baseResult = new BaseResult();
+    public BaseResult<Trouble> getTroubleDetail(long troubleId) {
+        BaseResult<Trouble> baseResult = new BaseResult();
         try {
             Trouble savedTrouble = troubleRepository.findOne(troubleId);
             if (null != savedTrouble) {
@@ -285,8 +285,8 @@ public class TroubleServiceImpl implements TroubleService {
     }
 
     @Override
-    public BaseResult toActiveTrouble(ProcessReq processReq) {
-        BaseResult baseResult = new BaseResult();
+    public BaseResult<Trouble> toActiveTrouble(ProcessReq processReq) {
+        BaseResult<Trouble> baseResult = new BaseResult();
         try {
             // 更新状态
             troubleRepository.updateSolveStatus("", "", Trouble.TROUBLE_STATUS_SUBMITTED, "", 0, processReq.getTroubleId());
@@ -298,6 +298,7 @@ public class TroubleServiceImpl implements TroubleService {
             return baseResult;
         }
         baseResult = getTroubleDetail(processReq.getTroubleId());
+        sendMessageToAdmin(baseResult.getData());
         return baseResult;
     }
 
