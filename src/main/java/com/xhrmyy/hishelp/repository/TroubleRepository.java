@@ -44,4 +44,6 @@ public interface TroubleRepository extends JpaRepository<Trouble, Long> {
 
     List<Trouble> findByStatus(int status, Sort sort);
     List<Trouble> findByStatusAndSolverIdAndSubmitTimeAfter(int status, long userId, Date monthAgo, Sort sort);
+
+    List<Trouble> findByStatusLessThan(int status, Sort sort);
 }
