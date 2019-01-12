@@ -33,4 +33,12 @@ public interface TroubleService {
     BaseResult<Trouble> toActiveTrouble(ProcessReq processReq);
 
     BaseResult sendTemplateMessage(TemplateMessage templateMessage);
+
+    /**
+     * 重新分配（转发）该故障
+     *
+     * @param processReq
+     * @return
+     */
+    BaseResult toReAssignTrouble(ProcessReq processReq);
 }

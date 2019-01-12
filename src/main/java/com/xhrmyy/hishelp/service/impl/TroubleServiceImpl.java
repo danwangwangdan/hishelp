@@ -2,16 +2,19 @@ package com.xhrmyy.hishelp.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.xhrmyy.hishelp.common.BaseResult;
+import com.xhrmyy.hishelp.entity.DutyPlan;
 import com.xhrmyy.hishelp.entity.FormIdMapper;
 import com.xhrmyy.hishelp.entity.Trouble;
 import com.xhrmyy.hishelp.entity.User;
 import com.xhrmyy.hishelp.model.ProcessReq;
 import com.xhrmyy.hishelp.model.TemplateData;
 import com.xhrmyy.hishelp.model.TemplateMessage;
+import com.xhrmyy.hishelp.repository.DutyPlanRepository;
 import com.xhrmyy.hishelp.repository.TroubleRepository;
 import com.xhrmyy.hishelp.repository.UserRepository;
 import com.xhrmyy.hishelp.service.CommonService;
 import com.xhrmyy.hishelp.service.TroubleService;
+import com.xhrmyy.hishelp.util.CommonUtil;
 import com.xhrmyy.hishelp.util.WeChatUtil;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -37,6 +40,8 @@ public class TroubleServiceImpl implements TroubleService {
     @Autowired
     private TroubleRepository troubleRepository;
     @Autowired
+    private DutyPlanRepository dutyPlanRepository;
+    @Autowired
     private UserRepository userRepository;
     @Autowired
     private CommonService commonService;
@@ -49,10 +54,14 @@ public class TroubleServiceImpl implements TroubleService {
 
         BaseResult baseResult = new BaseResult();
         Date lastSubmitDate = lastSubmitMap.get(trouble.getUserId());
+
         Date now = new Date();
         if (null == lastSubmitDate | (null != lastSubmitDate && (now.getTime() - lastSubmitDate.getTime()) > 2018)) {
             lastSubmitMap.put(trouble.getUserId(), now);
+            User user = userRepository.findOne(trouble.getUserId());
+            User responseAdmin = userRepository.findOne(user.getResponseAdmin());
             try {
+                trouble.setDefaultResponser(responseAdmin.getNickname());
                 trouble.setStatus(Trouble.TROUBLE_STATUS_SUBMITTED);
                 trouble.setSubmitTime(new Date());
                 Trouble savedTrouble = troubleRepository.saveAndFlush(trouble);
@@ -263,7 +272,22 @@ public class TroubleServiceImpl implements TroubleService {
         TemplateMessage templateMessage = new TemplateMessage();
         templateMessage.setTemplate_id(WeChatUtil.TEMPLE_MESSAGE_SUBMITTED);
         templateMessage.setPage(WeChatUtil.GO_PAGE_DETAIL + trouble.getId());
-        templateMessage.setTouser(WeChatUtil.HSM_OPEN_ID);
+        User user = userRepository.findOne(trouble.getUserId());
+        // 根据负责区域选择发送人，如果处于节假日，则统一发送给值班人
+        DutyPlan dutyPlan = dutyPlanRepository.findOne(1L);
+        if (CommonUtil.isWeekend()) {
+            if (dutyPlan.getIsWeekendWork() == 0) { //是周末，但是周末并不调班，则发送给值班人
+                templateMessage.setTouser(WeChatUtil.ADMIN_OPEN_ID.get(dutyPlan.getDutyUserId()));
+            } else { //是周末，但是周末调班（节假日调整），则根据负责区域选择发送人
+                templateMessage.setTouser(WeChatUtil.ADMIN_OPEN_ID.get(user.getResponseAdmin()));
+            }
+        } else {
+            if (dutyPlan.getIsHoliday() == 1) { //不是周末，但是节假日，则发送给值班人
+                templateMessage.setTouser(WeChatUtil.ADMIN_OPEN_ID.get(dutyPlan.getDutyUserId()));
+            } else { //不是周末，不是节假日，则根据负责区域选择发送人
+                templateMessage.setTouser(WeChatUtil.ADMIN_OPEN_ID.get(user.getResponseAdmin()));
+            }
+        }
         templateMessage.setData(dataMap);
         new MessageSendThread(templateMessage).start();
     }
@@ -320,6 +344,11 @@ public class TroubleServiceImpl implements TroubleService {
             return baseResult;
         }
         return baseResult;
+    }
+
+    @Override
+    public BaseResult toReAssignTrouble(ProcessReq processReq) {
+        return null;
     }
 
     private String getStatusByIntValue(int status) {

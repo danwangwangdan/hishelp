@@ -98,5 +98,25 @@ public class CommonController {
         return baseResult;
     }
 
+    public BaseResult setIsHoliday(@RequestParam String isHoliday) {
+        log.info("请求setIsHoliday");
+        BaseResult baseResult = commonService.setIsHoliday(isHoliday);
+        log.info("setIsHoliday请求返回：" + baseResult.toString());
+        return baseResult;
+    }
+
+    public BaseResult setIsWeekendWork(@RequestParam String isWeekendWork) {
+        log.info("请求setIsWeekendWork");
+        BaseResult baseResult = commonService.setIsWeekendWork(isWeekendWork);
+        log.info("setIsWeekendWork请求返回：" + baseResult.toString());
+        return baseResult;
+    }
+
+    public BaseResult setDutyPerson(@RequestParam String dutyPerson) {
+        log.info("请求setDutyPerson");
+        BaseResult baseResult = commonService.setDutyPerson(dutyPerson);
+        log.info("setDutyPerson请求返回：" + baseResult.toString());
+        return baseResult;
+    }
 
 }

@@ -35,6 +35,11 @@ public class User extends BaseModel {
     private String photoUrl;
     @Column
     private String openId;
+    @Column
+    /**
+     * 区域负责人
+     */
+    private Long responseAdmin;
 
     private String jsCode;
 
@@ -119,5 +124,13 @@ public class User extends BaseModel {
 
     public void setJsCode(String jsCode) {
         this.jsCode = jsCode;
+    }
+
+    public Long getResponseAdmin() {
+        return responseAdmin;
+    }
+
+    public void setResponseAdmin(Long responseAdmin) {
+        this.responseAdmin = responseAdmin;
     }
 }

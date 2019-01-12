@@ -75,6 +75,12 @@ public class TroubleController {
         return troubleService.toActiveTrouble(processReq);
     }
 
+    @PostMapping("/reAssign")
+    public BaseResult reAssignTrouble(@RequestBody ProcessReq processReq) {
+
+        return troubleService.toReAssignTrouble(processReq);
+    }
+
     @PostMapping("/confirm")
     public BaseResult toConfirmTrouble(@RequestBody ProcessReq processReq) {
         return troubleService.toConfirmTrouble(processReq);

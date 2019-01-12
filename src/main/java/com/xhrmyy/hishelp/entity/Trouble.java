@@ -34,6 +34,9 @@ public class Trouble extends BaseModel {
     @GeneratedValue
     private Long id;
     @Column(nullable = false)
+    /**
+     * 申报人
+     */
     private Long userId;
     /**
      * 故障状态： 1待确认 2已确认 3已解决
@@ -74,7 +77,8 @@ public class Trouble extends BaseModel {
     private Date solveTime;
     @Column
     private String solverName;
-
+    @Column
+    private String defaultResponser;
     @Transient
     private List<String> formIds;
 
@@ -251,5 +255,13 @@ public class Trouble extends BaseModel {
 
     public void setToOffice(String toOffice) {
         this.toOffice = toOffice;
+    }
+
+    public String getDefaultResponser() {
+        return defaultResponser;
+    }
+
+    public void setDefaultResponser(String defaultResponser) {
+        this.defaultResponser = defaultResponser;
     }
 }

@@ -30,4 +30,10 @@ public interface CommonService {
     BaseResult getNotice();
 
     BaseResult getContact();
+
+    BaseResult setIsHoliday(String isHoliday);
+
+    BaseResult setIsWeekendWork(String isWeekendWork);
+
+    BaseResult setDutyPerson(String dutyPerson);
 }

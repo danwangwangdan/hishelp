@@ -9,14 +9,13 @@ import com.xhrmyy.hishelp.model.WeChatInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class WeChatUtil {
 
     private static final Logger log = LoggerFactory.getLogger(WeChatUtil.class);
-    public static final String HSM_OPEN_ID = "oixGf4q8DpKAgflAZMKixk--Gc0Q";
-    public static final String YQ_OPEN_ID = "oixGf4q8DpKAgflAZMKixk--Gc0Q";
-    public static final String WWD_OPEN_ID = "oixGf4kbBjtkOdAOwowdd3DpV-2s";
+    public static final Map<Long, String> ADMIN_OPEN_ID = new HashMap<>();
     public static final String TEMPLE_MESSAGE_SUBMITTED = "3COMTrL4TYAvxpcphp-14fTP1bE5gcf40MNqQpjm8xI";
     public static final String TEMPLE_MESSAGE_PROCESSED = "V0KeA1QZRFSY6R6PtKvy-LwMWMYZ443_EYy6xsNSnDo";
     public static final String GO_PAGE_SUBMIT = "pages/submit/submit";
@@ -24,6 +23,12 @@ public class WeChatUtil {
 
     private static final String APP_ID = "wx6c54f40530b65ae8";
     private static final String APP_SECRET = "cbd4d838876efcb340fae65a4d8cf236";
+
+    static {
+        ADMIN_OPEN_ID.put(1L, "oixGf4q8DpKAgflAZMKixk--Gc0Q");
+        ADMIN_OPEN_ID.put(2L, "oixGf4q8DpKAgflAZMKixk--Gc0Q");
+        ADMIN_OPEN_ID.put(3L, "oixGf4kbBjtkOdAOwowdd3DpV-2s");
+    }
 
     /**
      * 通过code获取session
