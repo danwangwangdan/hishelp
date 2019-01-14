@@ -41,9 +41,10 @@ public class CommonServiceImpl implements CommonService {
     private NoticeRepository noticeRepository;
     @Autowired
     private ForIdMapperRepository forIdMapperRepository;
-
     @Autowired
     private ContactRepository contactRepository;
+    @Autowired
+    private DutyPlanRepository dutyPlanRepository;
 
     @Value("${imageDir}")
     private String uploadPath;
@@ -260,6 +261,63 @@ public class CommonServiceImpl implements CommonService {
         } catch (Exception e) {
             e.printStackTrace();
             log.error("getContact错误：" + e.toString());
+            baseResult.setCode(-500);
+            baseResult.setMessage("服务器异常");
+        }
+        return baseResult;
+    }
+
+    @Override
+    public BaseResult setIsHoliday(String isHoliday) {
+        BaseResult baseResult = new BaseResult();
+        try {
+            int i = dutyPlanRepository.updateIsHoliday(isHoliday);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("getDutyPlan错误：" + e.toString());
+            baseResult.setCode(-500);
+            baseResult.setMessage("服务器异常");
+        }
+        return baseResult;
+    }
+
+    @Override
+    public BaseResult setIsWeekendWork(String isWeekendWork) {
+        BaseResult baseResult = new BaseResult();
+        try {
+            int i = dutyPlanRepository.updateIsWeekendWork(isWeekendWork);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("getDutyPlan错误：" + e.toString());
+            baseResult.setCode(-500);
+            baseResult.setMessage("服务器异常");
+        }
+        return baseResult;
+    }
+
+    @Override
+    public BaseResult setDutyPerson(String dutyPerson) {
+        BaseResult baseResult = new BaseResult();
+        try {
+            int i = dutyPlanRepository.updateDutyPerson(dutyPerson);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("getDutyPlan错误：" + e.toString());
+            baseResult.setCode(-500);
+            baseResult.setMessage("服务器异常");
+        }
+        return baseResult;
+    }
+
+    @Override
+    public BaseResult getDutyPlan() {
+        BaseResult baseResult = new BaseResult();
+        try {
+            DutyPlan dutyPlan = dutyPlanRepository.findOne(1L);
+            baseResult.setData(dutyPlan);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("getDutyPlan错误：" + e.toString());
             baseResult.setCode(-500);
             baseResult.setMessage("服务器异常");
         }

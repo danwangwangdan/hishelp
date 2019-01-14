@@ -276,14 +276,14 @@ public class TroubleServiceImpl implements TroubleService {
         // 根据负责区域选择发送人，如果处于节假日，则统一发送给值班人
         DutyPlan dutyPlan = dutyPlanRepository.findOne(1L);
         if (CommonUtil.isWeekend()) {
-            if (dutyPlan.getIsWeekendWork() == 0) { //是周末，但是周末并不调班，则发送给值班人
-                templateMessage.setTouser(WeChatUtil.ADMIN_OPEN_ID.get(dutyPlan.getDutyUserId()));
+            if (dutyPlan.getIsWeekendWork().equals("否")) { //是周末，但是周末并不调班，则发送给值班人
+                templateMessage.setTouser(WeChatUtil.ADMIN_OPEN_ID.get(dutyPlan.getDutyUser()));
             } else { //是周末，但是周末调班（节假日调整），则根据负责区域选择发送人
                 templateMessage.setTouser(WeChatUtil.ADMIN_OPEN_ID.get(user.getResponseAdmin()));
             }
         } else {
-            if (dutyPlan.getIsHoliday() == 1) { //不是周末，但是节假日，则发送给值班人
-                templateMessage.setTouser(WeChatUtil.ADMIN_OPEN_ID.get(dutyPlan.getDutyUserId()));
+            if (dutyPlan.getIsHoliday().equals("是")) { //不是周末，但是节假日，则发送给值班人
+                templateMessage.setTouser(WeChatUtil.ADMIN_OPEN_ID.get(dutyPlan.getDutyUser()));
             } else { //不是周末，不是节假日，则根据负责区域选择发送人
                 templateMessage.setTouser(WeChatUtil.ADMIN_OPEN_ID.get(user.getResponseAdmin()));
             }

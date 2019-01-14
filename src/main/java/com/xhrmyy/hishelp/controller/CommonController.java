@@ -98,6 +98,15 @@ public class CommonController {
         return baseResult;
     }
 
+    @RequestMapping("/getDutyPlan")
+    public BaseResult getDutyPlan() {
+        log.info("请求getDutyPlan");
+        BaseResult baseResult = commonService.getDutyPlan();
+        log.info("getDutyPlan请求返回：" + baseResult.toString());
+        return baseResult;
+    }
+
+    @RequestMapping("/setIsHoliday")
     public BaseResult setIsHoliday(@RequestParam String isHoliday) {
         log.info("请求setIsHoliday");
         BaseResult baseResult = commonService.setIsHoliday(isHoliday);
@@ -105,6 +114,7 @@ public class CommonController {
         return baseResult;
     }
 
+    @RequestMapping("/setIsWeekendWork")
     public BaseResult setIsWeekendWork(@RequestParam String isWeekendWork) {
         log.info("请求setIsWeekendWork");
         BaseResult baseResult = commonService.setIsWeekendWork(isWeekendWork);
@@ -112,6 +122,7 @@ public class CommonController {
         return baseResult;
     }
 
+    @RequestMapping("/setDutyPerson")
     public BaseResult setDutyPerson(@RequestParam String dutyPerson) {
         log.info("请求setDutyPerson");
         BaseResult baseResult = commonService.setDutyPerson(dutyPerson);

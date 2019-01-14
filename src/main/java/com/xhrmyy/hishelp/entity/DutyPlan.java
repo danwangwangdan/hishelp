@@ -16,20 +16,14 @@ public class DutyPlan extends BaseModel {
     @Id
     @GeneratedValue
     private Long id;
-    @Column(columnDefinition = "INT default 0")
-    private Integer isHoliday;
-    @Column(columnDefinition = "INT default 0")
-    private Integer isWeekendWork;
     @Column
-    private Long dutyUserId;
+    private String isHoliday;
+    @Column
+    private String isWeekendWork;
+    @Column
+    private String dutyUser;
 
     public DutyPlan() {
-    }
-
-    public DutyPlan(Integer isHoliday, Integer isWeekendWork, Long dutyUserId) {
-        this.isHoliday = isHoliday;
-        this.isWeekendWork = isWeekendWork;
-        this.dutyUserId = dutyUserId;
     }
 
     public Long getId() {
@@ -40,27 +34,27 @@ public class DutyPlan extends BaseModel {
         this.id = id;
     }
 
-    public Integer getIsHoliday() {
+    public String getIsHoliday() {
         return isHoliday;
     }
 
-    public void setIsHoliday(Integer isHoliday) {
+    public void setIsHoliday(String isHoliday) {
         this.isHoliday = isHoliday;
     }
 
-    public Long getDutyUserId() {
-        return dutyUserId;
-    }
-
-    public void setDutyUserId(Long dutyUserId) {
-        this.dutyUserId = dutyUserId;
-    }
-
-    public Integer getIsWeekendWork() {
+    public String getIsWeekendWork() {
         return isWeekendWork;
     }
 
-    public void setIsWeekendWork(Integer isWeekendWork) {
+    public void setIsWeekendWork(String isWeekendWork) {
         this.isWeekendWork = isWeekendWork;
+    }
+
+    public String getDutyUser() {
+        return dutyUser;
+    }
+
+    public void setDutyUser(String dutyUser) {
+        this.dutyUser = dutyUser;
     }
 }

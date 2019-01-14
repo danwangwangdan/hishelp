@@ -7,6 +7,7 @@ import com.xhrmyy.hishelp.common.BaseModel;
  */
 public class ProcessReq extends BaseModel {
 
+    private static final long serialVersionUID = 5563348883546630732L;
     private Integer solutionType;
     private String solutionDetail;
     private String solutionComment;

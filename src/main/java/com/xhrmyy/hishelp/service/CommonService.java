@@ -36,4 +36,7 @@ public interface CommonService {
     BaseResult setIsWeekendWork(String isWeekendWork);
 
     BaseResult setDutyPerson(String dutyPerson);
+
+    BaseResult getDutyPlan();
+
 }
