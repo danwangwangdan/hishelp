@@ -323,4 +323,22 @@ public class CommonServiceImpl implements CommonService {
         }
         return baseResult;
     }
+
+    @Override
+    public BaseResult saveNotice(String noticeContent) {
+        BaseResult baseResult = new BaseResult();
+        try {
+            Notice notice = new Notice();
+            notice.setNoticeText(noticeContent);
+            notice.setId(0L);
+            Notice noticeResult = noticeRepository.saveAndFlush(notice);
+            baseResult.setData(noticeResult);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("saveNotice错误：" + e.toString());
+            baseResult.setCode(-500);
+            baseResult.setMessage("服务器异常");
+        }
+        return baseResult;
+    }
 }

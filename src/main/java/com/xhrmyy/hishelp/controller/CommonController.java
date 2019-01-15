@@ -130,4 +130,12 @@ public class CommonController {
         return baseResult;
     }
 
+    @RequestMapping("/saveNotice")
+    public BaseResult saveNotice(@RequestParam String notice) {
+        log.info("请求saveNotice");
+        BaseResult baseResult = commonService.saveNotice(notice);
+        log.info("saveNotice请求返回：" + baseResult.toString());
+        return baseResult;
+    }
+
 }

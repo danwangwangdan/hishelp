@@ -39,4 +39,5 @@ public interface CommonService {
 
     BaseResult getDutyPlan();
 
+    BaseResult saveNotice(String notice);
 }
