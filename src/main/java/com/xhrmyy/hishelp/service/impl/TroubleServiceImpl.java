@@ -68,7 +68,29 @@ public class TroubleServiceImpl implements TroubleService {
                 if (null != savedTrouble) {
                     baseResult.setData(savedTrouble);
                     // 给管理员推送消息
-                    sendMessageToAdmin(savedTrouble);
+                    String dutyAdmin = null;
+                    // 如果处于节假日，则统一发送给值班人
+                    DutyPlan dutyPlan = dutyPlanRepository.findOne(1L);
+                    if (CommonUtil.isWeekend()) {
+                        if (dutyPlan.getIsWeekendWork().equals("否")) { //是周末，但是周末并不调班，则发送给值班人
+                            dutyAdmin = WeChatUtil.ADMIN_OPEN_ID.get(dutyPlan.getDutyUser());
+                            sendMessageToAdmin(savedTrouble, dutyAdmin);
+                        } else { //是周末，但是周末调班（节假日调整），则全部发送
+                            sendMessageToAdmin(savedTrouble, WeChatUtil.ADMIN_OPEN_ID.get("文卫东"));
+                            sendMessageToAdmin(savedTrouble, WeChatUtil.ADMIN_OPEN_ID.get("黄士明"));
+                            sendMessageToAdmin(savedTrouble, WeChatUtil.ADMIN_OPEN_ID.get("杨庆"));
+                        }
+                    } else {
+                        if (dutyPlan.getIsHoliday().equals("是")) { //不是周末，但是节假日，则发送给值班人
+                            dutyAdmin = WeChatUtil.ADMIN_OPEN_ID.get(dutyPlan.getDutyUser());
+                            sendMessageToAdmin(savedTrouble, dutyAdmin);
+                        } else { //不是周末，不是节假日，则全部发送
+                            sendMessageToAdmin(savedTrouble, WeChatUtil.ADMIN_OPEN_ID.get("文卫东"));
+                            sendMessageToAdmin(savedTrouble, WeChatUtil.ADMIN_OPEN_ID.get("黄士明"));
+                            sendMessageToAdmin(savedTrouble, WeChatUtil.ADMIN_OPEN_ID.get("杨庆"));
+                        }
+                    }
+
                 }
             } catch (Exception e) {
                 log.error(e.toString());
@@ -262,7 +284,7 @@ public class TroubleServiceImpl implements TroubleService {
 
     }
 
-    private void sendMessageToAdmin(Trouble trouble) {
+    private void sendMessageToAdmin(Trouble trouble, String dutyAdmin) {
 
         Map<String, TemplateData> dataMap = new HashMap<>();
         dataMap.put("keyword1", new TemplateData(trouble.getOffice() + "--" + trouble.getTroublePersonName()));
@@ -272,22 +294,7 @@ public class TroubleServiceImpl implements TroubleService {
         TemplateMessage templateMessage = new TemplateMessage();
         templateMessage.setTemplate_id(WeChatUtil.TEMPLE_MESSAGE_SUBMITTED);
         templateMessage.setPage(WeChatUtil.GO_PAGE_DETAIL + trouble.getId());
-        User user = userRepository.findOne(trouble.getUserId());
-        // 根据负责区域选择发送人，如果处于节假日，则统一发送给值班人
-        DutyPlan dutyPlan = dutyPlanRepository.findOne(1L);
-        if (CommonUtil.isWeekend()) {
-            if (dutyPlan.getIsWeekendWork().equals("否")) { //是周末，但是周末并不调班，则发送给值班人
-                templateMessage.setTouser(WeChatUtil.ADMIN_OPEN_ID.get(dutyPlan.getDutyUser()));
-            } else { //是周末，但是周末调班（节假日调整），则根据负责区域选择发送人
-                templateMessage.setTouser(WeChatUtil.ADMIN_OPEN_ID.get(user.getResponseAdmin()));
-            }
-        } else {
-            if (dutyPlan.getIsHoliday().equals("是")) { //不是周末，但是节假日，则发送给值班人
-                templateMessage.setTouser(WeChatUtil.ADMIN_OPEN_ID.get(dutyPlan.getDutyUser()));
-            } else { //不是周末，不是节假日，则根据负责区域选择发送人
-                templateMessage.setTouser(WeChatUtil.ADMIN_OPEN_ID.get(user.getResponseAdmin()));
-            }
-        }
+        templateMessage.setTouser(dutyAdmin);
         templateMessage.setData(dataMap);
         new MessageSendThread(templateMessage).start();
     }
@@ -322,7 +329,29 @@ public class TroubleServiceImpl implements TroubleService {
             return baseResult;
         }
         baseResult = getTroubleDetail(processReq.getTroubleId());
-        sendMessageToAdmin(baseResult.getData());
+        // 给管理员推送消息
+        String dutyAdmin = null;
+        // 如果处于节假日，则统一发送给值班人
+        DutyPlan dutyPlan = dutyPlanRepository.findOne(1L);
+        if (CommonUtil.isWeekend()) {
+            if (dutyPlan.getIsWeekendWork().equals("否")) { //是周末，但是周末并不调班，则发送给值班人
+                dutyAdmin = WeChatUtil.ADMIN_OPEN_ID.get(dutyPlan.getDutyUser());
+                sendMessageToAdmin(baseResult.getData(), dutyAdmin);
+            } else { //是周末，但是周末调班（节假日调整），则全部发送
+                sendMessageToAdmin(baseResult.getData(), WeChatUtil.ADMIN_OPEN_ID.get("文卫东"));
+                sendMessageToAdmin(baseResult.getData(), WeChatUtil.ADMIN_OPEN_ID.get("黄士明"));
+                sendMessageToAdmin(baseResult.getData(), WeChatUtil.ADMIN_OPEN_ID.get("杨庆"));
+            }
+        } else {
+            if (dutyPlan.getIsHoliday().equals("是")) { //不是周末，但是节假日，则发送给值班人
+                dutyAdmin = WeChatUtil.ADMIN_OPEN_ID.get(dutyPlan.getDutyUser());
+                sendMessageToAdmin(baseResult.getData(), dutyAdmin);
+            } else { //不是周末，不是节假日，则全部发送
+                sendMessageToAdmin(baseResult.getData(), WeChatUtil.ADMIN_OPEN_ID.get("文卫东"));
+                sendMessageToAdmin(baseResult.getData(), WeChatUtil.ADMIN_OPEN_ID.get("黄士明"));
+                sendMessageToAdmin(baseResult.getData(), WeChatUtil.ADMIN_OPEN_ID.get("杨庆"));
+            }
+        }
         return baseResult;
     }
 

@@ -15,7 +15,7 @@ import java.util.Map;
 public class WeChatUtil {
 
     private static final Logger log = LoggerFactory.getLogger(WeChatUtil.class);
-    public static final Map<Long, String> ADMIN_OPEN_ID = new HashMap<>();
+    public static final Map<String, String> ADMIN_OPEN_ID = new HashMap<>();
     public static final String TEMPLE_MESSAGE_SUBMITTED = "3COMTrL4TYAvxpcphp-14fTP1bE5gcf40MNqQpjm8xI";
     public static final String TEMPLE_MESSAGE_PROCESSED = "V0KeA1QZRFSY6R6PtKvy-LwMWMYZ443_EYy6xsNSnDo";
     public static final String GO_PAGE_SUBMIT = "pages/submit/submit";
@@ -25,9 +25,9 @@ public class WeChatUtil {
     private static final String APP_SECRET = "cbd4d838876efcb340fae65a4d8cf236";
 
     static {
-        ADMIN_OPEN_ID.put(1L, "oixGf4q8DpKAgflAZMKixk--Gc0Q");
-        ADMIN_OPEN_ID.put(2L, "oixGf4q8DpKAgflAZMKixk--Gc0Q");
-        ADMIN_OPEN_ID.put(3L, "oixGf4kbBjtkOdAOwowdd3DpV-2s");
+        ADMIN_OPEN_ID.put("文卫东", "oixGf4q8DpKAgflAZMKixk--Gc0Q");
+        ADMIN_OPEN_ID.put("杨庆", "oixGf4q8DpKAgflAZMKixk--Gc0Q");
+        ADMIN_OPEN_ID.put("黄士明", "oixGf4kbBjtkOdAOwowdd3DpV-2s");
     }
 
     /**
