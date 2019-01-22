@@ -75,11 +75,14 @@ public class TroubleController {
         return troubleService.toActiveTrouble(processReq);
     }
 
+    // 管理员接口
+
     @PostMapping("/reAssign")
     public BaseResult reAssignTrouble(@RequestBody ProcessReq processReq) {
 
         return troubleService.toReAssignTrouble(processReq);
     }
+
 
     @PostMapping("/confirm")
     public BaseResult toConfirmTrouble(@RequestBody ProcessReq processReq) {
@@ -90,6 +93,7 @@ public class TroubleController {
     public BaseResult toSolveTrouble(@RequestBody ProcessReq processReq) {
         return troubleService.toSolveTrouble(processReq);
     }
+
 
     @RequestMapping("/mySolved")
     public BaseResult getMySolvedTroubles(@RequestParam long solverId) {
@@ -110,6 +114,12 @@ public class TroubleController {
         BaseResult baseResult = troubleService.getTroublesByStatus(Trouble.TROUBLE_STATUS_SUBMITTED);
         log.info("submitted返回：" + (new Date().getTime() - start.getTime()));
         return baseResult;
+    }
+
+    @RequestMapping("/mySolveCount")
+    public BaseResult getMySolveCount(@RequestParam String solver) {
+
+        return troubleService.getMySolveCount(solver);
     }
 
 

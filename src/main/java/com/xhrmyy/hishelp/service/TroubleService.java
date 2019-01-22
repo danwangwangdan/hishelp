@@ -41,4 +41,6 @@ public interface TroubleService {
      * @return
      */
     BaseResult toReAssignTrouble(ProcessReq processReq);
+
+    BaseResult getMySolveCount(String solver);
 }

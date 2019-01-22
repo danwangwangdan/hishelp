@@ -173,11 +173,13 @@ public class CommonServiceImpl implements CommonService {
 
                 User user = userRepository.findOne(trouble.getUserId());
                 for (int i = 0; i < trouble.getFormIds().size(); i++) {
-                    FormIdMapper formIdMapper = new FormIdMapper();
-                    formIdMapper.setCreateDate(new Date());
-                    formIdMapper.setFormId(trouble.getFormIds().get(i));
-                    formIdMapper.setOpenId(user.getOpenId());
-                    forIdMapperRepository.saveAndFlush(formIdMapper);
+                    if (!trouble.getFormIds().get(i).equals("the formId is a mock one")) {
+                        FormIdMapper formIdMapper = new FormIdMapper();
+                        formIdMapper.setCreateDate(new Date());
+                        formIdMapper.setFormId(trouble.getFormIds().get(i));
+                        formIdMapper.setOpenId(user.getOpenId());
+                        forIdMapperRepository.saveAndFlush(formIdMapper);
+                    }
                 }
             }
         } catch (Exception e) {

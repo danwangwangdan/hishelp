@@ -62,6 +62,8 @@ public class Trouble extends BaseModel {
     @Column
     private String solver;
     @Column
+    private Date solveTime;
+    @Column
     private Long confirmerId;
     @Column
     private String confirmer;
@@ -73,10 +75,7 @@ public class Trouble extends BaseModel {
     private Date submitTime;
     @Column
     private Date confirmTime;
-    @Column
-    private Date solveTime;
-    @Column
-    private String solverName;
+
     @Column
     private String defaultResponser;
     @Transient
@@ -190,15 +189,6 @@ public class Trouble extends BaseModel {
     public void setSolutionDetail(String solutionDetail) {
         this.solutionDetail = solutionDetail;
     }
-
-    public String getSolverName() {
-        return solverName;
-    }
-
-    public void setSolverName(String solverName) {
-        this.solverName = solverName;
-    }
-
 
     public String getSolutionComment() {
         return solutionComment;

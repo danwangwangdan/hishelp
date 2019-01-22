@@ -2,14 +2,12 @@ package com.xhrmyy.hishelp.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.xhrmyy.hishelp.common.BaseResult;
-import com.xhrmyy.hishelp.entity.DutyPlan;
-import com.xhrmyy.hishelp.entity.FormIdMapper;
-import com.xhrmyy.hishelp.entity.Trouble;
-import com.xhrmyy.hishelp.entity.User;
+import com.xhrmyy.hishelp.entity.*;
 import com.xhrmyy.hishelp.model.ProcessReq;
 import com.xhrmyy.hishelp.model.TemplateData;
 import com.xhrmyy.hishelp.model.TemplateMessage;
 import com.xhrmyy.hishelp.repository.DutyPlanRepository;
+import com.xhrmyy.hishelp.repository.SolveCountRepository;
 import com.xhrmyy.hishelp.repository.TroubleRepository;
 import com.xhrmyy.hishelp.repository.UserRepository;
 import com.xhrmyy.hishelp.service.CommonService;
@@ -43,6 +41,8 @@ public class TroubleServiceImpl implements TroubleService {
     private DutyPlanRepository dutyPlanRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private SolveCountRepository solveCountRepository;
     @Autowired
     private CommonService commonService;
     private Map<Long, Date> lastSubmitMap = new HashMap<>();
@@ -378,6 +378,22 @@ public class TroubleServiceImpl implements TroubleService {
     @Override
     public BaseResult toReAssignTrouble(ProcessReq processReq) {
         return null;
+    }
+
+    @Override
+    public BaseResult getMySolveCount(String solver) {
+        BaseResult baseResult = new BaseResult();
+        SolveCount solveCount = null;
+        try {
+            solveCount = solveCountRepository.findBySolverAndSolveDate(solver, new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+        } catch (Exception e) {
+            log.error(e.toString());
+            baseResult.setCode(-500);
+            baseResult.setMessage("服务器异常");
+            return baseResult;
+        }
+        baseResult.setData(solveCount);
+        return baseResult;
     }
 
     private String getStatusByIntValue(int status) {
