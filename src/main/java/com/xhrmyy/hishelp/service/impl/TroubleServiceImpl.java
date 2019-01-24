@@ -58,10 +58,7 @@ public class TroubleServiceImpl implements TroubleService {
         Date now = new Date();
         if (null == lastSubmitDate | (null != lastSubmitDate && (now.getTime() - lastSubmitDate.getTime()) > 2018)) {
             lastSubmitMap.put(trouble.getUserId(), now);
-            User user = userRepository.findOne(trouble.getUserId());
-            User responseAdmin = userRepository.findOne(user.getResponseAdmin());
             try {
-                trouble.setDefaultResponser(responseAdmin.getNickname());
                 trouble.setStatus(Trouble.TROUBLE_STATUS_SUBMITTED);
                 trouble.setSubmitTime(new Date());
                 Trouble savedTrouble = troubleRepository.saveAndFlush(trouble);
