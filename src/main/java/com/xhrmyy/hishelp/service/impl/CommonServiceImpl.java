@@ -206,8 +206,7 @@ public class CommonServiceImpl implements CommonService {
                     formIdMapper = forIdMapperList.get(i);
                     long differ = new Date().getTime() - formIdMapper.getCreateDate().getTime();
                     long day = differ / (24 * 60 * 60 * 1000);
-                    long hour = (differ / (60 * 60 * 1000) - day * 24);
-                    if (hour <= (24 * 7) - 1) {
+                    if (day < 7) {
                         isUseful = true;
                     } else {
                         // 标记为已过期
