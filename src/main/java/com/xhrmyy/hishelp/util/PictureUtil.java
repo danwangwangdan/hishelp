@@ -155,7 +155,7 @@ public class PictureUtil {
 
 
     public static void main(String[] args) {
-        compressPicForScale("0d680d82b5.JPG", "0d680d82b5.JPG", 512, 0.8);
+        compressPicForScale("1212.JPG", "1212_AFTER.JPG", 512, 0.8);
     }
 
     /**
@@ -272,11 +272,12 @@ public class PictureUtil {
         if (imageSize < 1280 * 720) {
             return maxQuality;
         } else if (imageSize <= 1920 * 1080) {
-            return 0.6f;
+
+            return 0.7f;
         } else if (imageSize <= 2560 * 1440) {
-            return 0.4f;
+            return 0.6f;
         } else {
-            return 0.2f;
+            return 0.5f;
         }
     }
 }
