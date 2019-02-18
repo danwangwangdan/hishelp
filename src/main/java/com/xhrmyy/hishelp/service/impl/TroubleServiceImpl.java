@@ -66,7 +66,7 @@ public class TroubleServiceImpl implements TroubleService {
                 }
                 trouble.setSubmitTime(new Date());
                 Trouble savedTrouble = troubleRepository.saveAndFlush(trouble);
-                if (null != savedTrouble) {
+                if (null != savedTrouble && (!savedTrouble.getTroublePersonName().equals("管理员"))) {
                     baseResult.setData(savedTrouble);
                     // 给管理员推送消息
                     String dutyAdmin = null;
