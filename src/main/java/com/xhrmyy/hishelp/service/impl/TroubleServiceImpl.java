@@ -59,7 +59,11 @@ public class TroubleServiceImpl implements TroubleService {
         if (null == lastSubmitDate | (null != lastSubmitDate && (now.getTime() - lastSubmitDate.getTime()) > 2018)) {
             lastSubmitMap.put(trouble.getUserId(), now);
             try {
-                trouble.setStatus(Trouble.TROUBLE_STATUS_SUBMITTED);
+                if (trouble.getStatus() == null) {
+                    trouble.setStatus(Trouble.TROUBLE_STATUS_SUBMITTED);
+                } else {
+                    trouble.setStatus(trouble.getStatus());
+                }
                 trouble.setSubmitTime(new Date());
                 Trouble savedTrouble = troubleRepository.saveAndFlush(trouble);
                 if (null != savedTrouble) {
