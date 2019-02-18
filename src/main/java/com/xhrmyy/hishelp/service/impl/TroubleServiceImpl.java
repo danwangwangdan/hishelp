@@ -66,33 +66,35 @@ public class TroubleServiceImpl implements TroubleService {
                 }
                 trouble.setSubmitTime(new Date());
                 Trouble savedTrouble = troubleRepository.saveAndFlush(trouble);
-                if (null != savedTrouble && (!savedTrouble.getTroublePersonName().equals("管理员"))) {
+                if (null != savedTrouble) {
                     baseResult.setData(savedTrouble);
-                    // 给管理员推送消息
-                    String dutyAdmin = null;
-                    // 如果处于节假日，则统一发送给值班人
-                    DutyPlan dutyPlan = dutyPlanRepository.findOne(1L);
-                    if (CommonUtil.isWeekend()) {
-                        if (dutyPlan.getIsWeekendWork().equals("否")) { //是周末，但是周末并不调班，则发送给值班人
-                            dutyAdmin = WeChatUtil.ADMIN_OPEN_ID.get(dutyPlan.getDutyUser());
-                            sendMessageToAdmin(savedTrouble, dutyAdmin);
-                        } else { //是周末，但是周末调班（节假日调整），则全部发送
-                            sendMessageToAdmin(savedTrouble, WeChatUtil.ADMIN_OPEN_ID.get("文卫东"));
-                            sendMessageToAdmin(savedTrouble, WeChatUtil.ADMIN_OPEN_ID.get("黄士明"));
-                            sendMessageToAdmin(savedTrouble, WeChatUtil.ADMIN_OPEN_ID.get("杨庆"));
-                        }
-                    } else {
-                        if (dutyPlan.getIsHoliday().equals("是")) { //不是周末，但是节假日，则发送给值班人
-                            dutyAdmin = WeChatUtil.ADMIN_OPEN_ID.get(dutyPlan.getDutyUser());
-                            sendMessageToAdmin(savedTrouble, dutyAdmin);
-                        } else { //不是周末，不是节假日，则全部发送
-                            sendMessageToAdmin(savedTrouble, WeChatUtil.ADMIN_OPEN_ID.get("文卫东"));
-                            sendMessageToAdmin(savedTrouble, WeChatUtil.ADMIN_OPEN_ID.get("黄士明"));
-                            sendMessageToAdmin(savedTrouble, WeChatUtil.ADMIN_OPEN_ID.get("杨庆"));
+                    if (!savedTrouble.getTroublePersonName().equals("管理员")) {
+                        // 给管理员推送消息
+                        String dutyAdmin = null;
+                        // 如果处于节假日，则统一发送给值班人
+                        DutyPlan dutyPlan = dutyPlanRepository.findOne(1L);
+                        if (CommonUtil.isWeekend()) {
+                            if (dutyPlan.getIsWeekendWork().equals("否")) { //是周末，但是周末并不调班，则发送给值班人
+                                dutyAdmin = WeChatUtil.ADMIN_OPEN_ID.get(dutyPlan.getDutyUser());
+                                sendMessageToAdmin(savedTrouble, dutyAdmin);
+                            } else { //是周末，但是周末调班（节假日调整），则全部发送
+                                sendMessageToAdmin(savedTrouble, WeChatUtil.ADMIN_OPEN_ID.get("文卫东"));
+                                sendMessageToAdmin(savedTrouble, WeChatUtil.ADMIN_OPEN_ID.get("黄士明"));
+                                sendMessageToAdmin(savedTrouble, WeChatUtil.ADMIN_OPEN_ID.get("杨庆"));
+                            }
+                        } else {
+                            if (dutyPlan.getIsHoliday().equals("是")) { //不是周末，但是节假日，则发送给值班人
+                                dutyAdmin = WeChatUtil.ADMIN_OPEN_ID.get(dutyPlan.getDutyUser());
+                                sendMessageToAdmin(savedTrouble, dutyAdmin);
+                            } else { //不是周末，不是节假日，则全部发送
+                                sendMessageToAdmin(savedTrouble, WeChatUtil.ADMIN_OPEN_ID.get("文卫东"));
+                                sendMessageToAdmin(savedTrouble, WeChatUtil.ADMIN_OPEN_ID.get("黄士明"));
+                                sendMessageToAdmin(savedTrouble, WeChatUtil.ADMIN_OPEN_ID.get("杨庆"));
+                            }
                         }
                     }
-
                 }
+
             } catch (Exception e) {
                 log.error(e.toString());
                 baseResult.setCode(-500);
@@ -100,10 +102,8 @@ public class TroubleServiceImpl implements TroubleService {
                 return baseResult;
             }
         }
-
         return baseResult;
     }
-
 
     @Override
     public BaseResult getAllTroubles() {
