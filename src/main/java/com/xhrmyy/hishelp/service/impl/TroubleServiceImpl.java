@@ -230,7 +230,10 @@ public class TroubleServiceImpl implements TroubleService {
             // 更新状态、解决方案
             int count = troubleRepository.updateSolveStatus(processReq.getSolutionComment(), processReq.getSolutionDetail(), Trouble.TROUBLE_STATUS_SOLVED, processReq.getSolver(), processReq.getSolverId(), processReq.getTroubleId());
             log.info("toSolveTrouble更新了" + count + "行");
-            sendProcessMessage(processReq.getTroubleId(), count);
+            Trouble trouble = troubleRepository.findOne(processReq.getTroubleId());
+            if (!trouble.getTroublePersonName().equals("管理员")) {
+                sendProcessMessage(processReq.getTroubleId(), count);
+            }
         } catch (Exception e) {
             log.error(e.toString());
             baseResult.setCode(-500);
@@ -271,7 +274,10 @@ public class TroubleServiceImpl implements TroubleService {
                 // 更新状态
                 int count = troubleRepository.updateConfirmStatus(Trouble.TROUBLE_STATUS_CONFIRMED, processReq.getSolverId(), processReq.getSolver(), processReq.getTroubleId());
                 log.info("toConfirmTrouble更新了" + count + "行");
-                sendProcessMessage(processReq.getTroubleId(), count);
+                Trouble trouble = troubleRepository.findOne(processReq.getTroubleId());
+                if (!trouble.getTroublePersonName().equals("管理员")) {
+                    sendProcessMessage(processReq.getTroubleId(), count);
+                }
             } catch (Exception e) {
                 log.error(e.toString());
                 baseResult.setCode(-500);
