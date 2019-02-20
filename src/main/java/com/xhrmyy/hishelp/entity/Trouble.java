@@ -77,7 +77,7 @@ public class Trouble extends BaseModel {
     private Date confirmTime;
 
     @Column
-    private String defaultResponser;
+    private String mobile;
     @Transient
     private List<String> formIds;
 
@@ -247,11 +247,12 @@ public class Trouble extends BaseModel {
         this.toOffice = toOffice;
     }
 
-    public String getDefaultResponser() {
-        return defaultResponser;
+
+    public String getMobile() {
+        return mobile;
     }
 
-    public void setDefaultResponser(String defaultResponser) {
-        this.defaultResponser = defaultResponser;
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
     }
 }
