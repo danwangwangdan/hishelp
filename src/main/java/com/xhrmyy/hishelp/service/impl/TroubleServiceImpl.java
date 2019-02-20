@@ -366,12 +366,15 @@ public class TroubleServiceImpl implements TroubleService {
     @Override
     public BaseResult sendTemplateMessage(TemplateMessage templateMessage) {
         BaseResult baseResult = new BaseResult();
-
         try {
             BaseResult<FormIdMapper> formIdResult = commonService.getOneUsefulFormId(templateMessage.getTouser());
             if (formIdResult.getCode() >= 0) {
                 JSONObject jsonObject1 = WeChatUtil.sendTemplateMessage(templateMessage.getTouser(), templateMessage.getTemplate_id(), templateMessage.getPage(), formIdResult.getData().getFormId(), templateMessage.getData());
-                log.info("发送消息至" + templateMessage.getTouser() + jsonObject1.getString("errmsg"));
+                Integer errCode = jsonObject1.getInteger("errcode");
+                log.info("发送消息给" + templateMessage.getTouser() + "，code: " + errCode + "，msg：" + jsonObject1.getString("errmsg"));
+                if (errCode != 0) {
+                    baseResult.setCode(-1);
+                }
             }
         } catch (Exception e) {
             log.error(e.toString());
@@ -421,6 +424,7 @@ public class TroubleServiceImpl implements TroubleService {
     class MessageSendThread extends Thread {
 
         private TemplateMessage templateMessage;
+        private final Logger log = LoggerFactory.getLogger(MessageSendThread.class);
 
         public TemplateMessage getTemplateMessage() {
             return templateMessage;
@@ -445,7 +449,14 @@ public class TroubleServiceImpl implements TroubleService {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            sendTemplateMessage(this.templateMessage);
+            int count = 0;
+            BaseResult baseResult;
+            do {
+                baseResult = sendTemplateMessage(this.templateMessage);
+                count++;
+                log.info("第" + count + "次发送消息，" + ((baseResult.getCode() >= 0) ? "成功" : "失败"));
+
+            } while (baseResult.getCode() >= 0 || count >= 3);
         }
     }
 
