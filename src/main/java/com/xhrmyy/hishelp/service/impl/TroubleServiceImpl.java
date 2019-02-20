@@ -424,7 +424,6 @@ public class TroubleServiceImpl implements TroubleService {
     class MessageSendThread extends Thread {
 
         private TemplateMessage templateMessage;
-        private final Logger log = LoggerFactory.getLogger(MessageSendThread.class);
 
         public TemplateMessage getTemplateMessage() {
             return templateMessage;
@@ -449,14 +448,7 @@ public class TroubleServiceImpl implements TroubleService {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            int count = 0;
-            BaseResult baseResult;
-            do {
-                baseResult = sendTemplateMessage(this.templateMessage);
-                count++;
-                log.info("第" + count + "次发送消息，" + ((baseResult.getCode() >= 0) ? "成功" : "失败"));
-
-            } while (baseResult.getCode() >= 0 || count >= 3);
+            sendTemplateMessage(this.templateMessage);
         }
     }
 
