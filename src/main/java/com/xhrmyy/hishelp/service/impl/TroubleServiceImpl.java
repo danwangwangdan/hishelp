@@ -73,6 +73,7 @@ public class TroubleServiceImpl implements TroubleService {
                         String dutyAdmin = null;
                         // 如果处于节假日，则统一发送给值班人
                         DutyPlan dutyPlan = dutyPlanRepository.findOne(1L);
+                        log.info("值班安排：" + dutyPlan.toString());
                         if (CommonUtil.isWeekend()) {
                             if (dutyPlan.getIsWeekendWork().equals("否")) { //是周末，但是周末并不调班，则发送给值班人
                                 dutyAdmin = WeChatUtil.ADMIN_OPEN_ID.get(dutyPlan.getDutyUser());
