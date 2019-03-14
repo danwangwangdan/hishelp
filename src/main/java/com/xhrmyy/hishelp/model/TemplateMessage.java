@@ -16,7 +16,6 @@ public class TemplateMessage extends BaseModel {
     private static final long serialVersionUID = 4672282392360960647L;
     private int messageType;
 
-
     private String touser;
 
     private String template_id;

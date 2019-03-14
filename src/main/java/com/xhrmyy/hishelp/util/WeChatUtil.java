@@ -18,8 +18,10 @@ public class WeChatUtil {
     public static final Map<String, String> ADMIN_OPEN_ID = new HashMap<>();
     public static final String TEMPLE_MESSAGE_SUBMITTED = "3COMTrL4TYAvxpcphp-14fTP1bE5gcf40MNqQpjm8xI";
     public static final String TEMPLE_MESSAGE_PROCESSED = "V0KeA1QZRFSY6R6PtKvy-LwMWMYZ443_EYy6xsNSnDo";
+    public static final String TEMPLE_MESSAGE_NOTE = "jVUGxvOSqGYTobxdxTRNaQNfcnddRgHpAcjWwPGvp4w";
     public static final String GO_PAGE_SUBMIT = "pages/submit/submit";
     public static final String GO_PAGE_DETAIL = "pages/detail/detail?troubleId=";
+    public static final String GO_PAGE_ME = "pages/me/me";
 
     private static final String APP_ID = "wx6c54f40530b65ae8";
     private static final String APP_SECRET = "cbd4d838876efcb340fae65a4d8cf236";
