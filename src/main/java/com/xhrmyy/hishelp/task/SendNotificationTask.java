@@ -33,8 +33,8 @@ public class SendNotificationTask {
             //要执行的任务逻辑写在这里
             log.info("开始定时发送消息");
             Map<String, TemplateData> dataMap = new HashMap<>();
-            dataMap.put("keyword1", new TemplateData("收集模版消息ID提醒"));
-            dataMap.put("keyword2", new TemplateData("每周任务，请多次点击对应按钮来获取推送消息的机会。"));
+            dataMap.put("keyword1", new TemplateData("获取推送消息机会任务提醒"));
+            dataMap.put("keyword2", new TemplateData("每周任务，请多次点击对应按钮来获取推送消息的机会，每点击一次会获得一次推送消息的机会，推荐点击20次"));
             TemplateMessage templateMessage = new TemplateMessage();
             templateMessage.setTemplate_id(WeChatUtil.TEMPLE_MESSAGE_NOTE);
             templateMessage.setPage(WeChatUtil.GO_PAGE_ME);
