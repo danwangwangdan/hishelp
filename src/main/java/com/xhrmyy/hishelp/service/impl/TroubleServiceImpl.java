@@ -45,73 +45,100 @@ public class TroubleServiceImpl implements TroubleService {
     private SolveCountRepository solveCountRepository;
     @Autowired
     private CommonService commonService;
-    private Map<Long, Date> lastSubmitMap = new HashMap<>();
-    private Map<Long, Date> lastConfirmMap = new HashMap<>();
-    private Map<Long, Date> lastSolveMap = new HashMap<>();
 
     @Override
     public BaseResult submitTrouble(Trouble trouble) {
 
         BaseResult baseResult = new BaseResult();
-        Date lastSubmitDate = lastSubmitMap.get(trouble.getUserId());
-
-        Date now = new Date();
-        if (null == lastSubmitDate | (null != lastSubmitDate && (now.getTime() - lastSubmitDate.getTime()) > 2018)) {
-            lastSubmitMap.put(trouble.getUserId(), now);
-            try {
-                if (trouble.getStatus() == null) {
-                    trouble.setStatus(Trouble.TROUBLE_STATUS_SUBMITTED);
-                } else {
-                    trouble.setStatus(trouble.getStatus());
-                }
-                trouble.setSubmitTime(new Date());
-                Trouble savedTrouble = troubleRepository.saveAndFlush(trouble);
-                if (null != savedTrouble) {
-                    baseResult.setData(savedTrouble);
-                    if (!savedTrouble.getTroublePersonName().equals("管理员")) {
-                        // 给管理员推送消息
-                        String dutyAdmin = null;
-                        // 如果处于节假日，则统一发送给值班人
-                        DutyPlan dutyPlan = dutyPlanRepository.findOne(1L);
-                        log.info("值班安排：" + dutyPlan.toString());
-                        if (CommonUtil.isWeekend()) {
-                            if (dutyPlan.getIsWeekendWork().equals("否")) { //是周末，但是周末并不调班，则发送给值班人
-                                dutyAdmin = WeChatUtil.ADMIN_OPEN_ID.get(dutyPlan.getDutyUser());
-                                sendMessageToAdmin(savedTrouble, dutyAdmin);
-                            } else { //是周末，但是周末调班（节假日调整），则全部发送
-                                sendMessageToAdmin(savedTrouble, WeChatUtil.ADMIN_OPEN_ID.get("文卫东"));
-                                sendMessageToAdmin(savedTrouble, WeChatUtil.ADMIN_OPEN_ID.get("黄士明"));
-                                sendMessageToAdmin(savedTrouble, WeChatUtil.ADMIN_OPEN_ID.get("杨庆"));
-                            }
-                        } else {
-                            if (dutyPlan.getIsHoliday().equals("是")) { //不是周末，但是节假日，则发送给值班人
-                                dutyAdmin = WeChatUtil.ADMIN_OPEN_ID.get(dutyPlan.getDutyUser());
-                                sendMessageToAdmin(savedTrouble, dutyAdmin);
-                            } else { //不是周末，不是节假日，则全部发送
-                                sendMessageToAdmin(savedTrouble, WeChatUtil.ADMIN_OPEN_ID.get("文卫东"));
-                                sendMessageToAdmin(savedTrouble, WeChatUtil.ADMIN_OPEN_ID.get("黄士明"));
-                                sendMessageToAdmin(savedTrouble, WeChatUtil.ADMIN_OPEN_ID.get("杨庆"));
-                            }
-                        }
-                    }
-                }
-
-            } catch (Exception e) {
-                log.error(e.toString());
-                baseResult.setCode(-500);
-                baseResult.setMessage("服务器异常");
-                return baseResult;
+        try {
+            if (trouble.getStatus() == null) {
+                trouble.setStatus(Trouble.TROUBLE_STATUS_SUBMITTED);
+            } else {
+                trouble.setStatus(trouble.getStatus());
             }
+            trouble.setSubmitTime(new Date());
+            Trouble savedTrouble = troubleRepository.saveAndFlush(trouble);
+            if (null != savedTrouble) {
+                baseResult.setData(savedTrouble);
+                if (!savedTrouble.getTroublePersonName().equals("管理员")) {
+                    switch (trouble.getFirType()) {
+                        case "设备科":
+                            // 给管理员推送消息
+                            String dutyAdmin = null;
+                            // 如果处于节假日，则统一发送给值班人
+                            DutyPlan dutyPlan = dutyPlanRepository.findOne(2L);
+                            log.info("值班安排：" + dutyPlan.toString());
+                            if (CommonUtil.isWeekend()) {
+                                if (dutyPlan.getIsWeekendWork().equals("否")) { //是周末，但是周末并不调班，则发送给值班人
+                                    dutyAdmin = WeChatUtil.ADMIN_OPEN_ID.get(dutyPlan.getDutyUser());
+                                    sendMessageToAdmin(savedTrouble, dutyAdmin);
+                                } else { //是周末，但是周末调班（节假日调整），则全部发送
+                                    sendMessageToAdmin(savedTrouble, WeChatUtil.ADMIN_OPEN_ID.get("田道君"));
+                                    sendMessageToAdmin(savedTrouble, WeChatUtil.ADMIN_OPEN_ID.get("曾叙铭"));
+                                    sendMessageToAdmin(savedTrouble, WeChatUtil.ADMIN_OPEN_ID.get("杨仕林"));
+                                }
+                            } else {
+                                if (dutyPlan.getIsHoliday().equals("是")) { //不是周末，但是节假日，则发送给值班人
+                                    dutyAdmin = WeChatUtil.ADMIN_OPEN_ID.get(dutyPlan.getDutyUser());
+                                    sendMessageToAdmin(savedTrouble, dutyAdmin);
+                                } else { //不是周末，不是节假日，则全部发送
+                                    sendMessageToAdmin(savedTrouble, WeChatUtil.ADMIN_OPEN_ID.get("田道君"));
+                                    sendMessageToAdmin(savedTrouble, WeChatUtil.ADMIN_OPEN_ID.get("曾叙铭"));
+                                    sendMessageToAdmin(savedTrouble, WeChatUtil.ADMIN_OPEN_ID.get("杨仕林"));
+                                }
+                            }
+                            ;
+                            break;
+                        case "网络中心":
+                            // 给管理员推送消息
+                            String dutyAdmin2 = null;
+                            // 如果处于节假日，则统一发送给值班人
+                            DutyPlan dutyPlan2 = dutyPlanRepository.findOne(1L);
+                            log.info("值班安排：" + dutyPlan2.toString());
+                            if (CommonUtil.isWeekend()) {
+                                if (dutyPlan2.getIsWeekendWork().equals("否")) { //是周末，但是周末并不调班，则发送给值班人
+                                    dutyAdmin2 = WeChatUtil.ADMIN_OPEN_ID.get(dutyPlan2.getDutyUser());
+                                    sendMessageToAdmin(savedTrouble, dutyAdmin2);
+                                } else { //是周末，但是周末调班（节假日调整），则全部发送
+                                    sendMessageToAdmin(savedTrouble, WeChatUtil.ADMIN_OPEN_ID.get("文卫东"));
+                                    sendMessageToAdmin(savedTrouble, WeChatUtil.ADMIN_OPEN_ID.get("黄士明"));
+                                    sendMessageToAdmin(savedTrouble, WeChatUtil.ADMIN_OPEN_ID.get("杨庆"));
+                                }
+                            } else {
+                                if (dutyPlan2.getIsHoliday().equals("是")) { //不是周末，但是节假日，则发送给值班人
+                                    dutyAdmin2 = WeChatUtil.ADMIN_OPEN_ID.get(dutyPlan2.getDutyUser());
+                                    sendMessageToAdmin(savedTrouble, dutyAdmin2);
+                                } else { //不是周末，不是节假日，则全部发送
+                                    sendMessageToAdmin(savedTrouble, WeChatUtil.ADMIN_OPEN_ID.get("文卫东"));
+                                    sendMessageToAdmin(savedTrouble, WeChatUtil.ADMIN_OPEN_ID.get("黄士明"));
+                                    sendMessageToAdmin(savedTrouble, WeChatUtil.ADMIN_OPEN_ID.get("杨庆"));
+                                }
+                            }
+                            break;
+                        case "总务科":
+                            sendMessageToAdmin(savedTrouble, WeChatUtil.ADMIN_OPEN_ID.get("杨臾"));
+                            sendMessageToAdmin(savedTrouble, WeChatUtil.ADMIN_OPEN_ID.get("唐曼莎"));
+                            break;
+                    }
+
+                }
+            }
+
+        } catch (Exception e) {
+            log.error(e.toString());
+            baseResult.setCode(-500);
+            baseResult.setMessage("服务器异常");
+            return baseResult;
         }
         return baseResult;
     }
 
     @Override
-    public BaseResult getAllTroubles() {
+    public BaseResult getAllTroubles(String office) {
         BaseResult baseResult = new BaseResult();
         try {
             Sort sort = new Sort(Sort.Direction.DESC, "submitTime");
-            List<Trouble> troubles = troubleRepository.findBySubmitTimeAfter(new Date((new Date().getTime() / 1000 - 30 * 24 * 60 * 60) * 1000), sort);
+            List<Trouble> troubles = troubleRepository.findByFirTypeAndSubmitTimeAfter(office, new Date((new Date().getTime() / 1000 - 30 * 24 * 60 * 60) * 1000), sort);
             if (null != troubles && troubles.size() > 0) {
                 baseResult.setData(troubles);
             }
@@ -143,11 +170,11 @@ public class TroubleServiceImpl implements TroubleService {
     }
 
     @Override
-    public BaseResult getTroublesByStatus(int status) {
+    public BaseResult getTroublesByStatus(int status, String office) {
         BaseResult baseResult = new BaseResult();
         try {
             Sort sort = new Sort(Sort.Direction.DESC, "submitTime");
-            List<Trouble> troubles = troubleRepository.findByStatus(status, sort);
+            List<Trouble> troubles = troubleRepository.findByStatusAndFirType(status, office, sort);
 
             if (null != troubles && troubles.size() > 0) {
                 baseResult.setData(troubles);
@@ -267,25 +294,21 @@ public class TroubleServiceImpl implements TroubleService {
     @Override
     public BaseResult toConfirmTrouble(ProcessReq processReq) {
         BaseResult baseResult = new BaseResult();
-        Date lastConfirmDate = lastConfirmMap.get(processReq.getSolverId());
-        Date now = new Date();
-        if (null == lastConfirmDate | (null != lastConfirmDate && (now.getTime() - lastConfirmDate.getTime()) > 2018)) {
-            lastConfirmMap.put(processReq.getSolverId(), now);
-            try {
-                // 更新状态
-                int count = troubleRepository.updateConfirmStatus(Trouble.TROUBLE_STATUS_CONFIRMED, processReq.getSolverId(), processReq.getSolver(), processReq.getTroubleId());
-                log.info("toConfirmTrouble更新了" + count + "行");
-                Trouble trouble = troubleRepository.findOne(processReq.getTroubleId());
-                if (!trouble.getTroublePersonName().equals("管理员")) {
-                    sendProcessMessage(processReq.getTroubleId(), count);
-                }
-            } catch (Exception e) {
-                log.error(e.toString());
-                baseResult.setCode(-500);
-                baseResult.setMessage("服务器异常");
-                return baseResult;
 
+        try {
+            // 更新状态
+            int count = troubleRepository.updateConfirmStatus(Trouble.TROUBLE_STATUS_CONFIRMED, processReq.getSolverId(), processReq.getSolver(), processReq.getTroubleId());
+            log.info("toConfirmTrouble更新了" + count + "行");
+            Trouble trouble = troubleRepository.findOne(processReq.getTroubleId());
+            if (!trouble.getTroublePersonName().equals("管理员")) {
+                sendProcessMessage(processReq.getTroubleId(), count);
             }
+        } catch (Exception e) {
+            log.error(e.toString());
+            baseResult.setCode(-500);
+            baseResult.setMessage("服务器异常");
+            return baseResult;
+
         }
         baseResult = getTroubleDetail(processReq.getTroubleId());
         return baseResult;

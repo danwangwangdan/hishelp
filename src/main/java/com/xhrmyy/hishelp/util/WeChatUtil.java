@@ -30,6 +30,11 @@ public class WeChatUtil {
         ADMIN_OPEN_ID.put("文卫东", "oixGf4kbBjtkOdAOwowdd3DpV-2s");
         ADMIN_OPEN_ID.put("杨庆", "oixGf4i-feQtCYXPPWX7L6ONzFhs");
         ADMIN_OPEN_ID.put("黄士明", "oixGf4q8DpKAgflAZMKixk--Gc0Q");
+        ADMIN_OPEN_ID.put("田道君", "");
+        ADMIN_OPEN_ID.put("曾叙铭", "");
+        ADMIN_OPEN_ID.put("杨仕林", "");
+        ADMIN_OPEN_ID.put("杨臾", "");
+        ADMIN_OPEN_ID.put("唐曼莎", "");
     }
 
     /**

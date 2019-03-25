@@ -35,9 +35,9 @@ public class TroubleController {
     }
 
     @RequestMapping("/all")
-    public BaseResult getAllTroubles() {
+    public BaseResult getAllTroubles(@RequestParam String office) {
 
-        return troubleService.getAllTroubles();
+        return troubleService.getAllTroubles(office);
     }
 
     @RequestMapping("/myAll")
@@ -102,16 +102,16 @@ public class TroubleController {
     }
 
     @RequestMapping("/confirmed")
-    public BaseResult getConfirmedTroubles() {
+    public BaseResult getConfirmedTroubles(@RequestParam String office) {
 
-        return troubleService.getTroublesByStatus(Trouble.TROUBLE_STATUS_CONFIRMED);
+        return troubleService.getTroublesByStatus(Trouble.TROUBLE_STATUS_CONFIRMED, office);
     }
 
     @RequestMapping("/submitted")
-    public BaseResult getSubmittedTroubles() {
+    public BaseResult getSubmittedTroubles(@RequestParam String office) {
         Date start = new Date();
         log.info("请求submitted：" + start.toLocaleString());
-        BaseResult baseResult = troubleService.getTroublesByStatus(Trouble.TROUBLE_STATUS_SUBMITTED);
+        BaseResult baseResult = troubleService.getTroublesByStatus(Trouble.TROUBLE_STATUS_SUBMITTED, office);
         log.info("submitted返回：" + (new Date().getTime() - start.getTime()));
         return baseResult;
     }

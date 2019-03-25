@@ -16,17 +16,17 @@ public interface DutyPlanRepository extends JpaRepository<DutyPlan, Long> {
 
     @Modifying
     @Transactional
-    @Query("update DutyPlan t set t.dutyUser=?1 where t.id=1")
-    int updateDutyPerson(String dutyPerson);
+    @Query("update DutyPlan t set t.dutyUser=?1 where t.id=?2")
+    int updateDutyPerson(String dutyPerson, Long id);
 
     @Modifying
     @Transactional
-    @Query("update DutyPlan t set t.isHoliday=?1 where t.id=1")
+    @Query("update DutyPlan t set t.isHoliday=?1")
     int updateIsHoliday(String isHoliday);
 
     @Modifying
     @Transactional
-    @Query("update DutyPlan t set t.isWeekendWork=?1 where t.id=1")
+    @Query("update DutyPlan t set t.isWeekendWork=?1")
     int updateIsWeekendWork(String isWeekendWork);
 
 }

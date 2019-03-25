@@ -99,9 +99,9 @@ public class CommonController {
     }
 
     @RequestMapping("/getDutyPlan")
-    public BaseResult getDutyPlan() {
+    public BaseResult getDutyPlan(@RequestParam String office) {
         log.info("请求getDutyPlan");
-        BaseResult baseResult = commonService.getDutyPlan();
+        BaseResult baseResult = commonService.getDutyPlan(office);
         log.info("getDutyPlan请求返回：" + baseResult.toString());
         return baseResult;
     }
@@ -123,9 +123,9 @@ public class CommonController {
     }
 
     @RequestMapping("/setDutyPerson")
-    public BaseResult setDutyPerson(@RequestParam String dutyPerson) {
+    public BaseResult setDutyPerson(@RequestParam String dutyPerson, @RequestParam String office) {
         log.info("请求setDutyPerson");
-        BaseResult baseResult = commonService.setDutyPerson(dutyPerson);
+        BaseResult baseResult = commonService.setDutyPerson(dutyPerson, office);
         log.info("setDutyPerson请求返回：" + baseResult.toString());
         return baseResult;
     }

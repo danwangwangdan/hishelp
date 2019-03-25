@@ -297,10 +297,11 @@ public class CommonServiceImpl implements CommonService {
     }
 
     @Override
-    public BaseResult setDutyPerson(String dutyPerson) {
+    public BaseResult setDutyPerson(String dutyPerson, String office) {
         BaseResult baseResult = new BaseResult();
         try {
-            int i = dutyPlanRepository.updateDutyPerson(dutyPerson);
+            long id = office.equals("设备科") ? 2 : 1;
+            int i = dutyPlanRepository.updateDutyPerson(dutyPerson, id);
         } catch (Exception e) {
             e.printStackTrace();
             log.error("getDutyPlan错误：" + e.toString());
@@ -311,10 +312,11 @@ public class CommonServiceImpl implements CommonService {
     }
 
     @Override
-    public BaseResult getDutyPlan() {
+    public BaseResult getDutyPlan(String office) {
         BaseResult baseResult = new BaseResult();
         try {
-            DutyPlan dutyPlan = dutyPlanRepository.findOne(1L);
+            long id = office.equals("设备科") ? 2L : 1L;
+            DutyPlan dutyPlan = dutyPlanRepository.findOne(id);
             baseResult.setData(dutyPlan);
         } catch (Exception e) {
             e.printStackTrace();

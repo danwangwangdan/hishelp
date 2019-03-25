@@ -19,6 +19,10 @@ public interface TroubleRepository extends JpaRepository<Trouble, Long> {
 
     List<Trouble> findBySubmitTimeAfter(Date nowBeforeMonth, Sort sort);
 
+    List<Trouble> findByStatusAndFirType(int status, String office, Sort sort);
+
+    List<Trouble> findByFirTypeAndSubmitTimeAfter(String toOffice, Date nowBeforeMonth, Sort sort);
+
     List<Trouble> findByUserIdAndSubmitTimeAfter(long userId, Date monthAgo, Sort sort);
 
     List<Trouble> findByUserIdAndStatusAndSubmitTimeAfter(long userId, int status, Date monthAgo, Sort sort);
@@ -43,7 +47,9 @@ public interface TroubleRepository extends JpaRepository<Trouble, Long> {
     List<Trouble> findByStatusAndSubmitTimeAfter(int status, Date monthAgo, Sort sort);
 
     List<Trouble> findByStatus(int status, Sort sort);
+
     List<Trouble> findByStatusAndSolverIdAndSubmitTimeAfter(int status, long userId, Date monthAgo, Sort sort);
 
     List<Trouble> findByStatusLessThan(int status, Sort sort);
+
 }

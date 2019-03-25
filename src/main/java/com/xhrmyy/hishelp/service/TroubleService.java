@@ -12,11 +12,11 @@ public interface TroubleService {
 
     BaseResult submitTrouble(Trouble trouble);
 
-    BaseResult getAllTroubles();
+    BaseResult getAllTroubles(String office);
 
     BaseResult getAllMyTroubles(long userId);
 
-    BaseResult getTroublesByStatus(int status);
+    BaseResult getTroublesByStatus(int status, String office);
 
     BaseResult getTroublesByStatusAndUserId(int status, long userId);
 
