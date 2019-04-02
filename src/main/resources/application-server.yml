@@ -12,7 +12,7 @@ spring:
   # 数据源配置
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://122.152.207.225:3306/hishelp
+    url: jdbc:mysql://35.241.126.125:3306/hishelp
     username: zhangyanfu
     password: 1105564Zyf!
   # spring data jpa配置
