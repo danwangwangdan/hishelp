@@ -25,4 +25,10 @@ public class CommonServiceTest {
     public void getOneUsefulFormId() {
         BaseResult<FormIdMapper> oneUsefulFormId = commonService.getOneUsefulFormId("oixGf4q8DpKAgflAZMKixk--Gc0Q");
     }
+
+    @Test
+    public void getNotice() {
+        BaseResult notice = commonService.getNotice();
+        System.out.println(notice.toString());
+    }
 }

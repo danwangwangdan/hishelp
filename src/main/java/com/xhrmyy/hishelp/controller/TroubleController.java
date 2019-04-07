@@ -103,16 +103,17 @@ public class TroubleController {
 
     @RequestMapping("/confirmed")
     public BaseResult getConfirmedTroubles(@RequestParam String office) {
-
-        return troubleService.getTroublesByStatus(Trouble.TROUBLE_STATUS_CONFIRMED, office);
+        log.info("请求confirmed：" + office);
+        BaseResult baseResult = troubleService.getTroublesByStatus(Trouble.TROUBLE_STATUS_CONFIRMED, office);
+        log.info("confirmed返回：" + baseResult.toString());
+        return baseResult;
     }
 
     @RequestMapping("/submitted")
     public BaseResult getSubmittedTroubles(@RequestParam String office) {
-        Date start = new Date();
-        log.info("请求submitted：" + start.toLocaleString());
+        log.info("请求submitted：" + office);
         BaseResult baseResult = troubleService.getTroublesByStatus(Trouble.TROUBLE_STATUS_SUBMITTED, office);
-        log.info("submitted返回：" + (new Date().getTime() - start.getTime()));
+        log.info("submitted返回：" + baseResult.toString());
         return baseResult;
     }
 
