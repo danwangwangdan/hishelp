@@ -40,4 +40,6 @@ public interface CommonService {
     BaseResult getDutyPlan(String office);
 
     BaseResult saveNotice(String notice);
+
+    BaseResult getSupportPlat();
 }

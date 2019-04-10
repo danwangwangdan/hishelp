@@ -344,4 +344,19 @@ public class CommonServiceImpl implements CommonService {
         }
         return baseResult;
     }
+
+    @Override
+    public BaseResult getSupportPlat() {
+        BaseResult baseResult = new BaseResult();
+        try {
+            Notice notice = noticeRepository.findOne(1L);
+            baseResult.setData(notice);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("getSupportPlat错误：" + e.toString());
+            baseResult.setCode(-500);
+            baseResult.setMessage("服务器异常");
+        }
+        return baseResult;
+    }
 }

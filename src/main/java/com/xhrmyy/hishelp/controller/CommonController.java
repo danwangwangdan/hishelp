@@ -28,6 +28,11 @@ public class CommonController {
     @Autowired
     private CommonService commonService;
 
+    @RequestMapping("/dystatus")
+    public BaseResult getDyStatus() {
+        return commonService.getSupportPlat();
+    }
+
     @RequestMapping("/firTypes")
     public BaseResult getFirTroubleTypes() {
         Date start = new Date();
