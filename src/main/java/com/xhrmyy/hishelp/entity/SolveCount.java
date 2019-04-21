@@ -1,6 +1,6 @@
 package com.xhrmyy.hishelp.entity;
 
-import com.xhrmyy.hishelp.common.BaseResult;
+import com.xhrmyy.hishelp.common.BaseModel;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,7 +14,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "v_solve_count")
-public class SolveCount extends BaseResult {
+public class SolveCount extends BaseModel {
 
     private static final long serialVersionUID = 1131616462933479120L;
     @Id   // 添加一个空的id标识，因为jpa在映射实体是需要一个id，这个必须有
