@@ -15,6 +15,8 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -31,14 +33,36 @@ public class CommonController {
     private CommonService commonService;
 
     @RequestMapping("/queue")
-    public BaseResult getQueueInfo(@RequestParam String office, @RequestParam String room, @RequestParam String ca) {
+    public BaseResult getQueueInfo(@RequestParam String office, @RequestParam String room, @RequestParam String ca) throws UnsupportedEncodingException {
 
         String authUrl = "http://24z56z0190.zicp.vip/histool/queue/list?office=OFFICE&room=ROOM&ca=CA";
         BaseResult baseResult = null;
-        authUrl = authUrl.replace("OFFICE", office);
-        authUrl = authUrl.replace("ROOM", room);
-        authUrl = authUrl.replace("CA", ca);
-        String resultJson = HttpUtil.sendGet(authUrl);
+        authUrl = authUrl.replace("OFFICE", URLEncoder.encode(office, "utf-8"));
+        authUrl = authUrl.replace("ROOM", URLEncoder.encode(room, "utf-8"));
+        authUrl = authUrl.replace("CA", URLEncoder.encode(ca, "utf-8"));
+        String resultJson = HttpUtil.sendMyGet(authUrl);
+        log.info("请求接口：" + authUrl);
+        log.info("请求接口返回：" + resultJson);
+        try {
+            baseResult = JSON.parseObject(resultJson, BaseResult.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        log.info("获取微信信息：" + baseResult.toString());
+        return baseResult;
+    }
+
+
+    @RequestMapping("/notify")
+    public BaseResult toNotify(@RequestParam Long pid, @RequestParam String ca) throws UnsupportedEncodingException {
+
+        String authUrl = "http://24z56z0190.zicp.vip/histool/queue/list?office=OFFICE&room=ROOM&ca=CA";
+        BaseResult baseResult = null;
+        authUrl = authUrl.replace("OFFICE", URLEncoder.encode(pid.toString(), "utf-8"));
+        authUrl = authUrl.replace("CA", URLEncoder.encode(ca, "utf-8"));
+        String resultJson = HttpUtil.sendMyGet(authUrl);
+        log.info("请求接口：" + authUrl);
+        log.info("请求接口返回：" + resultJson);
         try {
             baseResult = JSON.parseObject(resultJson, BaseResult.class);
         } catch (Exception e) {

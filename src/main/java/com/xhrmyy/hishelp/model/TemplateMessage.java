@@ -27,10 +27,6 @@ public class TemplateMessage extends BaseModel {
 
     private Map<String, TemplateData> data;
 
-    /**
-     * 模板需要放大的关键词，不填则默认无放大
-     */
-    private String emphasis_keyword;
 
     public String getTouser() {
         return touser;
@@ -70,14 +66,6 @@ public class TemplateMessage extends BaseModel {
 
     public void setData(Map<String, TemplateData> data) {
         this.data = data;
-    }
-
-    public String getEmphasis_keyword() {
-        return emphasis_keyword;
-    }
-
-    public void setEmphasis_keyword(String emphasis_keyword) {
-        this.emphasis_keyword = emphasis_keyword;
     }
 
     public int getMessageType() {

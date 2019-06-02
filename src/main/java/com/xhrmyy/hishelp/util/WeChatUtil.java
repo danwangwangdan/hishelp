@@ -99,7 +99,7 @@ public class WeChatUtil {
         templateMessage.setPage(page);
         templateMessage.setForm_id(formId);
         templateMessage.setData(map);
-        templateMessage.setEmphasis_keyword("");
+        //templateMessage.setEmphasis_keyword("");
         String json = JSONObject.toJSONString(templateMessage);
         log.info("##模版发送JSON数据:  " + json);
         String ret = HttpUtil.sendPost(authUrl, json);

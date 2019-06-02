@@ -1,13 +1,18 @@
 package com.xhrmyy.hishelp.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.net.ssl.*;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.cert.CertificateException;
 
-public class HttpUtil {
+import static org.springframework.http.HttpHeaders.USER_AGENT;
 
+public class HttpUtil {
+    private static final Logger log = LoggerFactory.getLogger(HttpUtil.class);
     /*
      * 处理https GET/POST请求
      * 请求地址、请求方法、参数
@@ -54,6 +59,40 @@ public class HttpUtil {
         return buffer.toString();
     }
 
+    // HTTP GET请求
+    public static String sendMyGet(String url) {
+
+        StringBuffer response = new StringBuffer();
+        try {
+            URL obj = new URL(url);
+            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+
+            //默认值GET
+            con.setRequestMethod("GET");
+
+            //添加请求头
+            con.setRequestProperty("User-Agent", USER_AGENT);
+
+            int responseCode = con.getResponseCode();
+            log.info("Sending 'GET' request to URL : " + url);
+            log.info("Response Code : " + responseCode);
+
+            BufferedReader in = new BufferedReader(
+                    new InputStreamReader(con.getInputStream()));
+            String inputLine;
+
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        //打印结果
+        return response.toString();
+    }
+
     /**
      * 向指定URL发送GET方法的请求
      *
@@ -67,7 +106,7 @@ public class HttpUtil {
             URL url = new URL(path.trim());
             // 打开连接
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-
+            log.info("响应码：" + urlConnection.getResponseCode());
             if (200 == urlConnection.getResponseCode()) {
                 // 得到输入流
                 is = urlConnection.getInputStream();
