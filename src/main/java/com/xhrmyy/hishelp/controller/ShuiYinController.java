@@ -39,4 +39,10 @@ public class ShuiYinController {
         return new BaseResult();
     }
 
+    @RequestMapping("/add")
+    private BaseResult addById(@RequestParam Long id, @RequestParam Integer count) {
+
+        return new BaseResult();
+    }
+
 }
