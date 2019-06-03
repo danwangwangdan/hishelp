@@ -15,7 +15,7 @@ public class ShuiYinController {
 
     private static final Logger log = LoggerFactory.getLogger(CommonController.class);
 
-    @RequestMapping("/loginByWx")
+    @RequestMapping("/login")
     public BaseResult loginByWx(@RequestParam String code, HttpServletRequest request) {
 
         return new BaseResult();
