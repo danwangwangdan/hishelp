@@ -35,4 +35,9 @@ public interface ShuiYinRepository extends JpaRepository<ShuiYinUser, Long> {
     @Transactional
     @Query("update ShuiYinUser t set t.point = t.point+2, t.videoCount=t.videoCount+1 where t.id=?1")
     int videoPoint(long id);
+
+    @Modifying
+    @Transactional
+    @Query("update ShuiYinUser t set t.videoCount=0,t.shareCount=0,t.signCount=0")
+    int resetCount();
 }

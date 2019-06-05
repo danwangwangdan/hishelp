@@ -117,4 +117,11 @@ public class ShuiYinServiceImpl implements ShuiYinService {
         }
         return baseResult;
     }
+
+    @Override
+    public BaseResult resetCount() {
+
+        shuiYinRepository.resetCount();
+        return null;
+    }
 }

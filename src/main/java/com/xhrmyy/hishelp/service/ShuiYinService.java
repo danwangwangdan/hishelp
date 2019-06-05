@@ -11,4 +11,6 @@ public interface ShuiYinService {
     BaseResult takeById(Long id);
 
     BaseResult addById(Long id, Integer type);
+
+    BaseResult resetCount();
 }

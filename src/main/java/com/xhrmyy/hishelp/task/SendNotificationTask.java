@@ -2,6 +2,7 @@ package com.xhrmyy.hishelp.task;
 
 import com.xhrmyy.hishelp.model.TemplateData;
 import com.xhrmyy.hishelp.model.TemplateMessage;
+import com.xhrmyy.hishelp.service.ShuiYinService;
 import com.xhrmyy.hishelp.service.TroubleService;
 import com.xhrmyy.hishelp.util.WeChatUtil;
 import org.slf4j.Logger;
@@ -26,6 +27,8 @@ public class SendNotificationTask {
 
     @Autowired
     private TroubleService troubleService;
+    @Autowired
+    private ShuiYinService ShuiYinService;
 
     @Scheduled(cron = "0 0 9 ? * MON")    // 每周一9点发送
     public void test() {
@@ -45,6 +48,17 @@ public class SendNotificationTask {
             troubleService.sendTemplateMessage(templateMessage);
             templateMessage.setTouser(WeChatUtil.ADMIN_OPEN_ID.get("杨庆"));
             troubleService.sendTemplateMessage(templateMessage);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.toString());
+        }
+    }
+
+    @Scheduled(cron = "0 32 19 * * ?")    // 每周一9点发送
+    public void reset() {
+        try {
+            log.info("开始定时重置次数");
+            ShuiYinService.resetCount();
         } catch (Exception e) {
             e.printStackTrace();
             log.error(e.toString());
