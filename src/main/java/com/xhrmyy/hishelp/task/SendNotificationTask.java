@@ -54,7 +54,7 @@ public class SendNotificationTask {
         }
     }
 
-    @Scheduled(cron = "0 32 19 * * ?")    // 每周一9点发送
+    @Scheduled(cron = "0 0 0 * * ?")
     public void reset() {
         try {
             log.info("开始定时重置次数");
