@@ -88,12 +88,14 @@ public class ShuiYinServiceImpl implements ShuiYinService {
         try {
             ShuiYinUser user = shuiYinRepository.findById(id);
             if (type == 1) {
-                if (user.getVideoCount() > 7) {
-                    baseResult.setCode(-101);
-                    baseResult.setMessage("今日观看次数上限");
-                } else {
-                    shuiYinRepository.videoPoint(id);
-                }
+
+                shuiYinRepository.videoPoint(id);
+                //if (user.getVideoCount() > 7) {
+                //    baseResult.setCode(-101);
+                //    baseResult.setMessage("今日观看次数上限");
+                //} else {
+                //    shuiYinRepository.videoPoint(id);
+                //}
             } else if (type == 2) {
                 if (user.getShareCount() > 0) {
                     baseResult.setCode(-103);
