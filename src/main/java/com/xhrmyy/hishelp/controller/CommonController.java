@@ -77,6 +77,18 @@ public class CommonController {
         return commonService.getSupportPlat();
     }
 
+    @RequestMapping("/show")
+    public BaseResult isShow() {
+
+        return commonService.getIsShow();
+    }
+
+    @RequestMapping("/showAd")
+    public BaseResult isShowAd() {
+
+        return commonService.getIsShowAd();
+    }
+
     @RequestMapping("/firTypes")
     public BaseResult getFirTroubleTypes() {
         Date start = new Date();

@@ -42,4 +42,8 @@ public interface CommonService {
     BaseResult saveNotice(String notice);
 
     BaseResult getSupportPlat();
+
+    BaseResult getIsShow();
+
+    BaseResult getIsShowAd();
 }

@@ -1,6 +1,7 @@
 package com.xhrmyy.hishelp.controller;
 
 import com.xhrmyy.hishelp.common.BaseResult;
+import com.xhrmyy.hishelp.service.CommonService;
 import com.xhrmyy.hishelp.service.ShuiYinService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,8 +18,11 @@ public class ShuiYinController {
 
     @Autowired
     private ShuiYinService shuiYinService;
+    @Autowired
+    private CommonService commonService;
 
     private static final Logger log = LoggerFactory.getLogger(CommonController.class);
+
 
     @RequestMapping("/login")
     public BaseResult loginByWx(@RequestParam String code, HttpServletRequest request) {
