@@ -59,6 +59,7 @@ public class SendNotificationTask {
         try {
             log.info("开始定时重置次数");
             ShuiYinService.resetCount();
+            ShuiYinService.resetPoint();
         } catch (Exception e) {
             e.printStackTrace();
             log.error(e.toString());

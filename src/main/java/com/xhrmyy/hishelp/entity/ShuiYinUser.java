@@ -24,6 +24,8 @@ public class ShuiYinUser extends BaseModel {
     private Integer shareCount;
     @Column
     private Integer videoCount;
+    @Column
+    private Integer buyRequest = 0;
 
     public Long getId() {
         return id;
@@ -79,5 +81,13 @@ public class ShuiYinUser extends BaseModel {
 
     public void setVideoCount(Integer videoCount) {
         this.videoCount = videoCount;
+    }
+
+    public Integer getBuyRequest() {
+        return buyRequest;
+    }
+
+    public void setBuyRequest(Integer buyRequest) {
+        this.buyRequest = buyRequest;
     }
 }

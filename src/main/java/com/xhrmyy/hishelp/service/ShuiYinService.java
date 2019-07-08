@@ -13,4 +13,10 @@ public interface ShuiYinService {
     BaseResult addById(Long id, Integer type);
 
     BaseResult resetCount();
+
+    BaseResult resetPoint();
+
+    BaseResult takeBatchById(Long id);
+
+    BaseResult updateById(Long id);
 }

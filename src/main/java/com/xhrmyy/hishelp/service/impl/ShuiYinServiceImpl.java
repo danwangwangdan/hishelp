@@ -30,7 +30,7 @@ public class ShuiYinServiceImpl implements ShuiYinService {
             if (null == user) {
                 //新用户
                 user = new ShuiYinUser();
-                user.setPoint(2);
+                user.setPoint(50);
                 user.setShareCount(0);
                 user.setSignCount(0);
                 user.setOpenid(weChatInfo.getOpenid());
@@ -125,5 +125,46 @@ public class ShuiYinServiceImpl implements ShuiYinService {
 
         shuiYinRepository.resetCount();
         return null;
+    }
+
+    @Override
+    public BaseResult resetPoint() {
+        shuiYinRepository.resetPoint();
+        return null;
+    }
+
+    @Override
+    public BaseResult takeBatchById(Long id) {
+        BaseResult baseResult = new BaseResult();
+        try {
+            ShuiYinUser user = shuiYinRepository.findById(id);
+            if (user.getPoint() < 50) {
+                baseResult.setCode(-101);
+                baseResult.setMessage("积分不足");
+            } else {
+                shuiYinRepository.takeBatchPoint(id);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            baseResult.setCode(-500);
+            baseResult.setMessage("服务器异常，请稍后重试");
+        }
+        return baseResult;
+    }
+
+    @Override
+    public BaseResult updateById(Long id) {
+
+        BaseResult baseResult = new BaseResult();
+        try {
+            shuiYinRepository.updateById(id);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            baseResult.setCode(-500);
+            baseResult.setMessage("服务器异常，请稍后重试");
+        }
+        return baseResult;
+
     }
 }

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
 
 @RestController
 @RequestMapping("/shuiyin")
@@ -36,6 +37,13 @@ public class ShuiYinController {
         return shuiYinService.findById(id);
     }
 
+    @RequestMapping("/srequest")
+    private BaseResult sRequest(@RequestParam Long id) throws UnsupportedEncodingException {
+
+        return shuiYinService.updateById(id);
+    }
+
+
     /**
      * 扣除积分
      *
@@ -46,6 +54,12 @@ public class ShuiYinController {
     private BaseResult takeById(@RequestParam Long id) {
 
         return shuiYinService.takeById(id);
+    }
+
+    @RequestMapping("/takebatch")
+    private BaseResult takeBatchById(@RequestParam Long id) {
+
+        return shuiYinService.takeBatchById(id);
     }
 
     @RequestMapping("/add")
