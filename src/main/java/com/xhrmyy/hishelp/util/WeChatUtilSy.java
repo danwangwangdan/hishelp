@@ -12,9 +12,9 @@ import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 import java.util.Map;
 
-public class WeChatUtil {
+public class WeChatUtilSy {
 
-    private static final Logger log = LoggerFactory.getLogger(WeChatUtil.class);
+    private static final Logger log = LoggerFactory.getLogger(WeChatUtilSy.class);
     public static final Map<String, String> ADMIN_OPEN_ID = new HashMap<>();
     public static final String TEMPLE_MESSAGE_SUBMITTED = "3COMTrL4TYAvxpcphp-14fTP1bE5gcf40MNqQpjm8xI";
     public static final String TEMPLE_MESSAGE_PROCESSED = "V0KeA1QZRFSY6R6PtKvy-LwMWMYZ443_EYy6xsNSnDo";
@@ -22,9 +22,11 @@ public class WeChatUtil {
     public static final String GO_PAGE_SUBMIT = "pages/submit/submit";
     public static final String GO_PAGE_DETAIL = "pages/detail/detail?troubleId=";
     public static final String GO_PAGE_ME = "pages/me/me";
+    private static final String APP_ID = "wx0e4df37b700d52d1";
+    private static final String APP_SECRET = "ecc9e2801ddaeeaa0b0ff2974fb023bd";
 
-    private static final String APP_ID = "wx0d4659933c32c53c";
-    private static final String APP_SECRET = "93b0648cd6ea64a58a8b046a7242b692";
+    private static final String APP_ID_PRO = "wx6c54f40530b65ae8";
+    private static final String APP_SECRET_PRO = "67e83942be7ba89d1810b6ec28465cab";
 
     static {
         ADMIN_OPEN_ID.put("文卫东", "oixGf4kbBjtkOdAOwowdd3DpV-2s");
@@ -49,6 +51,24 @@ public class WeChatUtil {
         WeChatInfo weChatInfo = null;
         authUrl = authUrl.replace("APPID", APP_ID);
         authUrl = authUrl.replace("SECRET", APP_SECRET);
+        authUrl = authUrl.replace("JSCODE", code);
+        System.out.println("code: " + code);
+        String resultJson = HttpUtil.sendGet(authUrl);
+        try {
+            weChatInfo = JSON.parseObject(resultJson, WeChatInfo.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        log.info("获取微信信息：" + weChatInfo.toString());
+        return weChatInfo;
+    }
+
+    public static WeChatInfo code2SessionPro(String code) {
+
+        String authUrl = "https://api.weixin.qq.com/sns/jscode2session?appid=APPID&secret=SECRET&js_code=JSCODE&grant_type=authorization_code";
+        WeChatInfo weChatInfo = null;
+        authUrl = authUrl.replace("APPID", APP_ID_PRO);
+        authUrl = authUrl.replace("SECRET", APP_SECRET_PRO);
         authUrl = authUrl.replace("JSCODE", code);
         System.out.println("code: " + code);
         String resultJson = HttpUtil.sendGet(authUrl);

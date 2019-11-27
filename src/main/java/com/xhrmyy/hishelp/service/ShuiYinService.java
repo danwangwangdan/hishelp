@@ -6,6 +6,8 @@ public interface ShuiYinService {
 
     BaseResult loginByWx(String code);
 
+    BaseResult loginByWxPro(String code);
+
     BaseResult findById(Long id);
 
     BaseResult takeById(Long id);
@@ -19,4 +21,8 @@ public interface ShuiYinService {
     BaseResult takeBatchById(Long id);
 
     BaseResult updateById(Long id);
+
+    BaseResult addPoint(Long id, Integer point);
+
+    BaseResult addPro(Long id);
 }

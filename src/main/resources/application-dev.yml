@@ -1,8 +1,8 @@
 server:
   # 端口号
-  port: 8090
+  port: 6080
   context-path: /hishelp
-imageDir: E:/Resources/Pictures/hishelp/
+imageDir: E:/xcx/hishelp/
 spring:
   mvc:
     static-path-pattern: /**
@@ -14,7 +14,7 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://localhost:3306/hishelp
     username: root
-    password: 525153
+    password: root
   # spring data jpa配置
   jpa:
     hibernate:

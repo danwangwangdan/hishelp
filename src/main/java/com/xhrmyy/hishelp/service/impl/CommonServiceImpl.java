@@ -25,8 +25,7 @@ import java.util.UUID;
  * Created by huangshiming on 2018/10/23 21:37
  */
 @Service("commonService")
-public class
-CommonServiceImpl implements CommonService {
+public class CommonServiceImpl implements CommonService {
 
     @Autowired
     private FirTypeRepository firTypeRepository;
@@ -385,6 +384,21 @@ CommonServiceImpl implements CommonService {
         } catch (Exception e) {
             e.printStackTrace();
             log.error("getIsShowAd错误：" + e.toString());
+            baseResult.setCode(-500);
+            baseResult.setMessage("服务器异常");
+        }
+        return baseResult;
+    }
+
+    @Override
+    public BaseResult getNoticeIndex() {
+        BaseResult baseResult = new BaseResult();
+        try {
+            Notice notice = noticeRepository.findOne(4L);
+            baseResult.setData(notice);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("getNoticeIndex错误：" + e.toString());
             baseResult.setCode(-500);
             baseResult.setMessage("服务器异常");
         }

@@ -77,6 +77,11 @@ public class CommonController {
         return commonService.getSupportPlat();
     }
 
+    @RequestMapping("/noticeindex")
+    public BaseResult getNoticeIndex() {
+        return commonService.getNoticeIndex();
+    }
+
     @RequestMapping("/show")
     public BaseResult isShow() {
 

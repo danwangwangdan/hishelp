@@ -5,7 +5,8 @@ import com.xhrmyy.hishelp.entity.ShuiYinUser;
 import com.xhrmyy.hishelp.model.WeChatInfo;
 import com.xhrmyy.hishelp.repository.ShuiYinRepository;
 import com.xhrmyy.hishelp.service.ShuiYinService;
-import com.xhrmyy.hishelp.util.WeChatUtil;
+import com.xhrmyy.hishelp.util.WeChatUtilSy;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,20 +26,59 @@ public class ShuiYinServiceImpl implements ShuiYinService {
 
         BaseResult baseResult = new BaseResult();
         try {
-            WeChatInfo weChatInfo = WeChatUtil.code2Session(code);
-            ShuiYinUser user = shuiYinRepository.findByOpenid(weChatInfo.getOpenid());
-            if (null == user) {
-                //新用户
-                user = new ShuiYinUser();
-                user.setPoint(50);
-                user.setShareCount(0);
-                user.setSignCount(0);
-                user.setOpenid(weChatInfo.getOpenid());
-                user.setVideoCount(0);
-                ShuiYinUser returnUser = shuiYinRepository.saveAndFlush(user);
-                baseResult.setData(returnUser);
+            WeChatInfo weChatInfo = WeChatUtilSy.code2Session(code);
+            if (StringUtils.isNotBlank(weChatInfo.getOpenid())) {
+                ShuiYinUser user = shuiYinRepository.findByOpenid(weChatInfo.getOpenid());
+                if (null == user) {
+                    //新用户
+                    user = new ShuiYinUser();
+                    user.setPoint(50);
+                    user.setShareCount(0);
+                    user.setSignCount(0);
+                    user.setOpenid(weChatInfo.getOpenid());
+                    user.setVideoCount(0);
+                    ShuiYinUser returnUser = shuiYinRepository.saveAndFlush(user);
+                    baseResult.setData(returnUser);
+                } else {
+                    baseResult.setData(user);
+                }
             } else {
-                baseResult.setData(user);
+                baseResult.setCode(-500);
+                baseResult.setMessage("服务器异常，请稍后重试");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            baseResult.setCode(-500);
+            baseResult.setMessage("服务器异常，请稍后重试");
+        }
+
+        return baseResult;
+    }
+
+    @Override
+    public BaseResult loginByWxPro(String code) {
+
+        BaseResult baseResult = new BaseResult();
+        try {
+            WeChatInfo weChatInfo = WeChatUtilSy.code2SessionPro(code);
+            if (StringUtils.isNotBlank(weChatInfo.getOpenid())) {
+                ShuiYinUser user = shuiYinRepository.findByOpenid(weChatInfo.getOpenid());
+                if (null == user) {
+                    //新用户
+                    user = new ShuiYinUser();
+                    user.setPoint(50);
+                    user.setShareCount(0);
+                    user.setSignCount(0);
+                    user.setOpenid(weChatInfo.getOpenid());
+                    user.setVideoCount(0);
+                    ShuiYinUser returnUser = shuiYinRepository.saveAndFlush(user);
+                    baseResult.setData(returnUser);
+                } else {
+                    baseResult.setData(user);
+                }
+            } else {
+                baseResult.setCode(-500);
+                baseResult.setMessage("服务器异常，请稍后重试");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -68,7 +108,7 @@ public class ShuiYinServiceImpl implements ShuiYinService {
         BaseResult baseResult = new BaseResult();
         try {
             ShuiYinUser user = shuiYinRepository.findById(id);
-            if (user.getPoint() < 2) {
+            if (user.getPoint() < 3) {
                 baseResult.setCode(-101);
                 baseResult.setMessage("积分不足");
             } else {
@@ -166,5 +206,37 @@ public class ShuiYinServiceImpl implements ShuiYinService {
         }
         return baseResult;
 
+    }
+
+    @Override
+    public BaseResult addPoint(Long id, Integer point) {
+        BaseResult baseResult = new BaseResult();
+        try {
+            shuiYinRepository.addPoint(id, point);
+        } catch (Exception e) {
+            e.printStackTrace();
+            baseResult.setCode(-500);
+            baseResult.setMessage("服务器异常，请稍后重试");
+        }
+        return baseResult;
+    }
+
+    @Override
+    public BaseResult addPro(Long id) {
+        BaseResult baseResult = new BaseResult();
+        try {
+            ShuiYinUser user = shuiYinRepository.findById(id);
+            if (user.getSignCount() > 0) {
+                baseResult.setCode(-102);
+                baseResult.setMessage("今日签到次数上限");
+            } else {
+                shuiYinRepository.signPoint(id);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            baseResult.setCode(-500);
+            baseResult.setMessage("服务器异常，请稍后重试");
+        }
+        return baseResult;
     }
 }

@@ -46,4 +46,6 @@ public interface CommonService {
     BaseResult getIsShow();
 
     BaseResult getIsShowAd();
+
+    BaseResult getNoticeIndex();
 }
