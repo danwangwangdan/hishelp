@@ -18,7 +18,7 @@ public interface ShuiYinRepository extends JpaRepository<ShuiYinUser, Long> {
 
     @Modifying
     @Transactional
-    @Query("update ShuiYinUser t set t.point = t.point-3 where t.id=?1")
+    @Query("update ShuiYinUser t set t.point = t.point-2 where t.id=?1")
     int takePoint(long id);
 
     @Modifying
@@ -33,7 +33,7 @@ public interface ShuiYinRepository extends JpaRepository<ShuiYinUser, Long> {
 
     @Modifying
     @Transactional
-    @Query("update ShuiYinUser t set t.point = t.point+5, t.videoCount=t.videoCount+1 where t.id=?1")
+    @Query("update ShuiYinUser t set t.point = t.point+9, t.videoCount=t.videoCount+1 where t.id=?1")
     int videoPoint(long id);
 
     @Modifying

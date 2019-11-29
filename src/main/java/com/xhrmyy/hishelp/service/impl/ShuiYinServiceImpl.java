@@ -108,7 +108,7 @@ public class ShuiYinServiceImpl implements ShuiYinService {
         BaseResult baseResult = new BaseResult();
         try {
             ShuiYinUser user = shuiYinRepository.findById(id);
-            if (user.getPoint() < 3) {
+            if (user.getPoint() < 2) {
                 baseResult.setCode(-101);
                 baseResult.setMessage("积分不足");
             } else {
