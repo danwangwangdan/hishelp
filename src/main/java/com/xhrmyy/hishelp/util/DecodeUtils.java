@@ -29,10 +29,12 @@ public class DecodeUtils {
 
     static final String WSAPI = "https://h5.qzone.qq.com/webapp/json/weishi/WSH5GetPlayPage?feedid=FEEDID";
 
+    static final String PPXAPI = "https://is.snssdk.com/bds/item/detail/?app_name=super&aid=1319&item_id=ITEM_ID";
+
     /**
+     * @tips 链接请求接口获取接口返回数据
      * @param var
      * @return
-     * @tips 链接请求接口获取接口返回数据
      */
     public static String dyDecode(String var) {
         Document doc = null;
@@ -105,6 +107,7 @@ public class DecodeUtils {
 
     }
 
+
     private static class UrlProcess {
         //url拼接
         public static String urlAppend(String photoId) {
@@ -139,6 +142,25 @@ public class DecodeUtils {
         while (m1.find()) {
             var = m1.group().replaceAll("\"", "").replaceAll("video_url:", "");
         }
+        return var;
+    }
+
+
+    public static String ppxDecode(String var) {
+        //正则
+        String video_url = "item/(.*)[?]";
+        Pattern r1 = Pattern.compile(video_url);
+        Matcher m1 = r1.matcher(var);
+        while (m1.find()) {
+            var = m1.group().replaceAll("item/", "").replaceAll("[?]", "");
+        }
+        String result2 = HttpRequest.get(PPXAPI.replaceAll("ITEM_ID", var))
+                .header(Header.USER_AGENT, "Mozilla/5.0 (Linux; U; Android 5.0; en-us; Nexus One Build/FRF91) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1")
+                .timeout(12138)
+                .execute().body();
+        JsonParser jsonParser = new JsonParser();
+        JsonObject jsonObject = jsonParser.parse(result2).getAsJsonObject();
+        var = jsonObject.get("data").getAsJsonObject().get("data").getAsJsonObject().get("origin_video_download").getAsJsonObject().get("url_list").getAsJsonArray().get(0).getAsJsonObject().get("url").getAsString();
         return var;
     }
 

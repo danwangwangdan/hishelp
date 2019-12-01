@@ -1,5 +1,6 @@
 package com.xhrmyy.hishelp.util;
 
+
 /**
  * @author xinyan
  * @title: StrProcessUtils
@@ -10,9 +11,9 @@ package com.xhrmyy.hishelp.util;
 public class StrProcessUtils {
 
     /**
+     * @tips 抖音链接处理
      * @param var
      * @return
-     * @tips 抖音链接处理
      */
     public static String dyStrProcess(String var) {
         if (!CommonUtils.isContainChinese(var)) return var;
@@ -21,11 +22,10 @@ public class StrProcessUtils {
         var = var.substring(start, end);
         return var;
     }
-
     /**
+     * @tips 快手链接处理
      * @param var
      * @return
-     * @tips 快手链接处理
      */
     public static String ksStrProcess(String var) {
         if (!CommonUtils.isContainChinese(var)) return var;
@@ -34,17 +34,27 @@ public class StrProcessUtils {
         var = var.substring(start, end);
         return var;
     }
-
     /**
+     * @tips 微视链接处理
      * @param var
      * @return
-     * @tips 微视链接处理
      */
     public static String wsStrProcess(String var) {
         if (!CommonUtils.isContainChinese(var)) return var;
         int start = var.indexOf("http");
         var = var.substring(start);
         return var;
+    }
+
+    /**
+     * @param var
+     * @return
+     * @tips 皮皮虾链接处理
+     */
+    public static String ppxStrProcess(String var) {
+        //if (!CommonUtils.isContainChinese(var))return var;
+        String uri = CommonUtils.getURI(var);
+        return uri;
     }
 
 }

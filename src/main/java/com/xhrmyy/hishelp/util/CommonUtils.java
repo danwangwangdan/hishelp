@@ -21,9 +21,9 @@ import java.util.regex.Pattern;
  */
 public class CommonUtils {
     /**
+     * @tips 检查是否有中文
      * @param str
      * @return
-     * @tips 检查是否有中文
      */
     public static boolean isContainChinese(String str) {
         Pattern p = Pattern.compile("[\u4e00-\u9fa5]");
@@ -33,7 +33,6 @@ public class CommonUtils {
         }
         return false;
     }
-
     //视频地址链接检查处理
     public static String decodeHttpUrl(String var) {
         if (var.contains("douyin") || var.contains("iesdouyin")) {
@@ -45,16 +44,17 @@ public class CommonUtils {
         } else if (var.contains("weishi")) {
             var = StrProcessUtils.wsStrProcess(var);
             return DecodeUtils.wsDecode(var);
-        } else {
-            return "";
-        }
+        } else if (var.contains("pipix")) {
+            var = StrProcessUtils.ppxStrProcess(var);
+            return DecodeUtils.ppxDecode(var);
+        } else return "";
     }
 
 
     /**
+     * @tips 获取原始地址
      * @param url
      * @return
-     * @tips 获取原始地址
      */
     public static String getURI(String url) {
         CloseableHttpClient httpClient = HttpClients.createDefault();
