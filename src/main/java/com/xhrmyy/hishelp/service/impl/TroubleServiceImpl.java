@@ -56,6 +56,8 @@ public class TroubleServiceImpl implements TroubleService {
             } else {
                 trouble.setStatus(trouble.getStatus());
             }
+            // todo 判断是否已解决
+
             trouble.setSubmitTime(new Date());
             Trouble savedTrouble = troubleRepository.saveAndFlush(trouble);
             if (null != savedTrouble) {
