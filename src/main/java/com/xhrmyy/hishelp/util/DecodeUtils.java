@@ -1,8 +1,6 @@
 package com.xhrmyy.hishelp.util;
 
 import cn.hutool.crypto.SecureUtil;
-import cn.hutool.http.Header;
-import cn.hutool.http.HttpRequest;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.jsoup.Jsoup;
@@ -31,10 +29,14 @@ public class DecodeUtils {
 
     static final String PPXAPI = "https://is.snssdk.com/bds/item/detail/?app_name=super&aid=1319&item_id=ITEM_ID";
 
+    static final String HSAPI = "https://share.huoshan.com/api/item/info?item_id=ITEM_ID&t=1575376410950&_signature=13W2xgAgEAreOczT0G9Md9d1ttAAIqc";
+
+    static final String HSAPI2 = "http://hotsoon.snssdk.com/hotsoon/item/video/_playback/?video_id=VIDEO_ID";
+
     /**
-     * @tips 链接请求接口获取接口返回数据
      * @param var
      * @return
+     * @tips 链接请求接口获取接口返回数据
      */
     public static String dyDecode(String var) {
         Document doc = null;
@@ -62,10 +64,7 @@ public class DecodeUtils {
             dytk = m1.group().replaceAll("dytk: ", "").replaceAll("\"", "");
         }
         try {
-            String result2 = HttpRequest.get(DYREQ.replaceAll("ITEM_IDS", aweme_id).replaceAll("DYTK", dytk))
-                    .header(Header.USER_AGENT, "Mozilla/5.0 (Linux; U; Android 5.0; en-us; Nexus One Build/FRF91) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1")
-                    .timeout(12138)
-                    .execute().body();
+            String result2 = CommonUtils.backForData(DYREQ.replaceAll("ITEM_IDS", aweme_id).replaceAll("DYTK", dytk));
             JsonParser jsonParser = new JsonParser();
             JsonObject jsonObject = jsonParser.parse(result2).getAsJsonObject();
             return CommonUtils.getURI(jsonObject.get("item_list").getAsJsonArray().get(0).getAsJsonObject().get("video").getAsJsonObject().get("play_addr").getAsJsonObject().get("url_list").getAsJsonArray().get(1).getAsString());
@@ -96,10 +95,7 @@ public class DecodeUtils {
         while (m.find()) {
             str = m.group().replaceAll("\"", "").replaceAll("photoId:", "");
         }
-        String result2 = HttpRequest.get(UrlProcess.urlAppend(str))
-                .header(Header.USER_AGENT, "Mozilla/5.0 (Linux; U; Android 5.0; en-us; Nexus One Build/FRF91) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1")
-                .timeout(12138)
-                .execute().body();
+        String result2 = CommonUtils.backForData(UrlProcess.urlAppend(str));
         JsonParser jsonParser = new JsonParser();
         JsonObject jsonObject = jsonParser.parse(result2).getAsJsonObject();
         var = jsonObject.get("photos").getAsJsonArray().get(0).getAsJsonObject().get("main_mv_urls").getAsJsonArray().get(1).getAsJsonObject().get("url").getAsString();
@@ -131,10 +127,7 @@ public class DecodeUtils {
 
     public static String wsDecode(String var) {
         String id = UrlProcess.getId(var);
-        String result2 = HttpRequest.get(WSAPI.replaceAll("FEEDID", id))
-                .header(Header.USER_AGENT, "Mozilla/5.0 (Linux; U; Android 5.0; en-us; Nexus One Build/FRF91) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1")
-                .timeout(12138)
-                .execute().body();
+        String result2 = CommonUtils.backForData(WSAPI.replaceAll("FEEDID", id));
         //正则
         String video_url = "\"video_url\":\"(.*)h5\"";
         Pattern r1 = Pattern.compile(video_url);
@@ -154,14 +147,30 @@ public class DecodeUtils {
         while (m1.find()) {
             var = m1.group().replaceAll("item/", "").replaceAll("[?]", "");
         }
-        String result2 = HttpRequest.get(PPXAPI.replaceAll("ITEM_ID", var))
-                .header(Header.USER_AGENT, "Mozilla/5.0 (Linux; U; Android 5.0; en-us; Nexus One Build/FRF91) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1")
-                .timeout(12138)
-                .execute().body();
+        String result2 = CommonUtils.backForData(PPXAPI.replaceAll("ITEM_ID", var));
         JsonParser jsonParser = new JsonParser();
         JsonObject jsonObject = jsonParser.parse(result2).getAsJsonObject();
         var = jsonObject.get("data").getAsJsonObject().get("data").getAsJsonObject().get("origin_video_download").getAsJsonObject().get("url_list").getAsJsonArray().get(0).getAsJsonObject().get("url").getAsString();
         return var;
+    }
+
+
+    public static String hsDecode(String var) {
+        String uri = CommonUtils.getURI(var);
+        String hs = "item_id=(.*)&tag";
+        Pattern r = Pattern.compile(hs);
+        Matcher m = r.matcher(uri);
+        while (m.find()) {
+            var = m.group().replaceAll("item_id=", "").replaceAll("&tag", "");
+        }
+        String item_id = CommonUtils.backForData(HSAPI.replaceAll("ITEM_ID", var));
+        String hs_1 = "video_id=(.*)&line";
+        Pattern r1 = Pattern.compile(hs_1);
+        Matcher m2 = r1.matcher(item_id);
+        while (m2.find()) {
+            var = m2.group().replaceAll("video_id=", "").replaceAll("&line", "");
+        }
+        return HSAPI2.replaceAll("VIDEO_ID", var);
     }
 
 }
