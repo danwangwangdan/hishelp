@@ -56,13 +56,12 @@ public class TroubleServiceImpl implements TroubleService {
             } else {
                 trouble.setStatus(trouble.getStatus());
             }
-            // todo 判断是否已解决
-
             trouble.setSubmitTime(new Date());
             Trouble savedTrouble = troubleRepository.saveAndFlush(trouble);
             if (null != savedTrouble) {
                 baseResult.setData(savedTrouble);
-                if (!savedTrouble.getTroublePersonName().equals("管理员")) {
+                //管理员登记的不发送消息
+                if (!savedTrouble.getTroublePersonName().contains("管理员")) {
                     switch (trouble.getFirType()) {
                         case "设备科":
                             // 给管理员推送消息
