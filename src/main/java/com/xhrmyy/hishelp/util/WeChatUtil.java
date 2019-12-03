@@ -23,8 +23,8 @@ public class WeChatUtil {
     public static final String GO_PAGE_DETAIL = "pages/detail/detail?troubleId=";
     public static final String GO_PAGE_ME = "pages/me/me";
 
-    private static final String APP_ID = "wx0d4659933c32c53c";
-    private static final String APP_SECRET = "93b0648cd6ea64a58a8b046a7242b692";
+    private static final String APP_ID = "wx6c54f40530b65ae8";
+    private static final String APP_SECRET = "ebc79de54d063500db4351f55ab49306";
 
     static {
         ADMIN_OPEN_ID.put("文卫东", "oixGf4kbBjtkOdAOwowdd3DpV-2s");
