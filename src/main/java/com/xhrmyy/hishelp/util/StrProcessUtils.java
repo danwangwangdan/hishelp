@@ -45,16 +45,16 @@ public class StrProcessUtils {
         var = var.substring(start);
         return var;
     }
-
     /**
+     * @tips 皮皮虾链接处理
      * @param var
      * @return
-     * @tips 皮皮虾链接处理
      */
     public static String ppxStrProcess(String var) {
         //if (!CommonUtils.isContainChinese(var))return var;
         String uri = CommonUtils.getURI(var);
         return uri;
     }
+
 
 }

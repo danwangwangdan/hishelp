@@ -1,5 +1,7 @@
 package com.xhrmyy.hishelp.util;
 
+import cn.hutool.http.Header;
+import cn.hutool.http.HttpRequest;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.protocol.HttpClientContext;
@@ -35,19 +37,28 @@ public class CommonUtils {
     }
     //视频地址链接检查处理
     public static String decodeHttpUrl(String var) {
-        if (var.contains("douyin") || var.contains("iesdouyin")) {
-            var = StrProcessUtils.dyStrProcess(var);
-            return DecodeUtils.dyDecode(var);
-        } else if (var.contains("kuaishou") || var.contains("gifshow") || var.contains("chenzhongtech")) {
-            var = StrProcessUtils.ksStrProcess(var);
-            return DecodeUtils.ksDecode(var);
-        } else if (var.contains("weishi")) {
-            var = StrProcessUtils.wsStrProcess(var);
-            return DecodeUtils.wsDecode(var);
-        } else if (var.contains("pipix")) {
-            var = StrProcessUtils.ppxStrProcess(var);
-            return DecodeUtils.ppxDecode(var);
-        } else return "";
+        try {
+            if (var.contains("douyin") || var.contains("iesdouyin")) {
+                var = StrProcessUtils.dyStrProcess(var);
+                return DecodeUtils.dyDecode(var);
+            } else if (var.contains("kuaishou") || var.contains("gifshow") || var.contains("chenzhongtech")) {
+                var = StrProcessUtils.ksStrProcess(var);
+                return DecodeUtils.ksDecode(var);
+            } else if (var.contains("weishi")) {
+                var = StrProcessUtils.wsStrProcess(var);
+                return DecodeUtils.wsDecode(var);
+            } else if (var.contains("pipix")) {
+                var = StrProcessUtils.ppxStrProcess(var);
+                return DecodeUtils.ppxDecode(var);
+            } else if (var.contains("huoshan")) {
+                var = StrProcessUtils.dyStrProcess(var);//抖音和火山地址采集一样
+                return DecodeUtils.hsDecode(var);
+            } else return "";
+        } catch (Exception e) {
+            //报错不处理
+            return "";
+        }
+
     }
 
 
@@ -76,5 +87,13 @@ public class CommonUtils {
                 e.printStackTrace();
             }
         }
+    }
+
+
+    public static String backForData(String var) {
+        return HttpRequest.get(var)
+                .header(Header.USER_AGENT, "Mozilla/5.0 (Linux; U; Android 5.0; en-us; Nexus One Build/FRF91) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1")
+                .timeout(12138)
+                .execute().body();
     }
 }
