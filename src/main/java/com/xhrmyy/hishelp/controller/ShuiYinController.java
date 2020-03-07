@@ -12,7 +12,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.Date;
 
 @RestController
 @RequestMapping("/shuiyin")
@@ -39,6 +46,53 @@ public class ShuiYinController {
     public BaseResult loginByWx(@RequestParam String code, HttpServletRequest request) {
 
         return shuiYinService.loginByWx(code);
+    }
+
+    @RequestMapping("/downloadVideo")
+    public void downloadVideo(@RequestParam String url, HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        //判断文件夹是否存在
+        OutputStream outputStream = null;
+        HttpURLConnection conn = null;
+        InputStream in = null;
+        try {
+            // 建立链接
+            URL httpUrl = new URL(url);
+            conn = (HttpURLConnection) httpUrl.openConnection();
+            //以Post方式提交表单，默认get方式
+            conn.setDoInput(true);
+            conn.setDoOutput(true);
+            // post方式不能使用缓存
+            conn.setUseCaches(false);
+            //连接指定的资源
+            conn.connect();
+            //获取网络输入流
+            in = conn.getInputStream();
+            response.setHeader("Content-Length", String.valueOf(conn.getContentLengthLong()));
+            response.setContentType("application/x-msdownload");
+            response.setHeader("Content-Disposition", "attachment; filename=" + new Date().getTime() + ".MP4");
+
+            outputStream = new BufferedOutputStream(response.getOutputStream());
+            //创建存放文件内容的数组
+            byte[] buff = new byte[1024];
+            //所读取的内容使用n来接收
+            int n;
+            //当没有读取完时,继续读取,循环
+            while ((n = in.read(buff)) != -1) {
+                //将字节数组的数据全部写入到输出流中
+                outputStream.write(buff, 0, n);
+            }
+
+            //强制将缓存区的数据进行输出
+            outputStream.flush();
+            //关流
+            outputStream.close();
+            in.close();
+            conn.disconnect();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("抛出异常！！");
+        }
     }
 
     @RequestMapping("/loginPro")

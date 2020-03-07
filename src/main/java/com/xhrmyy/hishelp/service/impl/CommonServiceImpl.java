@@ -404,4 +404,19 @@ public class CommonServiceImpl implements CommonService {
         }
         return baseResult;
     }
+
+    @Override
+    public BaseResult getInterface() {
+        BaseResult baseResult = new BaseResult();
+        try {
+            Notice notice = noticeRepository.findOne(5L);
+            baseResult.setData(notice);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("getInterface：" + e.toString());
+            baseResult.setCode(-500);
+            baseResult.setMessage("服务器异常");
+        }
+        return baseResult;
+    }
 }

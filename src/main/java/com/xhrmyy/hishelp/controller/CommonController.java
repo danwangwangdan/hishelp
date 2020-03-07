@@ -82,6 +82,11 @@ public class CommonController {
         return commonService.getNoticeIndex();
     }
 
+    @RequestMapping("/interface")
+    public BaseResult getInterface() {
+        return commonService.getInterface();
+    }
+
     @RequestMapping("/show")
     public BaseResult isShow() {
 

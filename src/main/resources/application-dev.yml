@@ -2,7 +2,7 @@ server:
   # 端口号
   port: 6080
   context-path: /hishelp
-imageDir: E:/xcx/hishelp/
+imageDir: D:/xcx/hishelp/
 spring:
   mvc:
     static-path-pattern: /**
